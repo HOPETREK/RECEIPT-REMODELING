@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tally: turn receipts into a slice of the brand</title>
-<meta name="description" content="Photograph a receipt and earn a small share of the company you bought from. Concept landing page.">
+<title>Slipshare: turn receipts into a slice of the brand</title>
+<meta name="description" content="Photograph a receipt and earn a small share of the company you bought from. Join the waitlist.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Courier+Prime:wght@400;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -36,12 +36,9 @@ h1{font:800 clamp(40px,6vw,68px)/1 var(--head);letter-spacing:-.035em;margin:0 0
 .lede{font-size:20px;color:var(--mute);max-width:30em;margin:0 0 28px}
 .note{font-size:14px;color:var(--mute);margin-top:14px}
 
-/* the receipt: the one memorable element */
-.receipt{background:var(--paper);font-family:var(--mono);font-size:15px;padding:26px 24px 34px;box-shadow:0 18px 40px rgba(0,0,0,.14);
-  --t:10px;
+.receipt{background:var(--paper);font-family:var(--mono);font-size:15px;padding:26px 24px 40px;box-shadow:0 18px 40px rgba(0,0,0,.14);
   -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/20px 100%;
-          mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/20px 100%;
-  padding-bottom:40px}
+          mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/20px 100%}
 .receipt h2{font:700 16px var(--mono);text-align:center;margin:0 0 4px}
 .receipt .sub{text-align:center;color:var(--mute);margin-bottom:16px}
 .row{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
@@ -91,31 +88,31 @@ footer p{max-width:60em;margin:0 0 10px}
 <body>
 <div class="wrap">
   <header>
-    <a class="logo" href="#">Tally</a>
-    <nav><a href="#how">How it works</a><a href="#brands">Brands</a><a href="#tiers">Tiers</a><a href="#faq">FAQ</a></nav>
+    <a class="logo" href="#">Slipshare</a>
+    <nav><a href="#how">How it works</a><a href="#brands">Companies</a><a href="#tiers">Tiers</a><a href="#faq">FAQ</a></nav>
   </header>
 
   <main>
     <div class="hero">
       <div>
         <h1>Buy the thing. Own a slice of the maker.</h1>
-        <p class="lede">Photograph your receipt and Tally sets aside a small share of the company you just paid, in your name.</p>
+        <p class="lede">Photograph your receipt and Slipshare sets aside a small share of the company you just paid, in your name.</p>
         <a class="btn" href="#waitlist">Join the waitlist</a>
-        <p class="note">Concept page. Brands and numbers are sample data.</p>
+        <p class="note">Not live yet. The numbers below are illustrations.</p>
       </div>
 
       <div>
         <div class="receipt" aria-live="polite">
-          <h2 id="r-brand">NORTHWIND MARKET</h2>
+          <h2 id="r-brand">APPLE</h2>
           <div class="sub">Store 0412</div>
           <div class="row"><span>Items</span><span id="r-sub">$0.00</span></div>
           <div class="row"><span>Tax</span><span id="r-tax">$0.00</span></div>
           <div class="row"><strong>TOTAL</strong><strong id="r-total">$0.00</strong></div>
           <div class="dash"></div>
           <div class="reward">
-            <div>Your reward (<span id="r-pct">2</span>%)</div>
+            <div>Example reward (<span id="r-pct">2</span>%)</div>
             <div class="big" id="r-reward">$0.00</div>
-            <div id="r-shares">0.0000 shares</div>
+            <div id="r-shares">Illustration only</div>
           </div>
         </div>
 
@@ -148,14 +145,14 @@ footer p{max-width:60em;margin:0 0 10px}
     </section>
 
     <section id="brands">
-      <h2 class="t">Companies you can earn</h2>
-      <p class="sec-lede">Only publicly traded companies qualify. These are placeholders for your own list.</p>
+      <h2 class="t">Companies we plan to support</h2>
+      <p class="sec-lede">Only publicly traded companies qualify. Availability will depend on your country and our share partner.</p>
       <ul class="brands" id="brand-list"></ul>
     </section>
 
     <section id="tiers">
       <h2 class="t">Higher tiers pay more per receipt</h2>
-      <p class="sec-lede">Define your own rules here. This table is an example.</p>
+      <p class="sec-lede">Example plan. Final rates and limits will be published before launch.</p>
       <div class="tablewrap">
         <table>
           <thead><tr><th>Tier</th><th>Reward per receipt</th><th>Daily cap</th><th>Receipts per day</th></tr></thead>
@@ -170,32 +167,36 @@ footer p{max-width:60em;margin:0 0 10px}
 
     <section id="faq">
       <h2 class="t">Questions</h2>
-      <details><summary>Do I really get shares?</summary><p>Replace with your real answer: who issues and holds the shares, which regions are supported, and what the risks are.</p></details>
-      <details><summary>Who pays for the rewards?</summary><p>Explain your funding model plainly. Users should never have to guess where the money comes from.</p></details>
-      <details><summary>How do you stop fake receipts?</summary><p>Live camera only, duplicate detection, and per-account limits. Keep the exact checks private.</p></details>
-      <details><summary>What if the store isn't public?</summary><p>Private companies have no stock to give, so those receipts earn nothing.</p></details>
+      <details><summary>Is Slipshare live?</summary><p>Not yet. We're collecting a waitlist and building the first version. Nothing on this page pays out today.</p></details>
+      <details><summary>Do I really get shares?</summary><p>The plan is fractional shares held through a licensed partner. We'll name the partner and explain how it works before launch.</p></details>
+      <details><summary>Which companies are included?</summary><p>We're starting with large public companies such as Apple, Nvidia, McDonald's and Samsung. The list will grow. These companies are not partners and do not endorse Slipshare.</p></details>
+      <details><summary>Who pays for the rewards?</summary><p>We'll publish exactly where the funding comes from before launch, so you never have to guess.</p></details>
+      <details><summary>Which receipts count?</summary><p>Paper receipts photographed live with your camera, from companies on our list. Screenshots and saved photos won't be accepted.</p></details>
+      <details><summary>How do you stop fake receipts?</summary><p>Live camera only, checks for edits and duplicates, and limits per account. A receipt can only be claimed once.</p></details>
+      <details><summary>Is my data safe?</summary><p>We'll only collect what's needed to verify receipts and send rewards. A full privacy policy will be published before launch.</p></details>
+      <details><summary>What are the risks?</summary><p>Shares can go down as well as up, so a reward can be worth less later. Nothing here is investment advice.</p></details>
     </section>
 
     <section id="waitlist">
       <h2 class="t">Get early access</h2>
-      <p class="sec-lede">Leave your email and we'll tell you when Tally opens.</p>
+      <p class="sec-lede">Leave your email and we'll tell you when Slipshare opens.</p>
       <a class="btn" href="https://forms.gle/WPYLipFCo7NfQvXv7" target="_blank" rel="noopener">Join the waitlist</a>
     </section>
   </main>
 
   <footer>
-    <p>Tally is a concept design. No real rewards are issued. Sample prices and brands are illustrative only and are not affiliated with any real company.</p>
-    <p>If you launch something real, add the legal, licensing and risk disclosures required where you operate. Tokenized or fractional securities are regulated.</p>
+    <p>Slipshare is not live and issues no rewards yet. Examples and amounts are illustrations, not offers.</p>
+    <p>Apple, Nvidia, McDonald's, Samsung and their tickers are named only as examples. Slipshare is not affiliated with, endorsed by, or partnered with any of them.</p>
+    <p>Shares can lose value. Nothing on this page is investment advice.</p>
   </footer>
 </div>
 
 <script>
 const BRANDS = [
-  {name:"Northwind Market", ticker:"NWM", price:182.40},
-  {name:"Orbit Electronics", ticker:"ORB", price:329.15},
-  {name:"Pixel & Plate Cafe", ticker:"PPC", price:94.80},
-  {name:"Harbor Home Supply", ticker:"HHS", price:251.00},
-  {name:"Lumen Cinemas", ticker:"LMN", price:12.65}
+  {name:"Apple", ticker:"AAPL"},
+  {name:"Nvidia", ticker:"NVDA"},
+  {name:"McDonald's", ticker:"MCD"},
+  {name:"Samsung", ticker:"005930"}
 ];
 const $ = id => document.getElementById(id);
 const money = n => "$" + n.toFixed(2);
@@ -216,7 +217,6 @@ function update(){
   $("r-total").textContent = money(total);
   $("r-pct").textContent = pct;
   $("r-reward").textContent = "+" + money(reward) + " in " + b.ticker;
-  $("r-shares").textContent = (reward / b.price).toFixed(4) + " shares @ " + money(b.price);
 }
 ["amt","brand","tier"].forEach(id => $(id).addEventListener("input", update));
 update();
