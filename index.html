@@ -634,7 +634,7 @@
   .kicker { font: 500 11px/1 var(--mono); letter-spacing: .26em; text-transform: uppercase; color: var(--fg); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
   .kicker::before { content: ""; width: 22px; height: 1px; background: var(--fg); }
   .sec-lede { color: var(--fg-2); font-size: 18px; margin: 0; max-width: 40ch; line-height: 1.5; }
-  /* ---- the contract address, and the hero's country line ------------------ */
+  /* ---- the hero's country line ------------------ */
   /* Each of these is its own row. As inline-flex they sat side by side on a
      wide screen — the country line and the address colliding on one line,
      shoved off-centre — because inline boxes share a line when they fit. */
@@ -646,49 +646,9 @@
   .hero-where a { color: var(--fg); text-decoration: none; box-shadow: inset 0 -1px 0 var(--stroke); }
   .hero-where a:hover { box-shadow: inset 0 -2px 0 var(--fg); }
 
-  /* The chain and the contract address, in the hero: the two things someone
-     looking for the token comes to the page for, above the fold. */
-  .hero-ca { margin: 16px auto 0; width: max-content; max-width: 100%; display: flex; align-items: center;
-    gap: 12px; flex-wrap: wrap; justify-content: center; padding: 10px 14px; background: var(--paper);
-    box-shadow: inset 0 0 0 1px var(--hair-2); font: 500 11.5px/1 var(--mono); }
-  .hero-ca .hca-lab { color: var(--fg-3); letter-spacing: .18em; text-transform: uppercase; }
-  .hero-ca code { font: 600 12px/1.4 var(--mono); color: var(--ink); word-break: break-all; }
-  .hca-copy { font: 600 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; cursor: pointer;
-    border: 0; background: var(--ink); color: #fff; padding: 8px 11px; flex: none; }
-  .hca-copy:hover { background: #000; }
-  .hca-copy.done { background: var(--green); }
   @media (max-width: 700px) {
     .hero-where { margin-top: 18px; font-size: 12px; gap: 7px; }
-    /* The address is 42 characters of mono: on a narrow screen it gets the
-       full width and its own line, with the label above and the button below,
-       rather than being squeezed between them. */
-    .hero-ca { width: 100%; flex-direction: column; gap: 9px; padding: 14px 12px; }
-    .hero-ca .hca-lab { font-size: 10px; }
-    .hero-ca code { font-size: clamp(9.5px, 3.1vw, 12px); width: 100%; text-align: center; line-height: 1.5; }
-    .hca-copy { width: 100%; padding: 11px; }
   }
-
-  .ca-sec { padding: 72px 0 8px; background: var(--bg); }
-  @media (max-width: 860px) { .ca-sec { padding: 48px 0 4px; } }
-  .ca { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 40px; align-items: center;
-    max-width: 980px; margin: 0 auto; background: var(--paper); padding: 32px 36px; box-shadow: var(--shadow-md); }
-  @media (max-width: 860px) { .ca { grid-template-columns: minmax(0,1fr); gap: 20px; padding: 24px; } }
-  .ca-lab { font: 500 10.5px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--fg-3); }
-  .ca-addr { display: flex; align-items: center; gap: 12px; margin-top: 13px; flex-wrap: wrap; }
-  .ca-addr code { font: 600 clamp(12px, 1.7vw, 16px)/1.3 var(--mono); letter-spacing: -.01em;
-    color: var(--ink); word-break: break-all; }
-  .ca-copy { font: 600 10.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; cursor: pointer;
-    border: 0; background: var(--ink); color: #fff; padding: 10px 14px; flex: none; }
-  .ca-copy:hover { background: #000; }
-  .ca-copy.done { background: var(--green); }
-  .ca-note { margin: 14px 0 0; font-size: 14.5px; line-height: 1.5; color: var(--fg-2); max-width: 52ch; }
-  .ca-note a { color: var(--fg); text-decoration: none; box-shadow: inset 0 -1px 0 var(--stroke); }
-  .ca-note a:hover { box-shadow: inset 0 -2px 0 var(--fg); }
-  .ca-links { display: flex; flex-direction: column; gap: 8px; }
-  @media (max-width: 860px) { .ca-links { flex-direction: row; flex-wrap: wrap; } }
-  .ca-links a { font: 600 10.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
-    text-decoration: none; color: var(--ink); padding: 11px 16px; box-shadow: inset 0 0 0 1px var(--hair-2); white-space: nowrap; }
-  .ca-links a:hover { box-shadow: inset 0 0 0 1px var(--ink); }
 
   /* the footer's page index */
   .foot-nav { display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: center;
@@ -696,9 +656,6 @@
   .foot-nav a { font: 500 11.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
     text-decoration: none; color: var(--fg-2); }
   .foot-nav a:hover { color: var(--fg); }
-  .foot-ca { font: 500 10.5px/1.6 var(--mono); letter-spacing: .02em; color: var(--fg-3);
-    text-align: center; margin: 0 0 20px; word-break: break-all; }
-  .foot-ca b { color: var(--fg-2); font-weight: 600; letter-spacing: .18em; }
 
   .reveal { opacity: 0; transform: translateY(26px); filter: blur(10px); }
   .reveal.in { opacity: 1; transform: none; filter: blur(0); transition: opacity .9s var(--ease), transform 1s var(--ease), filter .9s var(--ease); }
@@ -1115,11 +1072,6 @@
       <span>Reading receipts in <b id="hero-countries">22</b> countries<span id="hero-currencies"></span></span>
       <a href="#where">Check yours &rarr;</a>
     </div>
-    <div class="hero-ca rise" style="animation-delay:.32s">
-      <span class="hca-lab">$RECEIPT CA</span>
-      <code id="hero-ca-addr">0xb97d9e5ad6244d27588fe0a624a8c78e512934ee</code>
-      <button class="hca-copy" id="hero-ca-copy" type="button" data-ca="0xb97d9e5ad6244d27588fe0a624a8c78e512934ee" aria-label="Copy the $RECEIPT contract address">Copy</button>
-    </div>
   </div>
   <div class="printer rise" style="animation-delay:.3s" aria-label="A receipt printing, then paying out in stock">
     <div class="pslot"></div>
@@ -1428,25 +1380,6 @@
   </div>
 </section>
 
-<section class="ca-sec" id="token" aria-label="The $RECEIPT contract address">
-  <div class="wrap">
-    <div class="ca reveal">
-      <div>
-        <div class="ca-lab">$RECEIPT contract · Robinhood Chain</div>
-        <div class="ca-addr">
-          <code id="ca-addr">0xb97d9e5ad6244d27588fe0a624a8c78e512934ee</code>
-          <button class="ca-copy" id="ca-copy" type="button" data-ca="0xb97d9e5ad6244d27588fe0a624a8c78e512934ee">Copy</button>
-        </div>
-        <p class="ca-note">Holding $RECEIPT in the wallet you scan with is what makes a receipt pay at all — $100 is where earning starts. <a href="#tiers">See the tiers.</a></p>
-      </div>
-      <div class="ca-links">
-        <a id="ca-dex" href="https://dexscreener.com/robinhood/0xb97d9e5ad6244d27588fe0a624a8c78e512934ee" target="_blank" rel="noopener">Chart</a>
-        <a id="ca-exp" href="https://robinhoodchain.blockscout.com/token/0xb97d9e5ad6244d27588fe0a624a8c78e512934ee" target="_blank" rel="noopener">Explorer</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="tiers" class="tiers-sec">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -1536,7 +1469,6 @@
       <a href="/help">Help</a>
       <a href="/spend">Where your money goes</a>
     </nav>
-    <p class="foot-ca"><b>$RECEIPT</b><br>0xb97d9e5ad6244d27588fe0a624a8c78e512934ee</p>
     <div class="barcode" data-bars></div>
     <p class="disclosure">
       <b>RECEIPT is not affiliated with, endorsed by, or partnered with any brand named on this page.</b> RECEIPT's scanner is in early access; delivery of stock rewards is not yet live.
@@ -2055,41 +1987,6 @@ const API = location.port === "8100" ? "http://localhost:8080" : "";
       if (isOpen() && !e.target.closest(".wh-row")) close(false);
     });
   }).catch(() => { /* the section still reads correctly with its written defaults */ });
-})();
-
-// ---- the contract address: one click to copy ------------------------------
-(() => {
-  // Both copies of the address — the one in the hero and the one further down —
-  // share this, so there is one behaviour to get right rather than two.
-  document.querySelectorAll("[data-ca]").forEach((btn) => {
-  let t = 0;
-  btn.addEventListener("click", async () => {
-    const ca = btn.dataset.ca || "";
-    try {
-      await navigator.clipboard.writeText(ca);
-    } catch {
-      // No clipboard permission (or an insecure origin): select it instead, so
-      // the address can still be copied by hand rather than nothing happening.
-      const node = btn.parentElement?.querySelector("code");
-      if (node) {
-        const r = document.createRange();
-        r.selectNodeContents(node);
-        const sel = getSelection();
-        sel.removeAllRanges();
-        sel.addRange(r);
-      }
-      btn.textContent = "Select + copy";
-      btn.classList.remove("done");
-      clearTimeout(t);
-      t = setTimeout(() => { btn.textContent = "Copy"; }, 2400);
-      return;
-    }
-    btn.textContent = "Copied";
-    btn.classList.add("done");
-    clearTimeout(t);
-    t = setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1800);
-  });
-  });
 })();
 
 // ---- the tier receipts, from the ladder the server publishes --------------
