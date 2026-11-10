@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>RECEIPT — Proof of payouts</title>
+<meta name="description" content="What the treasury holds, what it has paid out, and the transaction behind every payout." />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" />
+<style>
+  :root{
+    --bg:#FFFFFF; --bg2:#F5F5F7; --paper:#FDFCFA; --ink:#1D1D1F; --soft:#6E665C; --faint:#A69C8E;
+    --hair:rgba(29,29,31,.1); --hair2:rgba(29,29,31,.18); --green:#5C7A52; --red:#B3261E; --amber:#946200;
+    --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  body{margin:0;background:var(--bg2);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased}
+  .wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+
+  nav{position:sticky;top:0;z-index:60}
+  nav::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(255,255,255,.78);
+    backdrop-filter:blur(18px) saturate(1.2);border-bottom:1px solid var(--hair)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:16px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.05em;font-size:19px;
+    text-decoration:none;color:inherit}
+  .brand img{width:20px;height:20px;display:block}
+  .brand em{font-style:normal;font:600 10.5px/1 var(--mono);letter-spacing:.22em;color:var(--faint);
+    text-transform:uppercase;padding-left:11px;margin-left:2px;border-left:1px solid var(--hair2)}
+  .live{display:flex;align-items:center;gap:8px;font:500 10.5px/1 var(--mono);letter-spacing:.16em;
+    text-transform:uppercase;color:var(--soft)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--green);display:block;animation:pulse 2s ease-in-out infinite}
+  .live.stale i{background:var(--amber);animation:none}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  header{padding:34px 0 8px}
+  h1{font-size:clamp(28px,4vw,40px);line-height:1;letter-spacing:-.04em;font-weight:800;margin:0 0 8px}
+  .sub{font:400 13px/1.6 var(--mono);color:var(--soft);margin:0;max-width:62ch}
+
+  section{padding:30px 0}
+  h2{font:600 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--faint);
+    margin:0 0 18px;display:flex;align-items:center;gap:12px}
+  h2 i{flex:1;border-top:1px dashed var(--hair2)}
+  h2 span{color:var(--soft);letter-spacing:.06em;text-transform:none;font-weight:500}
+
+  .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .cards.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media(max-width:860px){.cards,.cards.three{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .card{background:var(--paper);box-shadow:0 1px 0 var(--hair),0 10px 30px -24px rgba(14,13,12,.5);padding:20px;min-width:0}
+  .card .k{font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .card .v{font:700 30px/1 var(--mono);letter-spacing:-.02em;margin-top:12px;font-variant-numeric:tabular-nums;
+    overflow-wrap:anywhere}
+  .card .n{font:500 11px/1.5 var(--mono);color:var(--soft);margin-top:8px}
+  .card.good .v{color:var(--green)}
+
+  /* The treasury address: the one thing on this page a stranger checks first. */
+  .vault{background:var(--paper);box-shadow:0 1px 0 var(--hair),0 10px 30px -24px rgba(14,13,12,.5);
+    padding:20px;display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-bottom:14px}
+  .vault[hidden]{display:none}
+  .vault .k{font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
+  .vault .addr{font:600 13px/1.4 var(--mono);word-break:break-all}
+  .vault .addr a{color:inherit;text-decoration:none;box-shadow:inset 0 -1px 0 var(--hair2)}
+  .vault .grow{flex:1;min-width:240px}
+  .vault .side{text-align:right}
+  @media(max-width:640px){.vault .side{text-align:left}}
+  .vault .side .v{font:700 22px/1 var(--mono);font-variant-numeric:tabular-nums}
+  .copy{padding:7px 10px;font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    background:#fff;color:var(--soft);box-shadow:inset 0 0 0 1px var(--hair2);cursor:pointer;border:0}
+  .copy:hover{color:var(--ink)}
+
+  .tabs{display:flex;gap:6px;margin-left:auto}
+  .tab{padding:7px 10px;font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    background:#fff;color:var(--soft);box-shadow:inset 0 0 0 1px var(--hair2);cursor:pointer;border:0}
+  .tab.on{background:var(--ink);color:#fff;box-shadow:none}
+  .charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  @media(max-width:860px){.charts{grid-template-columns:1fr}}
+  .chart{padding:18px 16px 12px;min-width:0}
+  .chart .n{min-height:1.5em}
+  .chart .n b{font-weight:600;color:var(--ink)}
+  .chart canvas{width:100%;height:220px;display:block;margin-top:12px;cursor:crosshair;touch-action:pan-y}
+
+  table{width:100%;border-collapse:collapse;background:var(--paper);
+    box-shadow:0 1px 0 var(--hair),0 10px 30px -24px rgba(14,13,12,.5)}
+  th{font:600 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--faint);
+    text-align:left;padding:14px 16px;border-bottom:2px dashed var(--hair2);white-space:nowrap}
+  td{font:500 12.5px/1.5 var(--mono);padding:13px 16px;border-bottom:1px solid var(--hair);vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td a{color:var(--ink);text-decoration:none;box-shadow:inset 0 -1px 0 var(--hair2)}
+  td a:hover{color:var(--green)}
+  .tick{display:inline-block;margin-left:8px;padding:3px 6px;font:600 9.5px/1 var(--mono);letter-spacing:.14em;
+    color:var(--green);background:rgba(92,122,82,.12);vertical-align:1px}
+  .bar{height:6px;background:rgba(29,29,31,.08);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--green)}
+  .bar i.short{background:var(--amber)}
+  .empty{padding:26px 16px;font:500 12px/1.6 var(--mono);color:var(--soft);text-align:center}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .scroll table{min-width:620px}
+
+  @media(max-width:640px){
+    .wrap{width:calc(100% - 28px)}
+    header{padding:22px 0 4px}
+    section{padding:22px 0}
+    .cards,.cards.three{gap:10px}
+    .card{padding:16px}
+    .card .v{font-size:24px;margin-top:9px}
+    .chart canvas{height:180px}
+    h2 span{display:none}
+    th,td{padding:11px 12px}
+    .sub{font-size:11.5px}
+  }
+  footer{padding:34px 0 60px;font:400 11px/1.7 var(--mono);color:var(--faint)}
+  footer a{color:var(--soft)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="/"><img src="/brand/png/glyph-black.png" alt="">RECEIPT<em>Proof</em></a>
+    <div class="live" id="live"><i></i><span id="asof">Loading</span></div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header>
+    <h1>Proof of payouts</h1>
+    <p class="sub">Every payout below settled on-chain, and every one links to the transaction that settled it. The treasury address is public: check the balance yourself rather than taking ours.</p>
+  </header>
+
+  <section>
+    <h2>The treasury<i></i></h2>
+    <div class="cards three" style="margin-bottom:14px">
+      <div class="card good"><div class="k">Total reserve</div><div class="v" id="r-total">—</div>
+        <div class="n" id="r-total-n">—</div></div>
+      <div class="card"><div class="k">On-chain, verifiable</div><div class="v" id="r-onchain">—</div>
+        <div class="n" id="r-onchain-n">Across the wallets below</div></div>
+      <div class="card" id="r-off-card" hidden><div class="k">Held elsewhere</div><div class="v" id="r-off">—</div>
+        <div class="n">Reserves outside these wallets</div></div>
+    </div>
+    <div class="vault">
+      <div class="grow">
+        <div class="k">Treasury wallet · Robinhood Chain</div>
+        <div class="addr" id="vault-addr">—</div>
+      </div>
+      <button class="copy" id="copy" hidden>Copy</button>
+      <div class="side">
+        <div class="k">Balance</div>
+        <div class="v" id="vault-usd">—</div>
+        <div class="n" id="vault-detail" style="font:500 11px/1.5 var(--mono);color:var(--soft);margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="vault" id="vault-pay" hidden>
+      <div class="grow">
+        <div class="k">Payout wallet · $RECEIPT rewards</div>
+        <div class="addr" id="pay-addr">—</div>
+      </div>
+      <div class="side">
+        <div class="k">Balance</div>
+        <div class="v" id="pay-bal">—</div>
+        <div class="n" id="pay-detail" style="font:500 11px/1.5 var(--mono);color:var(--soft);margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="vault" id="vault-sol" hidden>
+      <div class="grow">
+        <div class="k">Treasury wallet · Solana</div>
+        <div class="addr" id="sol-addr">—</div>
+      </div>
+      <div class="side">
+        <div class="k">Balance</div>
+        <div class="v" id="sol-bal">—</div>
+        <div class="n" id="sol-detail" style="font:500 11px/1.5 var(--mono);color:var(--soft);margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="cards" id="held-cards">
+      <div class="card"><div class="k">Ether held</div><div class="v" id="b-usdg">—</div>
+        <div class="n">Pays for stock and for gas</div></div>
+      <div class="card" id="b-receipt-card" hidden><div class="k">$RECEIPT held</div><div class="v" id="b-receipt">—</div>
+        <div class="n" id="b-receipt-n">In the payout wallet, for $RECEIPT rewards</div></div>
+      <div class="card"><div class="k">Dollars held</div><div class="v" id="b-eth">—</div>
+        <div class="n">USDG on Robinhood Chain</div></div>
+      <div class="card"><div class="k">Owed, not yet sent</div><div class="v" id="owed">—</div>
+        <div class="n" id="owed-n">—</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The people <span>· wallets, not accounts</span><i></i></h2>
+    <div class="cards three">
+      <div class="card good"><div class="k">People paid</div><div class="v" id="u-total">—</div>
+        <div class="n" id="u-total-n">—</div></div>
+      <div class="card"><div class="k">Wallets scanned</div><div class="v" id="u-scanned">—</div>
+        <div class="n" id="u-24h">—</div></div>
+      <div class="card"><div class="k">Holding $RECEIPT</div><div class="v" id="u-holders">—</div>
+        <div class="n" id="u-holders-n">Earning above Paper</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Paid out<i></i></h2>
+    <div class="cards">
+      <div class="card good"><div class="k">Total paid out</div><div class="v" id="paid-usd">—</div>
+        <div class="n" id="paid-n">—</div></div>
+      <div class="card"><div class="k">Payouts</div><div class="v" id="paid-rows">—</div>
+        <div class="n" id="paid-wallets">—</div></div>
+      <div class="card"><div class="k">Last 24 hours</div><div class="v" id="d-usd">—</div>
+        <div class="n" id="d-n">—</div></div>
+      <div class="card"><div class="k">Last payout</div><div class="v" id="last-at">—</div>
+        <div class="n" id="last-n">—</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Over time <span>· paid out, day by day</span><i></i>
+      <div class="tabs" id="tabs"><button class="tab on" data-d="30">30 days</button><button class="tab" data-d="90">90 days</button></div></h2>
+    <div class="charts">
+      <div class="card chart good">
+        <div class="k">Total paid out</div><div class="v" id="g-usd-v">—</div>
+        <div class="n" id="g-usd-n">—</div>
+        <canvas id="g-usd"></canvas>
+      </div>
+      <div class="card chart">
+        <div class="k">Payouts</div><div class="v" id="g-rows-v">—</div>
+        <div class="n" id="g-rows-n">—</div>
+        <canvas id="g-rows"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Last payouts <span>· each one links to its transaction</span><i></i></h2>
+    <div class="scroll"><table>
+      <thead><tr>
+        <th>When</th><th>Reward</th><th class="num">Value</th><th>To</th><th>Transaction</th>
+      </tr></thead>
+      <tbody id="recent"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Held against owed <span>· stock in hand next to stock promised</span><i></i></h2>
+    <div class="scroll"><table>
+      <thead><tr>
+        <th>Stock</th><th class="num">Held</th><th class="num">Owed</th><th>Cover</th><th class="num">Owed value</th>
+      </tr></thead>
+      <tbody id="holdings"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <footer>Refreshes every 30 seconds; balances are read from the chain each time. Times are your local time zone. Recipient wallets are shortened — the full address is on the transaction. How a reward is computed is on the <a href="/rules">rules page</a>, and scanning activity is on <a href="/live">live stats</a>.</footer>
+</div>
+
+<script>
+// ?api=https://receipt.family previews this page on production's numbers from a dev server.
+const API = new URLSearchParams(location.search).get("api") ?? (location.port === "8100" ? "http://localhost:8080" : "");
+const $ = (id) => document.getElementById(id);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c]);
+const usd = (n) => "$" + Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const usd0 = (n) => "$" + Math.round(Number(n || 0)).toLocaleString();
+const int = (n) => Number(n || 0).toLocaleString();
+const plural = (n, w) => int(n) + " " + w + (n === 1 ? "" : "s");
+const shares = (n) => Number(n || 0).toLocaleString(undefined, { maximumFractionDigits: 4 });
+const dayLabel = (d) => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+const niceMax = (n) => { if (n <= 5) return 5; const p = 10 ** Math.floor(Math.log10(n)); const u = n / p; const m = u <= 1 ? 1 : u <= 2 ? 2 : u <= 5 ? 5 : 10; return m * p; };
+
+// "3 minutes ago" for the freshest payout, a date once it is older than a day.
+function ago(iso) {
+  const then = new Date(iso).getTime(), mins = Math.round((Date.now() - then) / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return plural(mins, "minute") + " ago";
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return plural(hrs, "hour") + " ago";
+  return plural(Math.round(hrs / 24), "day") + " ago";
+}
+const when = (iso) => new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+
+let windowDays = 30;
+let lastData = null;
+let series = { usd: [], rows: [] }; // cumulative points: { t, v }
+let hoverAt = null;
+
+// Running totals that end exactly on the headline figures: whatever was paid
+// before the window is the starting level, so the line is the true total.
+function buildSeries(d) {
+  const days = d.daily;
+  const inWindow = (k) => days.reduce((s, b) => s + b[k], 0);
+  let paid = d.paid.usd - inWindow("usd"), rows = d.paid.rows - inWindow("payouts");
+  const start = new Date(days[0].day).getTime() - 864e5;
+  series.usd = [{ t: start, v: paid }]; series.rows = [{ t: start, v: rows }];
+  for (const b of days) {
+    const t = new Date(b.day).getTime();
+    paid += b.usd; rows += b.payouts;
+    series.usd.push({ t, v: paid }); series.rows.push({ t, v: rows });
+  }
+  const gained = (k) => series[k].at(-1).v - series[k][0].v;
+  const span = `${d.windowDays} days`;
+  $("g-usd-v").textContent = usd(d.paid.usd);
+  $("g-rows-v").textContent = int(d.paid.rows);
+  $("g-usd-n").innerHTML = `<b>+${esc(usd(gained("usd")))}</b> in the last ${span}`;
+  $("g-rows-n").innerHTML = `<b>+${esc(int(gained("rows")))}</b> in the last ${span}`;
+}
+
+function drawLine(c, pts, color, fill, label = int) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.clientWidth, H = c.clientHeight;
+  if (!W || !H) return null;
+  c.width = Math.round(W * dpr); c.height = Math.round(H * dpr);
+  const ctx = c.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  if (pts.length < 2) return null;
+
+  const font = getComputedStyle(document.body).getPropertyValue("--mono");
+  ctx.font = `500 10px ${font}`;
+  const max = niceMax(Math.max(1, pts.at(-1).v));
+  const padL = Math.ceil(ctx.measureText(label(max)).width) + 12, padR = 8, padT = 10, padB = 22;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const t0 = pts[0].t, t1 = pts.at(-1).t;
+  const X = (t) => padL + ((t - t0) / (t1 - t0)) * plotW;
+  const Y = (v) => padT + plotH - (v / max) * plotH;
+
+  ctx.textBaseline = "middle"; ctx.textAlign = "right";
+  for (const v of [0, max / 2, max]) {
+    ctx.strokeStyle = "rgba(29,29,31,.08)";
+    ctx.beginPath(); ctx.moveTo(padL, Y(v) + 0.5); ctx.lineTo(W - padR, Y(v) + 0.5); ctx.stroke();
+    ctx.fillStyle = "#A69C8E"; ctx.fillText(label(v), padL - 6, Y(v));
+  }
+
+  ctx.beginPath();
+  pts.forEach((p, i) => (i ? ctx.lineTo(X(p.t), Y(p.v)) : ctx.moveTo(X(p.t), Y(p.v))));
+  ctx.lineTo(X(t1), Y(0)); ctx.lineTo(X(t0), Y(0)); ctx.closePath();
+  ctx.fillStyle = fill; ctx.fill();
+  ctx.beginPath();
+  pts.forEach((p, i) => (i ? ctx.lineTo(X(p.t), Y(p.v)) : ctx.moveTo(X(p.t), Y(p.v))));
+  ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.lineJoin = "round"; ctx.stroke();
+
+  // time axis: a date every few days, spaced so the labels never collide
+  ctx.textAlign = "center"; ctx.fillStyle = "#A69C8E";
+  const days = pts.length - 1;
+  const every = Math.max(1, Math.ceil(days / (W < 520 ? 4 : 8)));
+  pts.slice(1).forEach((p, i) => {
+    if ((days - 1 - i) % every !== 0) return;
+    ctx.fillText(dayLabel(new Date(p.t)), X(p.t), H - padB / 2 + 1);
+  });
+
+  // hover: nearest point, a guide line and a dot; the reading goes in the note
+  if (hoverAt && hoverAt.canvas === c) {
+    const t = t0 + ((hoverAt.px - padL) / plotW) * (t1 - t0);
+    const p = pts.reduce((a, q) => (Math.abs(q.t - t) < Math.abs(a.t - t) ? q : a));
+    ctx.strokeStyle = "rgba(29,29,31,.18)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(X(p.t) + 0.5, padT); ctx.lineTo(X(p.t) + 0.5, Y(0)); ctx.stroke();
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(X(p.t), Y(p.v), 4, 0, Math.PI * 2); ctx.fill();
+    return p;
+  }
+  return null;
+}
+
+function drawCharts() {
+  const k = drawLine($("g-usd"), series.usd, "#5C7A52", "rgba(92,122,82,.12)", usd0);
+  const s = drawLine($("g-rows"), series.rows, "#1D1D1F", "rgba(29,29,31,.07)");
+  if (k) $("g-usd-n").innerHTML = `<b>${esc(dayLabel(new Date(k.t)))}</b> · ${esc(usd(k.v))} paid out by then`;
+  if (s) $("g-rows-n").innerHTML = `<b>${esc(dayLabel(new Date(s.t)))}</b> · ${esc(int(s.v))} payouts by then`;
+}
+
+function hover(evt) {
+  const c = evt.currentTarget, r = c.getBoundingClientRect();
+  hoverAt = { canvas: c, px: (evt.touches ? evt.touches[0].clientX : evt.clientX) - r.left };
+  drawCharts();
+}
+function unhover() { hoverAt = null; if (lastData) buildSeries(lastData); drawCharts(); }
+
+function renderRecent(rows) {
+  const body = $("recent");
+  if (!rows.length) { body.innerHTML = `<tr><td colspan="5" class="empty">No payouts have settled yet.</td></tr>`; return; }
+  body.innerHTML = rows.map((r) => `
+    <tr>
+      <td>${esc(when(r.deliveredAt))}</td>
+      <td>${esc(r.company ?? r.ticker)}${r.ticker ? ` <span class="tick">${esc(r.ticker)}</span>` : ""}</td>
+      <td class="num">${esc(usd(r.usd))}${r.shares ? `<br><span style="color:var(--faint)">${esc(shares(r.shares))} sh</span>` : ""}</td>
+      <td>${esc(r.to)}</td>
+      <td>${r.txUrl
+        ? `<a href="${esc(r.txUrl)}" target="_blank" rel="noopener">${esc(r.txHash.slice(0, 10))}…</a>`
+        : `<span style="color:var(--faint)">sent by hand, off the app</span>`}</td>
+    </tr>`).join("");
+}
+
+function renderHoldings(rows) {
+  const body = $("holdings");
+  if (!rows.length) { body.innerHTML = `<tr><td colspan="5" class="empty">Nothing reserved and nothing held.</td></tr>`; return; }
+  body.innerHTML = rows.map((h) => {
+    // Cover: held against owed. Nothing owed is full cover, not a blank bar.
+    const cover = h.heldShares === null ? null : h.owedShares > 0 ? Math.min(1, h.heldShares / h.owedShares) : 1;
+    const bar = cover === null
+      ? `<span style="color:var(--faint)">unreadable</span>`
+      : `<div class="bar"><i class="${cover < 1 ? "short" : ""}" style="width:${(cover * 100).toFixed(1)}%"></i></div>`;
+    return `
+    <tr>
+      <td>${esc(h.company)}<span class="tick">${esc(h.ticker)}</span></td>
+      <td class="num">${h.heldShares === null ? "—" : esc(shares(h.heldShares))}</td>
+      <td class="num">${esc(shares(h.owedShares))}</td>
+      <td>${bar}</td>
+      <td class="num">${esc(usd(h.owedUsd))}</td>
+    </tr>`;
+  }).join("");
+}
+
+async function load() {
+  try {
+    const r = await fetch(`${API}/api/status/proof?days=${windowDays}`, { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+
+    const t = d.treasury;
+    $("vault-addr").innerHTML = t.address
+      ? `<a href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.address)}</a>`
+      : `<span style="color:var(--faint)">not configured</span>`;
+    $("copy").hidden = !t.address;
+    $("vault-usd").textContent = t.usd === null ? "—" : usd(t.usd);
+    $("b-usdg").textContent = t.balances.eth === null ? "—"
+      : Number(t.balances.eth).toLocaleString(undefined, { maximumFractionDigits: 4 }) + " ETH";
+    $("b-eth").textContent = t.balances.usdg === null ? "—" : usd(t.balances.usdg);
+    $("vault-detail").textContent = [
+      t.balances.receipt === null ? null : Math.round(t.balances.receipt).toLocaleString() + " $RECEIPT",
+      t.balances.eth === null ? null : Number(t.balances.eth).toLocaleString(undefined, { maximumFractionDigits: 4 }) + " ETH",
+    ].filter(Boolean).join(" · ");
+
+    const pay = d.payout ?? {};
+    $("vault-pay").hidden = !pay.address;
+    // $RECEIPT across both Robinhood Chain wallets: the treasury's balance in
+    // full, plus the payout wallet's.
+    const rcParts = [t.balances.receipt, pay.receipt].filter((n) => n !== null && n !== undefined);
+    const rcTotal = rcParts.length ? rcParts.reduce((a, b) => a + b, 0) : null;
+    const rcPrice = t.receiptUsd ?? pay.receiptUsd ?? null;
+    $("b-receipt-card").hidden = rcTotal === null;
+    $("held-cards").classList.toggle("three", rcTotal === null);
+    $("b-receipt").textContent = rcTotal === null ? "—" : Math.round(rcTotal).toLocaleString();
+    $("b-receipt-n").textContent = rcTotal === null || rcPrice === null
+      ? "Across the Robinhood Chain wallets"
+      : `${usd(rcTotal * rcPrice)} at ${rcPrice < 0.01 ? "$" + rcPrice.toFixed(7) : usd(rcPrice)} · both Robinhood Chain wallets`;
+    if (pay.address) {
+      $("pay-addr").innerHTML = `<a href="${esc(pay.url)}" target="_blank" rel="noopener">${esc(pay.address)}</a>`;
+      $("pay-bal").textContent = pay.usd === null ? "—" : usd(pay.usd);
+      $("pay-detail").textContent = [
+        pay.receipt === null ? null : Math.round(pay.receipt).toLocaleString() + " $RECEIPT",
+        pay.eth === null ? null : Number(pay.eth).toLocaleString(undefined, { maximumFractionDigits: 4 }) + " ETH",
+      ].filter(Boolean).join(" · ");
+    }
+
+    const sol = d.solana ?? {};
+    $("vault-sol").hidden = !sol.address;
+    if (sol.address) {
+      $("sol-addr").innerHTML = `<a href="${esc(sol.url)}" target="_blank" rel="noopener">${esc(sol.address)}</a>`;
+      $("sol-bal").textContent = sol.usd === null ? "—" : usd(sol.usd);
+      $("sol-detail").textContent = [
+        sol.sol === null ? null : Number(sol.sol).toLocaleString(undefined, { maximumFractionDigits: 3 }) + " SOL",
+        sol.usdc ? usd(sol.usdc) + " USDC" : null,
+      ].filter(Boolean).join(" · ");
+    }
+
+    const res = d.reserve ?? {};
+    $("r-total").textContent = res.totalUsd === null ? "—" : usd(res.totalUsd);
+    $("r-onchain").textContent = res.onchainUsd === null ? "—" : usd(res.onchainUsd);
+    const vaults = 1 + (pay.address ? 1 : 0) + (sol.address ? 1 : 0);
+    $("r-onchain-n").textContent = `Across the ${["one", "two", "three"][vaults - 1]} wallets below`;
+    $("r-off-card").hidden = !res.offchainUsd;
+    $("r-off").textContent = res.offchainUsd ? usd(res.offchainUsd) : "—";
+    $("r-total-n").textContent = res.offchainUsd
+      ? "On-chain plus reserves held elsewhere"
+      : "Everything the treasury holds";
+
+    $("owed").textContent = usd(d.owed.usd);
+    $("owed-n").textContent = `${plural(d.owed.rows, "reward")} reserved`;
+
+    const u = d.users ?? {};
+    $("u-total").textContent = int(u.total);
+    $("u-total-n").textContent = u.earlier
+      ? `${int(u.paid)} paid here · ${int(u.earlier)} on the earlier Solana rail`
+      : "Wallets that have been paid";
+    $("u-scanned").textContent = int(u.scanned);
+    $("u-24h").textContent = `${int(u.active24h)} scanned in the last 24 hours`;
+    $("u-holders").textContent = int(u.holders);
+    // Naming the tiers is the evidence; a bare count could be anything.
+    const tiers = Object.entries(u.byTier ?? {})
+      .filter(([name]) => name && name !== "paper")
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, n]) => `${int(n)} ${name}`);
+    $("u-holders-n").textContent = tiers.length ? tiers.join(" · ") : "Earning above Paper";
+
+    $("paid-usd").textContent = usd(d.paid.usd);
+    $("paid-n").textContent = `Across ${plural(d.paid.rows, "payout")}`;
+    $("paid-rows").textContent = int(d.paid.rows);
+    $("paid-wallets").textContent = `${plural(d.paid.wallets, "wallet")} paid`;
+    $("d-usd").textContent = usd(d.paid.last24h.usd);
+    $("d-n").textContent = plural(d.paid.last24h.rows, "payout");
+    $("last-at").textContent = d.paid.lastAt ? ago(d.paid.lastAt) : "—";
+    $("last-n").textContent = d.paid.lastAt ? when(d.paid.lastAt) : "Nothing settled yet";
+
+    lastData = d;
+    buildSeries(d);
+    drawCharts();
+
+    renderRecent(d.recent ?? []);
+    renderHoldings(t.holdings ?? []);
+
+    $("live").classList.remove("stale");
+    $("asof").textContent = "Updated " + new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  } catch {
+    $("live").classList.add("stale");
+    $("asof").textContent = "Reconnecting";
+  }
+}
+
+$("copy").addEventListener("click", async () => {
+  const addr = lastData?.treasury?.address;
+  if (!addr) return;
+  try { await navigator.clipboard.writeText(addr); } catch { return; }
+  $("copy").textContent = "Copied";
+  setTimeout(() => { $("copy").textContent = "Copy"; }, 1600);
+});
+for (const c of [$("g-usd"), $("g-rows")]) {
+  c.addEventListener("mousemove", hover);
+  c.addEventListener("mouseleave", unhover);
+  c.addEventListener("touchstart", hover, { passive: true });
+  c.addEventListener("touchmove", hover, { passive: true });
+}
+$("tabs").addEventListener("click", (e) => {
+  const t = e.target.closest(".tab"); if (!t) return;
+  windowDays = Number(t.dataset.d);
+  for (const b of document.querySelectorAll(".tab")) b.classList.toggle("on", b === t);
+  load();
+});
+addEventListener("resize", drawCharts);
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>
