@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>RECEIPT — Status</title>
+<meta name="description" content="Live status of every Receipt service, checked every hour, and the latest service audit." />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<style>
+  :root{
+    --bg:#FFFFFF; --bg2:#F5F5F7; --paper:#FDFCFA; --ink:#1D1D1F; --soft:#6E665C; --faint:#A69C8E;
+    --hair:rgba(29,29,31,.1); --hair2:rgba(29,29,31,.18); --green:#5C7A52; --red:#B3261E; --amber:#946200; --grey:#B9B3AA;
+    --green-bg:#E8EFE4; --red-bg:#F6E3E1; --amber-bg:#F5EBD6; --grey-bg:#EEECE8;
+    --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  body{margin:0;background:var(--bg2);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased}
+  .wrap{width:min(960px,100% - 40px);margin-inline:auto}
+  a{color:inherit}
+
+  nav{position:sticky;top:0;z-index:60}
+  nav::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(255,255,255,.78);
+    backdrop-filter:blur(18px) saturate(1.2);border-bottom:1px solid var(--hair)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:16px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.05em;font-size:19px;text-decoration:none;color:inherit}
+  .brand img{width:20px;height:20px;display:block}
+  .brand em{font-style:normal;font:600 10.5px/1 var(--mono);letter-spacing:.22em;color:var(--faint);
+    text-transform:uppercase;padding-left:11px;margin-left:2px;border-left:1px solid var(--hair2)}
+  .live{display:flex;align-items:center;gap:8px;font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--green);display:block;animation:pulse 2s ease-in-out infinite}
+  .live.warn i{background:var(--amber);animation:none}
+  .live.bad i{background:var(--red);animation:none}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @media(prefers-reduced-motion:reduce){.live i{animation:none}}
+
+  header{padding:34px 0 8px}
+  h1{font-size:clamp(28px,4vw,40px);line-height:1;letter-spacing:-.04em;font-weight:800;margin:0 0 8px;text-wrap:balance}
+  .sub{font:400 13px/1.6 var(--mono);color:var(--soft);margin:0;max-width:64ch}
+
+  .banner{margin-top:22px;padding:18px 20px;display:flex;align-items:center;gap:14px;background:var(--green-bg);color:var(--green);
+    font:600 15px/1.3 var(--display);letter-spacing:-.01em}
+  .banner.degraded{background:var(--amber-bg);color:var(--amber)}
+  .banner.major{background:var(--red-bg);color:var(--red)}
+  .banner i{width:10px;height:10px;border-radius:50%;background:currentColor;flex:none}
+  .banner small{margin-left:auto;font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:inherit;opacity:.8;white-space:nowrap}
+
+  section{padding:30px 0 0}
+  h2{font:600 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin:0 0 18px;display:flex;align-items:center;gap:12px}
+  h2 i{flex:1;border-top:1px dashed var(--hair2)}
+
+  .services{background:var(--paper);box-shadow:0 1px 0 var(--hair),0 10px 30px -24px rgba(14,13,12,.5)}
+  .svc{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 18px;padding:18px 20px;border-bottom:1px solid var(--hair)}
+  .svc:last-child{border-bottom:0}
+  .svc .name{font:600 15px/1.3 var(--display);letter-spacing:-.01em}
+  .svc .desc{font:400 12px/1.55 var(--mono);color:var(--soft);max-width:60ch}
+  .svc .detail{font:500 12px/1.55 var(--mono);color:var(--amber);max-width:60ch}
+  .svc .detail.bad{color:var(--red)}
+  .svc .detail.off{color:var(--faint)}
+  .pill{justify-self:end;align-self:start;font:600 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;padding:7px 9px;white-space:nowrap}
+  .pill.operational{background:var(--green-bg);color:var(--green)}
+  .pill.degraded{background:var(--amber-bg);color:var(--amber)}
+  .pill.down{background:var(--red-bg);color:var(--red)}
+  .pill.off{background:var(--grey-bg);color:var(--soft)}
+  .bar{grid-column:1 / -1;display:grid;grid-template-columns:repeat(30,minmax(0,1fr));gap:3px;margin-top:6px}
+  .bar b{display:block;height:22px;background:var(--grey-bg)}
+  .bar b.operational{background:var(--green)}
+  .bar b.degraded{background:var(--amber)}
+  .bar b.down{background:var(--red)}
+  .bar b.off{background:var(--grey)}
+  .bar b[title]{cursor:default}
+  .axis{grid-column:1 / -1;display:flex;justify-content:space-between;font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+
+  .incidents{background:var(--paper);box-shadow:0 1px 0 var(--hair),0 10px 30px -24px rgba(14,13,12,.5)}
+  .inc{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 16px;padding:16px 20px;border-bottom:1px solid var(--hair)}
+  .inc:last-child{border-bottom:0}
+  .inc .when{font:500 11px/1.6 var(--mono);color:var(--faint);white-space:nowrap}
+  .inc .what{font:600 14px/1.4 var(--display)}
+  .inc .how{grid-column:2;font:400 12px/1.55 var(--mono);color:var(--soft);max-width:64ch}
+  .inc .how b{font-weight:600;color:var(--ink)}
+  .empty{padding:18px 20px;font:400 12.5px/1.6 var(--mono);color:var(--soft)}
+
+  .audit{background:var(--paper);box-shadow:0 1px 0 var(--hair),0 10px 30px -24px rgba(14,13,12,.5);padding:26px 24px 8px}
+  .audit .lede{font:400 13.5px/1.65 var(--mono);color:var(--soft);margin:0 0 22px;max-width:66ch}
+  .audit .row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 18px;padding:16px 0;border-top:1px dashed var(--hair2)}
+  .audit .row .pill{justify-self:start;align-self:start;margin-top:2px}
+  .audit .row h3{font:600 15px/1.3 var(--display);margin:0;letter-spacing:-.01em}
+  .audit .row p{grid-column:2;font:400 12.5px/1.6 var(--mono);color:var(--soft);margin:0;max-width:64ch}
+  .audit .row p b{font-weight:600;color:var(--ink)}
+  @media(max-width:620px){
+    .inc{grid-template-columns:1fr}.inc .how{grid-column:1}
+    .audit .row{grid-template-columns:1fr}.audit .row p{grid-column:1}
+  }
+  footer{padding:34px 0 60px;font:400 11px/1.7 var(--mono);color:var(--faint)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="/"><img src="/brand/png/glyph-black.png" alt="">RECEIPT<em>Status</em></a>
+    <div class="live" id="live"><i></i><span id="asof">Loading</span></div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header>
+    <h1>Is Receipt working right now?</h1>
+    <p class="sub">Every service is checked once an hour. Green means it did what a customer would expect on the last check. This page never shows balances, wallets or anything private.</p>
+    <div class="banner" id="banner"><i></i><span id="banner-text">Checking…</span><small id="banner-when"></small></div>
+  </header>
+
+  <section>
+    <h2>Services <i></i></h2>
+    <div class="services" id="services"><div class="empty">Loading…</div></div>
+  </section>
+
+  <section>
+    <h2>Incidents, last 30 days <i></i></h2>
+    <div class="incidents" id="incidents"><div class="empty">Loading…</div></div>
+  </section>
+
+  <section>
+    <h2>Service audit · 9 September 2026 <i></i></h2>
+    <div class="audit">
+      <p class="lede">A full review of every way a receipt can earn stock on Receipt, checked against the live service. Written for customers: what works, what is limited, and what we are doing about it.</p>
+
+      <div class="row"><span class="pill operational">Working</span><h3>Paper receipts</h3>
+        <p>Scan a receipt from a supported brand, get the reward as that brand's stock in your wallet. <b>Every reward delivered so far has a matching transaction on Robinhood Chain</b>, and nothing is stuck waiting to be sent. Deliveries can pause overnight when the day's purchasing allowance is used up; a reserved reward is still yours and arrives the next day.</p></div>
+
+      <div class="row"><span class="pill operational">Working</span><h3>Solana rewards · McDonald's</h3>
+        <p>Rewards for brands whose stock lives on Solana are bought and delivered there. <b>The first live purchase and deliveries completed today</b> with no failures. Link a Solana wallet in the app to receive them.</p></div>
+
+      <div class="row"><span class="pill degraded">Limited</span><h3>DexScreener receipts</h3>
+        <p>Pay DexScreener for a boost, an ad or Enhanced Token Info from your wallet, and that payment counts as a receipt paid in NVDA. It is live on Ethereum, Base and Polygon. <b>Order history on Base is currently unavailable</b> because a third-party explorer is down; pasting the transaction hash still works on every chain. No claims have been made yet.</p></div>
+
+      <div class="row"><span class="pill off">Not yet</span><h3>On-chain receipts</h3>
+        <p>Swaps made from a linked Solana wallet, claimable as receipts. Built and tested, not switched on yet.</p></div>
+
+      <div class="row"><span class="pill operational">Resolved</span><h3>Email sign-in</h3>
+        <p><b>For several hours today, new accounts could not be created</b> by email. Existing accounts and wallet sign-in were unaffected. This was a limit at our sign-in provider and has been lifted. New sign-ups work again.</p></div>
+
+      <div class="row"><span class="pill degraded">Slower</span><h3>Manual review</h3>
+        <p>Some receipts the reader is not sure about wait for a person to look. <b>Reviews are currently taking longer than usual</b>, up to a day. A receipt in review is not refused; you will see the outcome in your history.</p></div>
+
+      <div class="row"><span class="pill operational">Fixed</span><h3>Reliability fixes shipped today</h3>
+        <p>Claims by transaction hash now work even when a chain's explorer is offline. The check that unlocks higher reward limits for token holders retries before giving up, so a slow moment can no longer lower a holder's reward. Recurring third-party outages no longer flood our logs, which keeps other problems visible.</p></div>
+    </div>
+  </section>
+
+  <footer>Checks run every hour and this page refreshes every five minutes. Times are shown in your local time zone. How rewards are computed is on the <a href="/rules">rules page</a>. Something wrong that isn't shown here? <a href="/help">Get help</a>.</footer>
+</div>
+
+<script>
+const API = location.origin;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const LABEL = { operational: "Operational", degraded: "Degraded", down: "Outage", off: "Off" };
+const fmtWhen = (iso) => new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+const fmtDay = (ymd) => new Date(ymd + "T12:00:00Z").toLocaleDateString([], { month: "short", day: "numeric" });
+const ago = (iso) => { const m = Math.round((Date.now() - new Date(iso).getTime()) / 60000); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : `${Math.round(m / 60)} h ago`; };
+
+function render(j) {
+  const banner = $("banner"); banner.className = "banner " + j.overall;
+  $("banner-text").textContent = j.overall === "operational" ? "All services operational"
+    : j.overall === "degraded" ? "Some services are limited" : "A service is down";
+  $("banner-when").textContent = j.checkedAt ? `Checked ${ago(j.checkedAt)}` : "Not checked yet";
+  const live = $("live"); live.className = "live " + (j.overall === "operational" ? "" : j.overall === "degraded" ? "warn" : "bad");
+  $("asof").textContent = j.checkedAt ? `Hourly · ${ago(j.checkedAt)}` : "Hourly";
+
+  $("services").innerHTML = j.services.map((s) => {
+    const detail = s.detail ? `<div class="detail ${s.status === "down" ? "bad" : s.status === "off" ? "off" : ""}">${esc(s.detail)}</div>` : "";
+    const cells = s.days.map((d) => `<b class="${d.status || ""}" title="${fmtDay(d.day)}: ${d.status ? LABEL[d.status] : "no checks"}"></b>`).join("");
+    const up = s.status === "off" ? "Not switched on" : s.uptime === null ? "" : `${s.uptime}% of checks operational`;
+    return `<div class="svc">
+      <div><div class="name">${esc(s.name)}</div><div class="desc">${esc(s.description)}</div>${detail}</div>
+      <span class="pill ${s.status}">${LABEL[s.status]}</span>
+      <div class="bar">${cells}</div>
+      <div class="axis"><span>${j.days} days ago</span><span>${esc(up)}</span><span>Today</span></div>
+    </div>`;
+  }).join("");
+
+  $("incidents").innerHTML = j.incidents.length === 0
+    ? `<div class="empty">No incidents recorded in the last ${j.days} days.</div>`
+    : j.incidents.map((i) => `<div class="inc">
+        <div class="when">${fmtWhen(i.startedAt)}${i.endedAt ? ` → ${fmtWhen(i.endedAt)}` : " → ongoing"}</div>
+        <div class="what">${esc(i.name)} · ${LABEL[i.status]}</div>
+        <div class="how">${esc(i.detail || "")}${i.endedAt ? " <b>Resolved.</b>" : ""}</div>
+      </div>`).join("");
+}
+
+async function load() {
+  try {
+    const r = await fetch(`${API}/api/status/services`, { cache: "no-store" });
+    if (!r.ok) throw new Error(`status ${r.status}`);
+    render(await r.json());
+  } catch (e) {
+    $("banner").className = "banner degraded"; $("banner-text").textContent = "Couldn't load status just now."; $("banner-when").textContent = "";
+  }
+}
+load();
+setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>
