@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>RECEIPT — Scan to paid, in seconds</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" />
+<style>
+  :root{
+    --bg:#FFFFFF; --bg2:#F5F5F7; --paper:#FDFCFA; --ink:#1D1D1F; --soft:#6E665C; --faint:#A69C8E;
+    --hair:rgba(29,29,31,.1); --hair2:rgba(29,29,31,.18); --green:#5C7A52; --red:#B3261E; --amber:#946200;
+    --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#141313; --bg2:#0F0E0E; --paper:#1B1A19; --ink:#F2EFEA; --soft:#A79E92; --faint:#7C736A;
+      --hair:rgba(242,239,234,.12); --hair2:rgba(242,239,234,.2); --green:#8FB07F; }
+  }
+  *{box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  body{margin:0;background:var(--bg2);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased}
+  .wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+
+  nav{position:sticky;top:0;z-index:60}
+  nav::before{content:"";position:absolute;inset:0;z-index:-1;background:color-mix(in srgb,var(--bg) 78%,transparent);
+    backdrop-filter:blur(18px) saturate(1.2);border-bottom:1px solid var(--hair)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:16px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.05em;font-size:19px;
+    text-decoration:none;color:inherit}
+  .brand img{width:20px;height:20px;display:block}
+  .brand em{font-style:normal;font:600 10.5px/1 var(--mono);letter-spacing:.22em;color:var(--faint);
+    text-transform:uppercase;padding-left:11px;margin-left:2px;border-left:1px solid var(--hair2)}
+  .live{display:flex;align-items:center;gap:8px;font:500 10.5px/1 var(--mono);letter-spacing:.16em;
+    text-transform:uppercase;color:var(--soft)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--green);display:block;animation:pulse 2s ease-in-out infinite}
+  .live.stale i{background:var(--amber);animation:none}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  header{padding:40px 0 10px}
+  .kicker{font:600 10.5px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+  h1{font-size:clamp(28px,4.4vw,44px);line-height:1.02;letter-spacing:-.045em;font-weight:800;margin:0 0 10px}
+  .sub{font:400 13px/1.65 var(--mono);color:var(--soft);margin:0;max-width:62ch}
+
+  /* The number. It is the page, so it is allowed to be enormous. */
+  .hero{margin:30px 0 0;padding:44px 32px 38px;border-radius:26px;background:var(--paper);
+    border:1px solid var(--hair);box-shadow:0 30px 60px -40px rgba(0,0,0,.4);text-align:center}
+  .hero-k{font:600 10.5px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
+  .big{display:flex;align-items:baseline;justify-content:center;gap:.12em;margin:18px 0 6px;
+    font-weight:800;letter-spacing:-.06em;line-height:.86;
+    font-size:clamp(88px,22vw,220px);font-variant-numeric:tabular-nums}
+  .big .unit{font-size:clamp(20px,4.4vw,44px);letter-spacing:-.03em;color:var(--soft);font-weight:600}
+  .hero-note{font:400 13px/1.6 var(--mono);color:var(--soft);margin:10px auto 0;max-width:52ch}
+  .hero-note b{color:var(--ink);font-weight:600}
+
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;gap:10px} }
+  .card{background:var(--paper);border:1px solid var(--hair);border-radius:18px;padding:20px 20px 18px}
+  .card .k{font:600 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .card b{display:block;font:800 34px/1 var(--display);letter-spacing:-.045em;margin-top:10px;
+    font-variant-numeric:tabular-nums}
+  .card .m{display:block;font:400 11.5px/1.5 var(--mono);color:var(--soft);margin-top:7px}
+
+  /* The volume chart. One measure at a time, one axis, so nothing implies a
+     correlation between claims and dollars that the scales invented. */
+  section.vol{margin:22px 0 0}
+  .vol-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 12px}
+  .vol-head h2{font-size:15px;letter-spacing:-.02em;margin:0 0 5px;font-weight:800}
+  .vol-head p{font:400 11.5px/1.5 var(--mono);color:var(--soft);margin:0;max-width:56ch}
+  .segs{display:flex;gap:8px;flex-wrap:wrap}
+  .seg{display:flex;gap:2px;padding:2px;border:1px solid var(--hair);border-radius:11px;background:var(--paper)}
+  .seg button{appearance:none;border:0;background:transparent;color:var(--soft);cursor:pointer;
+    font:600 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border-radius:9px}
+  .seg button[aria-selected="true"]{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--ink)}
+  .seg button:focus-visible{outline:2px solid var(--green);outline-offset:1px}
+
+  .vol-card{background:var(--paper);border:1px solid var(--hair);border-radius:18px;padding:20px 20px 14px;position:relative}
+  .vol-sum{display:flex;gap:26px;flex-wrap:wrap;margin:0 0 16px}
+  .vol-sum div{min-width:0}
+  .vol-sum .k{font:600 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .vol-sum b{display:block;font:800 26px/1 var(--display);letter-spacing:-.04em;margin-top:8px;font-variant-numeric:tabular-nums}
+  .vol-sum .m{display:block;font:400 11px/1.4 var(--mono);color:var(--soft);margin-top:6px}
+  .vol-sum .up{color:var(--green)}
+  .chart{position:relative;width:100%}
+  .chart svg{display:block;width:100%;height:auto;overflow:visible}
+  .gridline{stroke:var(--hair);stroke-width:1;shape-rendering:crispEdges}
+  .axis-t{font:400 10px/1 var(--mono);fill:var(--faint)}
+  .chart.narrow .axis-t{font-size:9px}
+  .bar{fill:color-mix(in srgb,var(--green) 34%,transparent)}
+  .bar.hot{fill:var(--green)}
+  .trend{fill:none;stroke:var(--green);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .hit{fill:transparent;cursor:default}
+  .cross{stroke:var(--hair2);stroke-width:1;shape-rendering:crispEdges}
+  .tip{position:absolute;pointer-events:none;z-index:5;background:var(--bg);border:1px solid var(--hair2);
+    border-radius:10px;padding:9px 11px;box-shadow:0 12px 28px -18px rgba(0,0,0,.6);white-space:nowrap;
+    font:400 11px/1.45 var(--mono);color:var(--soft);transform:translate(-50%,-100%);opacity:0;transition:opacity .12s}
+  .tip.on{opacity:1}
+  .tip b{display:block;font:700 14px/1.2 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .tip i{display:inline-block;width:12px;height:2px;border-radius:1px;background:var(--green);
+    vertical-align:middle;margin-right:6px}
+  .vol-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    margin-top:12px;padding-top:11px;border-top:1px solid var(--hair);
+    font:400 10.5px/1.5 var(--mono);color:var(--faint)}
+  .vol-foot .key{display:flex;align-items:center;gap:14px}
+  .vol-foot .key span{display:flex;align-items:center;gap:6px}
+  .vol-foot .key u{text-decoration:none;width:10px;height:10px;border-radius:2px;display:block;
+    background:color-mix(in srgb,var(--green) 34%,transparent)}
+  .vol-foot .key u.line{height:2px;border-radius:1px;background:var(--green)}
+  .vol-foot button{appearance:none;border:0;background:transparent;color:var(--soft);cursor:pointer;
+    font:inherit;text-decoration:underline;padding:0}
+  table.vol-t{width:100%;border-collapse:collapse;margin-top:12px;font:400 11px/1 var(--mono)}
+  table.vol-t th{text-align:left;color:var(--faint);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    font-size:9.5px;padding:0 8px 8px 0}
+  table.vol-t td{padding:6px 8px 6px 0;border-top:1px solid var(--hair);color:var(--soft);font-variant-numeric:tabular-nums}
+  table.vol-t td:first-child{color:var(--ink)}
+  @media (prefers-reduced-motion: reduce){ .tip{transition:none} }
+
+  section.feed{margin:22px 0 60px}
+  .feed h2{font-size:15px;letter-spacing:-.02em;margin:0 0 12px;font-weight:800}
+  .row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;
+    padding:13px 18px;background:var(--paper);border:1px solid var(--hair);border-radius:14px;margin-bottom:8px}
+  .row .tk{font:700 12px/1 var(--mono);letter-spacing:.06em}
+  .row .amt{font:400 12px/1 var(--mono);color:var(--soft);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .row .took{font:700 13px/1 var(--mono);color:var(--green);font-variant-numeric:tabular-nums}
+  .row.fresh{animation:in .5s ease}
+  @keyframes in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .empty{padding:26px 18px;text-align:center;font:400 12.5px/1.6 var(--mono);color:var(--soft);
+    background:var(--paper);border:1px dashed var(--hair2);border-radius:14px}
+
+  footer{padding:24px 0 48px;border-top:1px solid var(--hair);font:400 11.5px/1.7 var(--mono);color:var(--faint)}
+  footer a{color:var(--soft)}
+  @media (prefers-reduced-motion: reduce){ .live i,.row.fresh{animation:none} }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <a class="brand" href="/"><img src="/brand/png/glyph-black.png" alt="" /> Receipt <em>Speed</em></a>
+  <span class="live" id="live"><i></i> <span id="live-t">Live</span></span>
+</div></nav>
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Scan to paid</div>
+    <h1>How long a receipt<br>takes to pay you.</h1>
+    <p class="sub">Measured, not promised. Every number here is the real gap between a scan being approved and the shares landing on-chain, read from the ledger — every delivery since payouts became automatic.</p>
+  </header>
+
+  <div class="hero">
+    <div class="hero-k">Typical wait, scan to settled</div>
+    <div class="big"><span id="big">—</span><span class="unit" id="big-u">seconds</span></div>
+    <p class="hero-note" id="hero-note">Reading the ledger…</p>
+  </div>
+
+  <div class="grid">
+    <div class="card"><div class="k">Fastest on record</div><b id="fastest">—</b><span class="m">The quickest a scan has settled.</span></div>
+    <div class="card"><div class="k">9 in 10 land within</div><b id="p90">—</b><span class="m">Nine of every ten deliveries beat this.</span></div>
+    <div class="card"><div class="k">Settling right now</div><b id="waiting">—</b><span class="m">Approved, waiting on the next pass.</span></div>
+  </div>
+
+  <section class="vol">
+    <div class="vol-head">
+      <div>
+        <h2 id="vol-h">Since the reset, hour by hour.</h2>
+        <p id="vol-p">Receipts scanned, rewards claimed and cashback paid, every hour since the queue was cleared.</p>
+      </div>
+      <div class="segs">
+        <div class="seg" role="tablist" aria-label="What to chart">
+          <button role="tab" id="m-scans" aria-selected="true" data-measure="scans">Scanned</button>
+          <button role="tab" id="m-claims" aria-selected="false" data-measure="claims">Claimed</button>
+          <button role="tab" id="m-usd" aria-selected="false" data-measure="usd">Stockback</button>
+        </div>
+        <div class="seg" role="tablist" aria-label="Over what span">
+          <button role="tab" id="r-hourly" aria-selected="true" data-range="hourly">Hourly</button>
+          <button role="tab" id="r-daily" aria-selected="false" data-range="daily">30 days</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vol-card">
+      <div class="vol-sum">
+        <div><div class="k" id="s1k">Last 7 days</div><b id="s1">—</b><span class="m" id="s1m">&nbsp;</span></div>
+        <div><div class="k" id="s2k">Versus the 7 before</div><b id="s2">—</b><span class="m" id="s2m">&nbsp;</span></div>
+        <div><div class="k" id="s3k">Best day</div><b id="s3">—</b><span class="m" id="s3m">&nbsp;</span></div>
+      </div>
+      <div class="chart" id="chart">
+        <svg id="svg" role="img" aria-labelledby="chart-title"><title id="chart-title">Claims per day over the last 30 days</title></svg>
+        <div class="tip" id="tip" role="status" aria-live="polite"></div>
+      </div>
+      <div class="vol-foot">
+        <div class="key">
+          <span><u></u> <span id="key-bar">Per hour</span></span>
+          <span><u class="line"></u> <span id="key-line">6-hour average</span></span>
+        </div>
+        <button type="button" id="tbl-t" aria-expanded="false" aria-controls="tbl">Show the numbers</button>
+      </div>
+      <div id="tbl" hidden></div>
+    </div>
+  </section>
+
+  <section class="feed">
+    <h2>Just landed</h2>
+    <div id="feed"><div class="empty">Loading the last deliveries…</div></div>
+  </section>
+
+  <footer>
+    An approved scan now kicks its own settlement pass, so a reward no longer waits on the five-minute loop.
+    Figures are the median and 90th percentile of real delivered rewards, counted from the moment that became automatic —
+    earlier payouts ran behind a four-hour credit delay and would describe a system that no longer exists.
+    <a href="/proof">See the proof page</a> · <a href="/status">Service status</a> · <a href="/app">Open the app</a>
+  </footer>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const API = "";
+
+  /** Seconds as the shortest honest phrase, and its unit, kept apart so the
+      big number stays a number and the unit stays small beside it. */
+  function split(sec) {
+    if (sec === null || sec === undefined) return ["—", ""];
+    if (sec < 90) return [String(Math.round(sec)), Math.round(sec) === 1 ? "second" : "seconds"];
+    if (sec < 5400) { const m = sec / 60; return [m < 10 ? m.toFixed(1) : String(Math.round(m)), "minutes"]; }
+    const h = sec / 3600;
+    return [h < 10 ? h.toFixed(1) : String(Math.round(h)), "hours"];
+  }
+  const short = (sec) => { const [n, u] = split(sec); return u ? `${n} ${u.replace(/s$/, u === "seconds" || u === "minutes" || u === "hours" ? "s" : "")}` : n; };
+  const ago = (iso) => {
+    const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+    if (s < 60) return Math.round(s) + "s ago";
+    if (s < 3600) return Math.round(s / 60) + "m ago";
+    if (s < 86400) return Math.round(s / 3600) + "h ago";
+    return Math.round(s / 86400) + "d ago";
+  };
+  const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  let seen = new Set();
+
+  /* ---------------- The volume chart ----------------
+     One measure at a time and one y-axis. Claims and dollars are different
+     scales, and putting them on the same plot with two axes would invent a
+     correlation neither of them has. */
+  let daily = [];
+  let hourly = [];
+  let hourlyFrom = null;
+  let measure = "scans";
+  let range = "hourly";
+
+  // Which series is on screen, and the words that describe its grain. The
+  // hourly one starts at the fresh start, so it is the default: the daily
+  // chart draws that whole era as two bars.
+  const isHourly = () => range === "hourly" && hourly.length > 1;
+  const series = () => (isHourly() ? hourly : daily);
+  const AVG_W = () => (isHourly() ? 6 : 7);
+  const grain = () => (isHourly() ? "hour" : "day");
+
+  const nf = new Intl.NumberFormat("en-US");
+  const money = (v) => "$" + (v >= 1000
+    ? nf.format(Math.round(v))
+    : v.toFixed(2).replace(/\.00$/, ""));
+  const fmtV = (v) => (measure === "usd" ? money(v) : nf.format(v));
+  const MEASURE_N = { scans: "Receipts scanned", claims: "Claims", usd: "Stockback dollars" };
+  const dayLabel = (iso) =>
+    new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+  // Hours read in the reader's own clock: the series is UTC, but "3 PM" is
+  // only useful if it is the 3 PM they are living in.
+  const hourLabel = (iso) =>
+    new Date(iso).toLocaleTimeString("en-US", { hour: "numeric" });
+  // The axis spans more than a day, so a bare "3 AM" at both ends reads as one
+  // clock going round rather than two days passing. Axis labels carry the day.
+  const hourAxis = (iso) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-US", { weekday: "short" }) + " " +
+      d.toLocaleTimeString("en-US", { hour: "numeric" });
+  };
+  const hourFull = (iso) =>
+    new Date(iso).toLocaleString("en-US", { weekday: "short", hour: "numeric" });
+  // One label per point, whichever series is showing.
+  const label = (d) => (isHourly() ? hourLabel(d.hour) : dayLabel(d.day));
+  const labelFull = (d) => (isHourly() ? hourFull(d.hour) : dayLabel(d.day));
+
+  /** A trailing seven-day mean. Trailing, not centred, so the last point is a
+      real number and not half-guessed from days that have not happened. */
+  function trailing(values, w) {
+    return values.map((_, i) => {
+      const from = Math.max(0, i - w + 1);
+      const slice = values.slice(from, i + 1);
+      return slice.reduce((a, b) => a + b, 0) / slice.length;
+    });
+  }
+
+  function sum(arr) { return arr.reduce((a, b) => a + b, 0); }
+
+  function drawChart() {
+    const svg = $("svg");
+    const wrap = $("chart");
+    if (!svg || !wrap) return;
+    const data = series();
+    if (!data.length) return;
+
+    const vals = data.map((d) => Number(d[measure]) || 0);
+    const avg = trailing(vals, AVG_W());
+
+    // Geometry. The viewBox is fixed and the SVG scales, so one set of numbers
+    // works at every width; the bars just get wider.
+    // The viewBox scales its contents, type included, so a fixed 10px axis
+    // label shrinks with the card. Narrowing the viewBox on a phone keeps the
+    // same label legible: fewer user units across the same painted width.
+    const narrow = wrap.getBoundingClientRect().width < 560;
+    const W = narrow ? 380 : 720, H = narrow ? 200 : 240;
+    const padL = narrow ? 34 : 46, padR = 10, padT = 12, padB = narrow ? 24 : 26;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const n = vals.length;
+    const step = iw / n;
+    const bw = Math.max(2, Math.min(step - 2, step * 0.62)); // 2px surface gap between bars
+
+    const peak = Math.max(...vals, ...avg, 1);
+    // A round ceiling, so the gridlines land on numbers a person would say.
+    const mag = Math.pow(10, Math.floor(Math.log10(peak)));
+    const top = Math.ceil(peak / (mag / 2)) * (mag / 2) || 1;
+    const y = (v) => padT + ih - (v / top) * ih;
+    const xc = (i) => padL + i * step + step / 2;
+
+    const ticks = [0, top / 2, top];
+    const maxAt = vals.indexOf(Math.max(...vals));
+
+    const el = (tag, attrs, text) => {
+      const e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      for (const k in attrs) e.setAttribute(k, attrs[k]);
+      if (text !== undefined) e.textContent = text;
+      return e;
+    };
+
+    while (svg.lastChild) svg.removeChild(svg.lastChild);
+    wrap.classList.toggle("narrow", narrow);
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.appendChild(el("title", {},
+      `${MEASURE_N[measure]} per ${grain()} over the last ${n} ${grain()}s`));
+
+    // Recessive solid hairline grid.
+    for (const t of ticks) {
+      svg.appendChild(el("line", { class: "gridline", x1: padL, x2: W - padR, y1: y(t), y2: y(t) }));
+      svg.appendChild(el("text", { class: "axis-t", x: padL - 8, y: y(t) + 3.5, "text-anchor": "end" },
+        measure === "usd" ? (t >= 1000 ? "$" + Math.round(t / 1000) + "k" : "$" + Math.round(t)) : nf.format(Math.round(t))));
+    }
+
+    // Bars, with 4px rounded data-ends anchored to the baseline.
+    vals.forEach((v, i) => {
+      const h = Math.max(v > 0 ? 2 : 0, (v / top) * ih);
+      if (!h) return;
+      const r = Math.min(4, bw / 2, h);
+      const x = xc(i) - bw / 2, yy = padT + ih - h;
+      const d = `M${x},${padT + ih} L${x},${yy + r} Q${x},${yy} ${x + r},${yy} L${x + bw - r},${yy} Q${x + bw},${yy} ${x + bw},${yy + r} L${x + bw},${padT + ih} Z`;
+      svg.appendChild(el("path", { class: "bar" + (i === maxAt ? " hot" : ""), d, "data-i": i }));
+    });
+
+    // The trend.
+    svg.appendChild(el("path", { class: "trend", d: avg.map((v, i) => `${i ? "L" : "M"}${xc(i)},${y(v)}`).join(" ") }));
+
+    // X labels: first, middle, last only — a date under every bar is unreadable.
+    const xLabels = narrow ? [0, n - 1] : [0, Math.floor((n - 1) / 2), n - 1];
+    for (const i of [...new Set(xLabels)]) {
+      svg.appendChild(el("text", {
+        class: "axis-t", x: xc(i), y: H - 8,
+        "text-anchor": i === 0 ? "start" : i === n - 1 ? "end" : "middle",
+      }, isHourly() ? hourAxis(data[i].hour) : dayLabel(data[i].day)));
+    }
+
+    // Hover layer: a crosshair snapping to the nearest day, and one full-height
+    // hit column per day so the pointer never has to find a 2px bar.
+    const cross = el("line", { class: "cross", y1: padT, y2: padT + ih, x1: -99, x2: -99 });
+    svg.appendChild(cross);
+    const tip = $("tip");
+    let shown = -1;
+
+    const show = (i) => {
+      if (i < 0 || i >= n) return;
+      shown = i;
+      cross.setAttribute("x1", xc(i)); cross.setAttribute("x2", xc(i));
+      while (tip.lastChild) tip.removeChild(tip.lastChild);
+      const b = document.createElement("b");
+      // Values lead, label follows.
+      b.textContent = fmtV(vals[i]);
+      const line = document.createElement("span");
+      const key = document.createElement("i");
+      line.appendChild(key);
+      line.appendChild(document.createTextNode(
+        `${AVG_W()}-${grain()} avg ${measure === "usd" ? money(avg[i]) : nf.format(Math.round(avg[i]))}`));
+      const when = document.createElement("div");
+      when.textContent = labelFull(data[i]);
+      tip.appendChild(when); tip.appendChild(b); tip.appendChild(line);
+      const rect = wrap.getBoundingClientRect();
+      tip.style.left = Math.round((xc(i) / W) * rect.width) + "px";
+      tip.style.top = Math.round((y(Math.max(vals[i], avg[i])) / H) * rect.height) - 10 + "px";
+      tip.classList.add("on");
+    };
+    const hide = () => { shown = -1; tip.classList.remove("on"); cross.setAttribute("x1", -99); cross.setAttribute("x2", -99); };
+
+    vals.forEach((v, i) => {
+      const hit = el("rect", {
+        class: "hit", x: padL + i * step, y: padT, width: step, height: ih,
+        tabindex: "0", role: "img",
+        "aria-label": `${labelFull(data[i])}: ${fmtV(v)}`,
+      });
+      hit.addEventListener("pointerenter", () => show(i));
+      hit.addEventListener("focus", () => show(i));
+      hit.addEventListener("blur", hide);
+      svg.appendChild(hit);
+    });
+    svg.addEventListener("pointerleave", hide);
+
+    // Summary figures, on the same measure the chart is showing.
+    //
+    // The hourly view compares half-days rather than weeks, and its first
+    // figure is the running total since the reset — there is no "last 7 days"
+    // inside a window that is barely two of them.
+    const hourlyNow = isHourly();
+    const w = hourlyNow ? 12 : 7;
+    const unit = hourlyNow ? "hours" : "days";
+    // The final hour is still running, so it is short by construction. Compare
+    // whole periods only, or a bucket three minutes old drags the change
+    // negative and the page reports a slowdown that has not happened.
+    const whole = hourlyNow ? vals.slice(0, -1) : vals;
+    const recent = whole.slice(-w), before = whole.slice(-w * 2, -w);
+    const a = hourlyNow ? sum(vals) : sum(recent);
+    const b2 = sum(before);
+    const noun = measure === "usd" ? "Paid out"
+      : measure === "scans" ? (a === 1 ? "receipt scanned" : "receipts scanned")
+      : (a === 1 ? "claim" : "claims");
+
+    $("s1k").textContent = hourlyNow ? "Since the reset" : "Last 7 days";
+    $("s1").textContent = fmtV(a);
+    $("s1m").textContent = noun;
+
+    $("s2k").textContent = `Last ${w} ${unit} vs the ${w} before`;
+    if (before.length < w || !b2) {
+      $("s2").textContent = "—";
+      $("s2m").textContent = "Not enough history yet.";
+      $("s2").classList.remove("up");
+    } else {
+      const c = sum(recent);
+      const pct = ((c - b2) / b2) * 100;
+      $("s2").textContent = (pct >= 0 ? "+" : "") + (Math.abs(pct) >= 100 ? Math.round(pct) : pct.toFixed(0)) + "%";
+      $("s2").classList.toggle("up", pct > 0);
+      $("s2m").textContent = `${fmtV(b2)} → ${fmtV(c)}`;
+    }
+
+    $("s3k").textContent = hourlyNow ? "Busiest hour" : "Best day";
+    $("s3").textContent = fmtV(vals[maxAt]);
+    $("s3m").textContent = labelFull(data[maxAt]);
+
+    // The table view, so every value is reachable without hovering.
+    const t = $("tbl");
+    while (t.lastChild) t.removeChild(t.lastChild);
+    const table = document.createElement("table");
+    table.className = "vol-t";
+    const thead = document.createElement("thead");
+    const hr = document.createElement("tr");
+    for (const h of [hourlyNow ? "Hour" : "Day", "Scanned", "Claimed", "Stockback"]) {
+      const th = document.createElement("th"); th.textContent = h; hr.appendChild(th);
+    }
+    thead.appendChild(hr); table.appendChild(thead);
+    const tb = document.createElement("tbody");
+    [...data].reverse().forEach((d) => {
+      const tr = document.createElement("tr");
+      for (const v of [labelFull(d), nf.format(Number(d.scans) || 0),
+                       nf.format(Number(d.claims) || 0), money(Number(d.usd) || 0)]) {
+        const td = document.createElement("td"); td.textContent = v; tr.appendChild(td);
+      }
+      tb.appendChild(tr);
+    });
+    table.appendChild(tb); t.appendChild(table);
+  }
+
+  /** Heading, legend and prose follow whichever series is drawn. */
+  function retitle() {
+    const hourlyNow = isHourly();
+    $("key-bar").textContent = hourlyNow ? "Per hour" : "Per day";
+    $("key-line").textContent = `${AVG_W()}-${grain()} average`;
+    const from = hourlyFrom
+      ? new Date(hourlyFrom).toLocaleString("en-US", { month: "long", day: "numeric", hour: "numeric" })
+      : null;
+    $("vol-h").textContent = hourlyNow ? "Since the reset, hour by hour." : "Claims are going up.";
+    $("vol-p").textContent = hourlyNow
+      ? `Receipts scanned, rewards claimed and cashback paid, every hour${from ? ` since ${from}` : ""}.`
+      : "Every day of the whole history, not just the automated window above.";
+  }
+
+  for (const btn of document.querySelectorAll(".seg button[data-measure]")) {
+    btn.addEventListener("click", () => {
+      measure = btn.dataset.measure;
+      for (const o of document.querySelectorAll(".seg button[data-measure]")) {
+        o.setAttribute("aria-selected", String(o === btn));
+      }
+      drawChart();
+    });
+  }
+  for (const btn of document.querySelectorAll(".seg button[data-range]")) {
+    btn.addEventListener("click", () => {
+      range = btn.dataset.range;
+      for (const o of document.querySelectorAll(".seg button[data-range]")) {
+        o.setAttribute("aria-selected", String(o === btn));
+      }
+      retitle();
+      drawChart();
+    });
+  }
+  $("tbl-t").addEventListener("click", () => {
+    const t = $("tbl"), open = t.hidden;
+    t.hidden = !open;
+    $("tbl-t").setAttribute("aria-expanded", String(open));
+    $("tbl-t").textContent = open ? "Hide the numbers" : "Show the numbers";
+  });
+  // The viewBox scales, but the tooltip is positioned in real pixels.
+  addEventListener("resize", () => { if (daily.length) drawChart(); });
+
+  async function tick() {
+    try {
+      const r = await fetch(API + "/api/status/settle-speed", { cache: "no-store" });
+      if (!r.ok) throw new Error("http " + r.status);
+      const j = await r.json();
+
+      const [n, u] = split(j.medianSeconds);
+      $("big").textContent = n;
+      $("big-u").textContent = u;
+
+      const from = j.since ? new Date(j.since).toLocaleDateString("en-US", { month: "long", day: "numeric" }) : null;
+      const when = from ? ` since ${from}, when settlement became automatic` : "";
+      // "Half are faster than this" is a claim about a distribution, and with
+      // one or two payouts there is no distribution to describe. Say what the
+      // number actually is until there are enough of them to talk about.
+      const count = Number(j.sample) || 0;
+      $("hero-note").innerHTML =
+        count === 0 ? `No payouts yet${from ? ` since ${from}` : ""}. The first automatic one shows up here.`
+        : count === 1 ? `The one payout${when}. More will fill this in.`
+        : count < 5 ? `Across <b>${count}</b> payouts${when}. Early days — the figure moves as more land.`
+        : `Half of all deliveries are faster than this. Measured across <b>${count.toLocaleString("en-US")}</b> real payouts${when}.`;
+
+      $("fastest").textContent = j.fastestSeconds === null ? "—" : short(j.fastestSeconds);
+      // With too few payouts a 90th percentile is just the same row again.
+      $("p90").textContent = count >= 5 ? (j.p90Seconds === null ? "—" : short(j.p90Seconds)) : "—";
+      const p90note = document.querySelector("#p90")?.parentElement?.querySelector(".m");
+      if (p90note) p90note.textContent = count >= 5
+        ? "Nine of every ten deliveries beat this."
+        : "Needs a few more payouts to mean anything.";
+      $("waiting").textContent = j.waiting === 0 ? "None" : String(j.waiting);
+
+      if (Array.isArray(j.hourly)) { hourly = j.hourly; hourlyFrom = j.hourlyFrom || null; }
+      // An hourly series too short to be a chart falls back to the daily one,
+      // and the toggle goes with it rather than offering an empty view.
+      if (!isHourly() && range === "hourly") {
+        range = "daily";
+        for (const o of document.querySelectorAll(".seg button[data-range]")) {
+          o.setAttribute("aria-selected", String(o.dataset.range === "daily"));
+        }
+      }
+      if (Array.isArray(j.daily) && j.daily.length) daily = j.daily;
+      if (daily.length || hourly.length) { retitle(); drawChart(); }
+
+      const feed = $("feed");
+      if (!j.recent || !j.recent.length) {
+        feed.innerHTML = '<div class="empty">Nothing delivered yet. The next scan shows up here.</div>';
+      } else {
+        feed.innerHTML = j.recent.map((x) => {
+          const key = x.at + "|" + x.ticker + "|" + x.usd;
+          const fresh = seen.size && !seen.has(key) ? " fresh" : "";
+          return `<div class="row${fresh}">
+            <span class="tk">${esc(x.ticker)}</span>
+            <span class="amt">$${Number(x.usd).toFixed(2)} · ${esc(ago(x.at))}</span>
+            <span class="took">${esc(short(x.tookSeconds))}</span>
+          </div>`;
+        }).join("");
+        seen = new Set(j.recent.map((x) => x.at + "|" + x.ticker + "|" + x.usd));
+      }
+
+      $("live").classList.remove("stale");
+      $("live-t").textContent = "Live";
+    } catch (e) {
+      $("live").classList.add("stale");
+      $("live-t").textContent = "Reconnecting";
+    }
+  }
+
+  tick();
+  // The settlement pass is five minutes, so polling faster than this only
+  // costs requests — fifteen seconds keeps "just landed" feeling immediate
+  // without pretending anything changes in between.
+  setInterval(tick, 15000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) tick(); });
+</script>
+</body>
+</html>
