@@ -8,7 +8,7 @@
 <meta name="description" content="Scan a receipt and get a slice of the stock of the brand you bought from. A Costco run pays in COST. An iPhone pays in AAPL.">
 <meta property="og:title" content="Buy it. Own a piece of it.">
 <meta property="og:description" content="Scan a receipt and get a slice of the stock of the brand you bought from.">
-<link rel="icon" href="/assets/favicon-32.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232237F5'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=Instrument+Sans:wght@400;500;600&family=Courier+Prime:wght@400;700&display=swap">
@@ -21,7 +21,8 @@
   --rcpt:"Courier Prime","Courier New",monospace;
 }
 *{box-sizing:border-box}
-html{color-scheme:light;scroll-behavior:smooth}
+[hidden]{display:none!important}
+html{color-scheme:light;scroll-behavior:smooth;scroll-padding-top:70px}
 body{margin:0;font:400 17px/1.55 var(--body);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--mint);outline-offset:3px}
@@ -41,7 +42,7 @@ nav .w{display:flex;align-items:center;justify-content:space-between;height:60px
 nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;align-items:center}
 nav ul a{text-decoration:none;font-weight:500;font-size:15px;opacity:.85}
 nav ul a:hover{opacity:1}
-nav .btn{padding:10px 18px;font-size:14px}
+nav .btn{padding:10px 18px;font-size:14px;opacity:1}
 @media(max-width:760px){nav ul li:not(:last-child){display:none}}
 
 /* hero */
@@ -96,7 +97,7 @@ section.alt{background:var(--wash)}
 .tbl tr.hl td{background:#fff}
 .tbl .r{text-align:right;padding-right:0}
 .tnote{margin-top:18px;color:var(--mute);font-size:15px;max-width:60ch}
-@media(max-width:600px){.tbl{font-size:15px}.tbl td:first-child{font-size:20px}.tbl .hide{display:none}}
+@media(max-width:600px){.tbl{font-size:15px}.tbl td:first-child{font-size:20px}}
 
 /* stocks */
 .stocks{margin-top:44px;display:grid;grid-template-columns:repeat(2,1fr);column-gap:48px}
@@ -132,6 +133,7 @@ details p{padding:0 0 24px;color:var(--mute);max-width:62ch}
 /* closing + footer */
 .close{background:var(--cobalt);color:#fff}
 .close h2{max-width:14ch}
+.close p{margin-top:20px;max-width:44ch;font-size:19px;opacity:.9}
 .close .cta{margin-top:30px}
 footer{padding:44px 0 56px;font-size:14px;color:var(--mute)}
 footer .fl{display:flex;flex-wrap:wrap;gap:8px 22px;margin-bottom:22px;font-weight:600;color:var(--ink)}
@@ -150,7 +152,7 @@ footer b{color:var(--ink)}
       <li><a href="#tiers">Tiers</a></li>
       <li><a href="#stocks">Stocks</a></li>
       <li><a href="#faq">FAQ</a></li>
-      <li><a class="btn light" href="/app">Scan a receipt</a></li>
+      <li><a class="btn light" href="#scan">Scan a receipt</a></li>
     </ul>
   </div>
 </nav>
@@ -161,7 +163,7 @@ footer b{color:var(--ink)}
       <h1>Buy it.<br>Own a piece of it.</h1>
       <p class="sub">Scan a receipt and get a slice of the stock of the brand you bought from.</p>
       <div class="cta">
-        <a class="btn light" href="/app">Scan a receipt</a>
+        <a class="btn light" href="#scan">Scan a receipt</a>
         <a class="btn line" href="#how">See how it works</a>
       </div>
       <p class="note">Early access. The scanner is open now and rewards are being turned on brand by brand.</p>
@@ -204,7 +206,7 @@ footer b{color:var(--ink)}
       <thead><tr><th>Tier</th><th>You hold</th><th>Back on each receipt</th><th class="r">Up to, per day</th></tr></thead>
       <tbody id="tbody"></tbody>
     </table>
-    <p class="tnote">Locking $SLIPSHARE for 3, 7 or 30 days keeps its value counting toward your tier through price dips. Nothing is spent, and every token comes back at the end of the term.</p>
+    <p class="tnote">Locking $SLIPSHARE for 3, 7 or 30 days keeps its value counting toward your tier through price dips. Nothing is spent, and every token comes back at the end of the term. <a href="#faq">More on locking.</a></p>
   </div>
 </section>
 
@@ -267,16 +269,17 @@ footer b{color:var(--ink)}
   </div>
 </section>
 
-<section class="close">
+<section class="close" id="scan">
   <div class="w">
     <h2>Your next receipt could be a share.</h2>
-    <div class="cta"><a class="btn light" href="/app">Scan a receipt</a></div>
+    <p id="scan-msg">The scanner is in early access. Join the waitlist and we'll tell you when your wallet can start scanning.</p>
+    <div class="cta"><a class="btn light" id="waitlist" href="#scan" hidden>Join the waitlist</a></div>
   </div>
 </section>
 
 <footer>
   <div class="w">
-    <div class="fl"><a href="/tiers">Tiers</a><a href="/lock">Lock</a><a href="/rules">Rules</a><a href="/docs">Docs</a><a href="/live">Live stats</a><a href="/help">Help</a></div>
+    <div class="fl"><a href="#how">How it works</a><a href="#tiers">Tiers</a><a href="#stocks">Stocks</a><a href="#faq">FAQ</a><a href="#">Back to top</a></div>
     <p><b>SLIPSHARE is not affiliated with, endorsed by or partnered with any brand named on this page.</b> The scanner is in early access and delivery of stock rewards is rolling out, so figures shown here are examples. Tokenized shares are securities and can lose value, and availability varies by region. $SLIPSHARE is a utility token, not an investment in any brand. Prices are illustrative and nothing here is investment advice. Crypto assets carry risk, including total loss.</p>
   </div>
 </footer>
@@ -284,6 +287,11 @@ footer b{color:var(--ink)}
 <script>
 (()=>{
   const $=id=>document.getElementById(id);
+  // Paste your Google Form link between the quotes to show the waitlist button.
+  const FORM_URL="";
+  if(FORM_URL){const b=$("waitlist");b.href=FORM_URL;b.target="_blank";b.rel="noopener";b.hidden=false}
+  else $("scan-msg").textContent="The scanner is in early access and the waitlist opens soon.";
+
   const PX={AAPL:328.21,AMZN:258.90,COST:914.50,AMC:2.65,GME:19.35};
   const STORES=[["Costco","COST",186],["Apple","AAPL",999],["AMC","AMC",44],["GameStop","GME",70],["Whole Foods","AMZN",128]];
   // Mirrors the published ladder: pct of total, floored to the cent, capped per day.
