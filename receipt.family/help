@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      RECEIPT — Help &amp; support
+    </title>
+    <meta name="description" content="Answers to common questions about scanning, rewards, wallets and delivery, and how to get help when something goes wrong." />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" />
+    <style>
+      :root {
+    --bg: #F5F5F7; --paper: #FDFCFA; --paper-2: #F3F1EC; --ink: #1D1D1F; --ink-2: #6E665C; --ink-3: #A69C8E;
+    --hair: rgba(29,29,31,.14); --dash: #D9D1C4; --green: #5C7A52; --green-bg: #E9EFE4; --red: #B3261E; --red-bg: #F7E6E4; --amber: #9A6D00; --amber-bg: #F6EDD2;
+    --display: &#34;Bricolage Grotesque&#34;, &#34;Helvetica Neue&#34;, Arial, sans-serif; --mono: &#34;IBM Plex Mono&#34;, ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme=&#34;light&#34;]) {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12;
+  } }
+  :root[data-theme=&#34;dark&#34;] {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--display); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { width: min(760px, 100% - 40px); margin: 0 auto; padding: 40px 0 96px; }
+  header { margin-bottom: 40px; }
+  .eyebrow { font: 600 11px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+  h1 { font-size: clamp(38px, 7vw, 56px); line-height: .95; letter-spacing: -.04em; font-weight: 800; margin: 0 0 16px; text-wrap: balance; }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 60ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  h2 { font-size: 26px; letter-spacing: -.03em; font-weight: 800; margin: 48px 0 8px; text-wrap: balance; }
+  h2 + p { margin-top: 0; color: var(--ink-2); max-width: 62ch; }
+  p { max-width: 62ch; }
+  a { color: var(--ink); }
+
+  /* jump nav */
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .jump a { font: 600 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; text-decoration: none;
+    color: var(--ink-2); background: var(--paper); box-shadow: 0 0 0 1px var(--hair); padding: 9px 12px; }
+  .jump a:hover { color: var(--ink); }
+
+  /* FAQ accordion */
+  .faq { display: grid; gap: 10px; margin: 18px 0; }
+  details.q { background: var(--paper); box-shadow: 0 0 0 1px var(--hair); padding: 2px 18px; }
+  details.q summary { list-style: none; cursor: pointer; padding: 16px 0; font-weight: 700; font-size: 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+  details.q summary::-webkit-details-marker { display: none; }
+  details.q summary::after { content: &#34;+&#34;; font: 400 22px/1 var(--mono); color: var(--ink-3); flex: none; transition: transform .15s ease; }
+  details.q[open] summary::after { content: &#34;\2212&#34;; }
+  details.q .a { color: var(--ink-2); font-size: 15px; padding: 0 0 18px; max-width: 62ch; }
+  details.q .a p { margin: 0 0 10px; }
+  details.q .a p:last-child { margin-bottom: 0; }
+  details.q .a code { font: 500 13px/1.5 var(--mono); background: var(--paper-2); padding: 1px 5px; }
+
+  /* support card */
+  .support { background: var(--paper); box-shadow: 0 0 0 1px var(--hair); padding: 22px 24px; margin: 18px 0; }
+  .support .k { font: 600 10.5px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+  .support ol { margin: 10px 0 0; padding-left: 20px; color: var(--ink-2); }
+  .support li { margin-bottom: 6px; }
+  .support li b { color: var(--ink); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 600 12px/1 var(--mono);
+    letter-spacing: .1em; text-transform: uppercase; color: #fff; background: var(--ink); padding: 12px 16px; margin-top: 14px; }
+
+  .band { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: start; padding: 14px 16px; background: var(--paper); box-shadow: 0 0 0 1px var(--hair); margin: 12px 0; }
+  .band .tag { font: 600 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 6px 8px; display: inline-block; background: var(--amber-bg); color: var(--amber); }
+  .band p { margin: 0; font-size: 15px; }
+  .band small { display: block; margin-top: 6px; font: 400 12px/1.5 var(--mono); color: var(--ink-2); }
+  @media (max-width: 560px) { .band { grid-template-columns: 1fr; gap: 8px; } .wrap { padding-top: 32px; } }
+
+  .fine { font: 400 12px/1.7 var(--mono); color: var(--ink-3); margin-top: 40px; border-top: 1px solid var(--hair); padding-top: 18px; }
+    </style>
+  </head>
+  <body>
+    <nav style="width:min(760px,100% - 40px);margin:0 auto;padding:22px 0 0;display:flex;justify-content:space-between;align-items:center">
+      <a href="/" style="display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.05em;font-size:20px;text-decoration:none;color:inherit">      <img src="/brand/png/glyph-black.png" alt="" width="22" height="22" style="display:block" />
+      RECEIPT
+</a>
+      <a href="/app" style="font:600 12px/1 &#39;IBM Plex Mono&#39;,ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:#fff;background:#1D1D1F;padding:11px 16px">      Scan a receipt
+</a>
+    </nav>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">
+          RECEIPT · receipt.family · help &amp; support
+        </div>
+        <h1>
+          Answers, and a way to reach a person.
+        </h1>
+        <p class="lede">
+          Most questions are answered below. If a scan didn&#39;t go the way you expected, the fastest fix is usually right there in the app —
+          <a href="#appeal">          see how
+</a>
+          .
+        </p>
+        <div class="jump">
+          <a href="#scanning">          Scanning
+</a>
+          <a href="#rewards">          Rewards
+</a>
+          <a href="#wallet">          Wallet &amp; delivery
+</a>
+          <a href="#appeal">          Something went wrong
+</a>
+          <a href="#contact">          Contact
+</a>
+        </div>
+      </header>
+      <h2 id="scanning">
+        Scanning
+      </h2>
+      <div class="faq">
+        <details class="q">
+          <summary>
+            Why does scanning only work on my phone?
+          </summary>
+          <div class="a">
+            <p>
+              The scanner uses the phone&#39;s live camera. Uploads and screenshots are never accepted — that&#39;s one of the checks that keeps the rewards honest, since a photo of a photo is easy to fake but a live camera capture is much harder to.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            The camera won&#39;t open, or the link says it&#39;s expired.
+          </summary>
+          <div class="a">
+            <p>
+              Scanner links last 30 minutes from when you open them on your computer. If it&#39;s expired, go back to the wallet connect page and get a fresh link.
+            </p>
+            <p>
+              If the camera itself won&#39;t start, try closing other camera apps, reload the page, and allow camera access when the browser asks.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            My photo came back blurry or &#34;unreadable.&#34;
+          </summary>
+          <div class="a">
+            <p>
+              Lay the receipt flat on a plain surface, fill the frame, and use good light — a shadow across the total is the most common reason a scan fails. Retake rather than crop or edit the photo; any sign of editing gets a receipt refused outright.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            Can I submit the same receipt twice, or from a different wallet?
+          </summary>
+          <div class="a">
+            <p>
+              No. Every receipt is fingerprinted from its photo, and that fingerprint can only be claimed once, by any wallet, from any angle. A second attempt comes back as
+              <code>              Already claimed
+</code>
+              .
+            </p>
+          </div>
+        </details>
+      </div>
+      <h2 id="rewards">
+        Rewards
+      </h2>
+      <div class="faq">
+        <details class="q">
+          <summary>
+            How much does a receipt pay?
+          </summary>
+          <div class="a">
+            <p>
+              3% of the receipt total, in the matching brand&#39;s stock. Full rules, caps and a worked example live on the
+              <a href="/rules">              rules page
+</a>
+              .
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            Why did my receipt pay less than 3%?
+          </summary>
+          <div class="a">
+            <p>
+              Two ceilings can cut it down: the per-receipt cap ($20, or $100 if the wallet holds enough $RECEIPT), and whatever&#39;s left of the wallet&#39;s rolling 24-hour $200 limit. The rule is applied first, then whichever ceiling is lower wins.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            My merchant isn&#39;t listed. Why?
+          </summary>
+          <div class="a">
+            <p>
+              Only brands whose stock exists as a token pay out. On Robinhood Chain that&#39;s Apple, Amazon/Whole Foods, Costco, AMC and GameStop; more are added as Robinhood lists them. A few brands whose stock is issued on Solana instead pay there — see the next question. The current list is on the
+              <a href="/rules">              rules page
+</a>
+              .
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            What about McDonald&#39;s? It has no stock on Robinhood Chain.
+          </summary>
+          <div class="a">
+            <p>
+              McDonald&#39;s stock exists as a token on
+              <b>              Solana
+</b>
+              (Backed&#39;s xStocks), so when that rail is switched on, a McDonald&#39;s receipt pays the same 3% in MCD stock there — the
+              <a href="/app">              dashboard
+</a>
+              lists it under &#34;Paying out now&#34; whenever it&#39;s live. The treasury buys the shares and delivers them, exactly like the other brands.
+            </p>
+            <p>
+              The shares need somewhere to go: add a
+              <b>              Solana wallet
+</b>
+              on your dashboard — connect Phantom, or paste a Solana address. Your Robinhood Chain wallet signs once to confirm it, and it can be changed any time. A reward earned before you&#39;ve added one simply waits, and is delivered within minutes of you adding it.
+            </p>
+            <p>
+              Check a pasted address carefully: stock sent to a mistyped address cannot be recovered. Connecting Phantom avoids that, because the address is signed rather than typed. Starbucks stays &#34;coming soon&#34;: its token exists but isn&#39;t tradable yet, so there&#39;s nothing to buy.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            What&#39;s the &#34;welcome&#34; bonus?
+          </summary>
+          <div class="a">
+            <p>
+              A wallet&#39;s very first approved receipt pays its first $5 in full, then 3% of whatever&#39;s left on that receipt. It only applies once, ever, per wallet.
+            </p>
+          </div>
+        </details>
+      </div>
+      <h2 id="wallet">
+        Wallet &amp; delivery
+      </h2>
+      <div class="faq">
+        <details class="q">
+          <summary>
+            How long does delivery take?
+          </summary>
+          <div class="a">
+            <p>
+              A reward is reserved on your wallet the moment a receipt is approved. The treasury buys and sends the actual stock roughly every five minutes, so delivery usually lands within about five minutes of approval — you can watch it happen on Robinhood Chain.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            My receipt says &#34;reserved&#34; — is that the same as delivered?
+          </summary>
+          <div class="a">
+            <p>
+              Not yet. Reserved means the reward is locked in and counted against your wallet&#39;s daily cap; delivered means the tokenized shares have actually been sent to your wallet on-chain. Reserved almost always becomes delivered within minutes.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            Can I connect a different wallet later?
+          </summary>
+          <div class="a">
+            <p>
+              Yes — connect any wallet and scan from it. Limits and history are tracked per wallet, so switching wallets starts a fresh set of daily limits, but does not let you resubmit a receipt already claimed by another wallet.
+            </p>
+          </div>
+        </details>
+      </div>
+      <h2 id="appeal">
+        Something went wrong
+      </h2>
+      <p>
+        There is nothing to submit and nobody to email. A receipt we could not read clearly goes to a person on its own, and shows as
+        <b>        in progress
+</b>
+        until they have looked.
+      </p>
+      <div class="band">
+        <span class="tag">        In the app
+</span>
+        <div>
+          <p>
+            A blurry photo, a total we could not make out, a date that would not parse: all of it is our eyes failing, not your receipt. It goes into the queue automatically.
+          </p>
+          <small>          If it clears, it pays and delivers exactly like a normal approval, and you will see it land on your balance. If it does not, you will be told why.
+</small>
+        </div>
+      </div>
+      <p>
+        Some answers are final, because no second look could change them — an old receipt is old whoever reads it:
+      </p>
+      <div class="faq">
+        <details class="q">
+          <summary>
+            My receipt is older than three months.
+          </summary>
+          <div class="a">
+            <p>
+              That one is settled: the window is three months from the date printed on the receipt, and a person re-reading the same date reaches the same answer. Lock $RECEIPT and the window is a year. The same goes for a total over $4,000, a shop that is not a public company, and a day you have already hit your limit on.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            My receipt says &#34;already claimed&#34; but I never scanned it before.
+          </summary>
+          <div class="a">
+            <p>
+              The fingerprint check works on the receipt itself, not the wallet — so it also catches a receipt someone else photographed first, or the same paper scanned twice by mistake. If you&#39;re certain that&#39;s wrong,
+              <a href="#contact">              contact us
+</a>
+              with roughly when you scanned and what the receipt was for.
+            </p>
+          </div>
+        </details>
+        <details class="q">
+          <summary>
+            My wallet says it&#39;s blocked.
+          </summary>
+          <div class="a">
+            <p>
+              Nothing blocks a wallet automatically. Patterns that look like abuse — many wallets from one network, or repeated refusals — send the receipt to a person instead, and you&#39;ll see it as &#34;waiting for review&#34;. A wallet is only blocked when the team decides so. If you think that&#39;s a mistake,
+              <a href="#contact">              contact us
+</a>
+              with your wallet address.
+            </p>
+          </div>
+        </details>
+      </div>
+      <h2 id="contact">
+        Contact
+      </h2>
+      <div class="support">
+        <div class="k">
+          Before you write in
+        </div>
+        <p style="color:var(--ink-2);margin:0">
+          Most of what support can do, the app can already do faster — the manual-review button above reaches the same people, without the wait. Use email for anything the button doesn&#39;t cover: a blocked wallet, a receipt marked as already claimed that shouldn&#39;t be, or a delivery that hasn&#39;t shown up after a day.
+        </p>
+        <ol>
+          <li>
+            <b>            Your wallet address
+</b>
+            — so we can find your history.
+          </li>
+          <li>
+            <b>            Roughly when it happened
+</b>
+            — date and time is enough.
+          </li>
+          <li>
+            <b>            What you expected vs. what you saw
+</b>
+            — the exact message helps.
+          </li>
+        </ol>
+        <a class="btn" href="mailto:support@receipt.family">        Email support@receipt.family
+</a>
+      </div>
+      <div class="fine">
+        This page covers how the app behaves as of 9 September 2026 and changes as the rules do — the
+        <a href="/rules">        rules page
+</a>
+        is the source of truth for numbers. Rewards are tokenized stock issued by Robinhood on Robinhood Chain, subject to eligibility and region. Nothing here is an offer of securities or investment advice.
+      </div>
+    </div>
+  </body>
+</html>
