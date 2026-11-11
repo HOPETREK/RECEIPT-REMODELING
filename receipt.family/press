@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>
+      RECEIPT — Press Kit
+    </title>
+    <meta name="description" content="Logos, brand assets, boilerplate and fact sheet for RECEIPT." />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" />
+    <style>
+      :root{
+    --ink:#1D1D1F; --soft:#6E665C; --faint:#A69C8E;
+    --bg:#FFFFFF; --bg2:#F5F5F7; --hair:rgba(29,29,31,.10);
+    --green:#0E8A4F;
+    --display:&#34;Bricolage Grotesque&#34;,&#34;Helvetica Neue&#34;,Arial,sans-serif;
+    --mono:&#34;IBM Plex Mono&#34;,ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);
+    -webkit-font-smoothing:antialiased}
+  .wrap{width:min(1080px,100% - 48px);margin-inline:auto}
+  header{padding:64px 0 56px;border-bottom:1px solid var(--hair)}
+  .head-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);
+    gap:48px;align-items:start}
+  /* aligns with the top of the headline, not the bottom of the column */
+  .head-art{display:flex;justify-content:center;align-items:flex-start;padding-top:52px}
+  .head-art img{width:min(200px,100%);height:auto;display:block}
+  @media(max-width:820px){.head-grid{grid-template-columns:1fr;gap:28px}
+    /* stacked: no top padding, and the glyph sits with the text */
+    .head-art{justify-content:flex-start;padding-top:0}.head-art img{width:104px}}
+  .brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit}
+  .brand img{width:34px;height:34px;display:block}
+  .brand b{font-size:23px;font-weight:800;letter-spacing:-.03em}
+  .kicker{font:500 11px/1 var(--mono);letter-spacing:.22em;color:var(--faint);
+    text-transform:uppercase;margin:42px 0 16px}
+  h1{font-size:clamp(40px,6.4vw,68px);font-weight:800;letter-spacing:-.045em;line-height:.98;margin:0}
+  .lede{font:400 16px/1.72 var(--mono);color:var(--soft);max-width:58ch;margin-top:24px}
+  .status{display:inline-flex;align-items:center;gap:9px;margin-top:28px;
+    font:500 11.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+  .status .dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex:none}
+  .legal{font:400 13.5px/1.85 var(--mono);color:var(--soft);max-width:74ch}
+  .legal p{margin:0 0 14px}
+  .legal p:last-child{margin:0}
+  .legal b{color:var(--ink);font-weight:600}
+  section{padding:64px 0;border-bottom:1px solid var(--hair)}
+  h2{font-size:11px;font-family:var(--mono);font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--faint);margin:0 0 30px}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--hair);background:var(--bg2);padding:30px 26px 22px;display:flex;
+    flex-direction:column;align-items:center;justify-content:space-between;min-height:196px;gap:22px;
+    transition:border-color .18s ease, background .18s ease}
+  .card:hover{border-color:rgba(29,29,31,.24)}
+  .card .art{flex:1;display:flex;align-items:center;justify-content:center;width:100%}
+  .card.dark{background:var(--ink);border-color:var(--ink)}
+  .card.dark:hover{border-color:#3a3a3d}
+  .card img{max-width:168px;max-height:96px;width:auto;height:auto;display:block}
+
+  /* nav, matching the landing page */
+  nav{position:sticky;top:0;z-index:60}
+  nav::before{content:&#34;&#34;;position:absolute;inset:0;z-index:-1;background:rgba(255,255,255,.72);
+    backdrop-filter:blur(18px) saturate(1.2);border-bottom:1px solid var(--hair)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:20px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:-.05em;
+    font-size:21px;text-decoration:none;color:inherit;font-family:var(--display)}
+  .brand img{width:22px;height:22px;display:block;flex:none}
+  .nav-meta{font:500 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{color:var(--soft);text-decoration:none;font:500 12px/1 var(--mono);
+    letter-spacing:.08em;text-transform:uppercase;transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links .btn,.nav-links .btn:hover{color:#fff}
+  .xlink{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
+    color:var(--soft);transition:color .2s,transform .2s}
+  .xlink:hover{color:var(--ink);transform:translateY(-1px)}
+  .xi{width:17px;height:17px;display:block}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:11px 18px;border:0;background:var(--ink);
+    color:#fff;text-decoration:none;font:600 11.5px/1 var(--mono);letter-spacing:.1em;
+    text-transform:uppercase;transition:transform .2s,box-shadow .2s}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 14px 30px -14px rgba(14,13,12,.6)}
+  @media(max-width:900px){.nav-links .hide-sm,.nav-meta{display:none}}
+
+
+  .socials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  @media(max-width:760px){.socials{grid-template-columns:1fr}}
+  .banner{border:1px solid var(--hair);background:var(--bg2);padding:20px;display:flex;flex-direction:column;gap:14px}
+  .banner .shot{background:#fff;box-shadow:inset 0 0 0 1px var(--hair);display:flex;align-items:center;justify-content:center;padding:10px}
+  .banner img{max-width:100%;height:auto;display:block}
+  .banner .meta{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .banner .cname{margin:0}
+  .banner .dim{font:500 10.5px/1 var(--mono);letter-spacing:.12em;color:var(--faint)}
+  .wide{grid-column:1 / -1}
+  .links{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .cname{font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--soft);margin-bottom:2px}
+  .card.dark .cname{color:#B9B2A8}
+  .dl{display:inline-flex;align-items:center;gap:7px;font:600 10.5px/1 var(--mono);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink);text-decoration:none;padding:9px 13px;background:#fff;
+    box-shadow:inset 0 0 0 1px var(--hair2);transition:background .18s,color .18s,box-shadow .18s}
+  .dl::after{content:&#34;↓&#34;;font-size:12px;opacity:.5;transition:transform .18s,opacity .18s}
+  .dl:hover{background:var(--ink);color:#fff;box-shadow:inset 0 0 0 1px var(--ink)}
+  .dl:hover::after{transform:translateY(2px);opacity:1}
+  .card.dark .dl{background:transparent;color:#E8E4DE;box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+  .card.dark .dl:hover{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1px #fff}
+  dl{margin:0;display:grid;grid-template-columns:180px 1fr;gap:0}
+  dt{font:500 12px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--faint);padding:13px 0;border-top:1px solid var(--hair)}
+  dd{margin:0;font:400 15px/1.6 var(--mono);color:var(--ink);padding:13px 0;border-top:1px solid var(--hair)}
+  @media(max-width:640px){dl{grid-template-columns:1fr}dt{padding-bottom:2px;border-top:1px solid var(--hair)}dd{padding-top:2px;border-top:0}}
+  .sw{display:flex;flex-wrap:wrap;gap:14px}
+  .sw div{flex:1 1 150px}
+  .chip{height:76px;border:1px solid var(--hair)}
+  .sw code{font:500 11.5px/1.8 var(--mono);color:var(--soft);display:block;margin-top:8px}
+  .copy{background:var(--bg2);border:1px solid var(--hair);padding:24px;
+    font:400 15px/1.72 var(--mono);color:var(--ink);max-width:76ch;white-space:pre-wrap}
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:8px}
+  @media(max-width:720px){.rules{grid-template-columns:1fr}}
+  .rules ul{margin:10px 0 0;padding-left:18px}
+  .rules li{font:400 14px/1.85 var(--mono);color:var(--soft)}
+  .yes b{color:var(--green)} .no b{color:#B3261E}
+  .foot-x{display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:var(--soft);
+    font:500 11.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;padding:11px 15px;
+    box-shadow:inset 0 0 0 1px var(--hair2);transition:color .2s,box-shadow .2s}
+  .foot-x:hover{color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  footer{padding:44px 0 80px;font:400 13px/1.7 var(--mono);color:var(--faint)}
+  a{color:var(--ink)}
+
+  /* ---------- phone ---------- */
+  @media(max-width:640px){
+    .wrap{width:calc(100% - 36px)}
+    .nav-in{padding:13px 0}
+    .brand{font-size:18px;gap:10px}
+    .brand img{width:20px;height:20px}
+    /* the nav already sits above it; the header needs far less air */
+    header{padding:26px 0 30px}
+    .kicker{margin:0 0 12px}
+    h1{font-size:clamp(30px,9vw,40px)}
+    .lede{font-size:14px;line-height:1.65;margin-top:16px}
+    /* the bullet was overlapping the first word once the line wrapped */
+    .status{align-items:flex-start;line-height:1.55;gap:8px;margin-top:20px;font-size:10.5px;letter-spacing:.12em}
+    .status .dot{margin-top:5px}
+    /* the glyph was stranded in white space between two big gaps */
+    .head-grid{gap:22px}
+    .head-art{padding-top:0}
+    .head-art img{width:84px}
+    section{padding:38px 0}
+    h2{margin:0 0 20px}
+    .grid,.socials{gap:12px}
+    .card{min-height:0;padding:22px 18px 18px;gap:16px}
+    .card img{max-height:74px}
+    .banner{padding:14px}
+    .banner .meta{gap:10px}
+    /* 44px is the minimum comfortable tap target; these were 30px */
+    .dl{min-height:44px;padding:0 16px;font-size:11px}
+    .nav-links .btn{min-height:44px;padding:0 18px}
+    .rules{gap:18px}
+    .rules li{font-size:13px;line-height:1.7}
+    .copy{padding:18px;font-size:13.5px;line-height:1.7}
+    .sw div{flex-basis:calc(50% - 7px)}
+    .chip{height:60px}
+    dt{padding:12px 0 0}
+    dd{padding:0 0 12px;font-size:13.5px}
+    .legal{font-size:12.5px;line-height:1.75}
+    footer{padding:30px 0 56px;font-size:11.5px}
+  }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap nav-in">
+        <a class="brand" href="/">        <img class="mark" src="/brand/png/glyph-black.png" alt="" width="22" height="22" />
+        RECEIPT
+</a>
+        <div class="nav-meta">
+          Press &amp; brand kit
+        </div>
+        <div class="nav-links">
+          <a class="hide-sm" href="/">          Home
+</a>
+          <a class="hide-sm" href="#">          Logo
+</a>
+          <a class="hide-sm" href="/app">          Scanner
+</a>
+          <a aria-label="RECEIPT on X" class="xlink" href="https://x.com/receiptfamily" rel="noopener" target="_blank">          <svg class="xi" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
+            </path>
+          </svg>
+</a>
+          <a class="btn" href="/app">          Scan a receipt
+</a>
+        </div>
+      </div>
+    </nav>
+    <div class="wrap">
+      <header>
+        <div class="head-grid">
+          <div>
+            <div class="kicker">
+              Press &amp; brand kit
+            </div>
+            <h1>
+              Buy the product.
+              <br />
+              Get the stock.
+            </h1>
+            <p class="lede">
+              Everything you need to write about RECEIPT: logos, colours, type, boilerplate and the fact sheet. Assets are free to use in editorial coverage.
+            </p>
+            <div class="status">
+              <span class="dot"></span>
+              Live · Updated 14 Sep 2026
+            </div>
+          </div>
+          <div class="head-art">
+            <img src="/brand/png/glyph-black.png" alt="The Receipt R" />
+          </div>
+        </div>
+      </header>
+      <section>
+        <h2>
+          Logo
+        </h2>
+        <div class="grid">
+          <div class="card">
+            <div class="art">
+              <img src="/brand/png/glyph-black.png" alt="The Receipt R, black" />
+            </div>
+            <div class="cname">
+              The R
+            </div>
+            <div class="links">
+              <a class="dl" download="" href="/download/logo-glyph.svg">              SVG
+</a>
+              <a class="dl" download="" href="/download/png/glyph-black.png">              PNG
+</a>
+            </div>
+          </div>
+          <div class="card dark">
+            <div class="art">
+              <img src="/brand/png/glyph-white.png" alt="The Receipt R, white" />
+            </div>
+            <div class="cname">
+              The R, reversed
+            </div>
+            <div class="links">
+              <a class="dl" download="" href="/download/png/glyph-white.png">              PNG
+</a>
+            </div>
+          </div>
+          <div class="card dark">
+            <div class="art">
+              <img src="/brand/png/mark-reversed-512.png" alt="The Receipt R, reversed" />
+            </div>
+            <div class="cname">
+              The R on dark
+            </div>
+            <div class="links">
+              <a class="dl" download="" href="/download/logo-mark-reversed.svg">              SVG
+</a>
+              <a class="dl" download="" href="/download/png/mark-reversed-1024.png">              PNG
+</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="art">
+              <img src="/brand/png/lockup-black.png" alt="RECEIPT lockup" />
+            </div>
+            <div class="cname">
+              Lockup
+            </div>
+            <div class="links">
+              <a class="dl" download="" href="/download/png/lockup-black.png">              PNG
+</a>
+            </div>
+          </div>
+          <div class="card dark">
+            <div class="art">
+              <img src="/brand/png/lockup-reversed.png" alt="RECEIPT lockup, reversed" />
+            </div>
+            <div class="cname">
+              Lockup reversed
+            </div>
+            <div class="links">
+              <a class="dl" download="" href="/download/png/lockup-reversed.png">              PNG
+</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="art">
+              <img src="/brand/png/social-card.png" alt="Social share card" />
+            </div>
+            <div class="cname">
+              Social card
+            </div>
+            <div class="links">
+              <a class="dl" download="" href="/download/png/social-card.png">              PNG
+</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>
+          Social
+        </h2>
+        <div class="socials">
+          <div class="banner wide">
+            <div class="shot">
+              <img src="/brand/social/x-header.png" alt="X header banner, light" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="cname">
+                  X header · light
+                </div>
+                <div class="dim">
+                  1500 × 500
+                </div>
+              </div>
+              <div class="links">
+                <a class="dl" download="" href="/download/social/x-header.png">                PNG
+</a>
+              </div>
+            </div>
+          </div>
+          <div class="banner wide">
+            <div class="shot">
+              <img src="/brand/social/x-header-dark.png" alt="X header banner, dark" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="cname">
+                  X header · dark
+                </div>
+                <div class="dim">
+                  1500 × 500
+                </div>
+              </div>
+              <div class="links">
+                <a class="dl" download="" href="/download/social/x-header-dark.png">                PNG
+</a>
+              </div>
+            </div>
+          </div>
+          <div class="banner">
+            <div class="shot">
+              <img src="/brand/social/x-post.png" alt="Social post card" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="cname">
+                  Post card
+                </div>
+                <div class="dim">
+                  1600 × 900
+                </div>
+              </div>
+              <div class="links">
+                <a class="dl" download="" href="/download/social/x-post.png">                PNG
+</a>
+              </div>
+            </div>
+          </div>
+          <div class="banner">
+            <div class="shot">
+              <img src="/brand/social/x-avatar.png" alt="Profile avatar" style="max-width:180px" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="cname">
+                  Avatar
+                </div>
+                <div class="dim">
+                  1000 × 1000
+                </div>
+              </div>
+              <div class="links">
+                <a class="dl" download="" href="/download/social/x-avatar.png">                PNG
+</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>
+          Usage
+        </h2>
+        <div class="rules">
+          <div class="yes">
+            <b>            Do
+</b>
+            <ul>
+              <li>
+                Keep clear space of at least half the R&#39;s width on every side.
+              </li>
+              <li>
+                Place the black R on white or any light background; use the reversed R on dark.
+              </li>
+              <li>
+                Scale the SVG; it stays sharp at any size.
+              </li>
+              <li>
+                Drop the green dot below 16px, where it stops reading.
+              </li>
+              <li>
+                Minimum size: 16px for the R, 120px wide for the lockup.
+              </li>
+            </ul>
+          </div>
+          <div class="no">
+            <b>            Don&#39;t
+</b>
+            <ul>
+              <li>
+                Recolour the R or the dot — only black, white and the brand green.
+              </li>
+              <li>
+                Stretch, rotate, outline, or straighten the torn edge.
+              </li>
+              <li>
+                Place the logo on a busy photo without a solid panel.
+              </li>
+              <li>
+                Rebuild the wordmark in another typeface.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>
+          Colour
+        </h2>
+        <div class="sw">
+          <div>
+            <div class="chip" style="background:#1D1D1F">
+            </div>
+            <code>            Ink · #1D1D1F
+</code>
+          </div>
+          <div>
+            <div class="chip" style="background:#0E8A4F">
+            </div>
+            <code>            Green · #0E8A4F
+</code>
+          </div>
+          <div>
+            <div class="chip" style="background:#F5F5F7">
+            </div>
+            <code>            Paper · #F5F5F7
+</code>
+          </div>
+          <div>
+            <div class="chip" style="background:#FFFFFF">
+            </div>
+            <code>            White · #FFFFFF
+</code>
+          </div>
+        </div>
+        <p class="lede" style="font-size:14px;margin-top:18px">
+          Green indicates money and is never decorative.
+        </p>
+      </section>
+      <section>
+        <h2>
+          Typography
+        </h2>
+        <dl>
+          <dt>
+            Display
+          </dt>
+          <dd>
+            Bricolage Grotesque — 700/800, tight tracking
+          </dd>
+          <dt>
+            Mono
+          </dt>
+          <dd>
+            IBM Plex Mono — labels, figures, receipt text
+          </dd>
+          <dt>
+            Accent
+          </dt>
+          <dd>
+            Instrument Serif Italic — used sparingly for emphasis
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h2>
+          Boilerplate
+        </h2>
+        <div class="copy">
+          RECEIPT turns everyday purchases into ownership. Photograph a paper receipt and earn a fraction of the stock of the brand you bought from — coffee at Starbucks pays in SBUX, an iPhone pays in AAPL. Rewards are delivered as tokenized shares through a licensed securities provider, on Robinhood Chain.
+
+RECEIPT is live at receipt.family, paying out in five brands on Robinhood Chain: Apple, Amazon, Costco, AMC and GameStop.
+        </div>
+        <div class="copy" style="margin-top:16px">
+          One line: RECEIPT pays you back in the stock of the brand you just bought from.
+        </div>
+      </section>
+      <section>
+        <h2>
+          Fact sheet
+        </h2>
+        <dl>
+          <dt>
+            Name
+          </dt>
+          <dd>
+            RECEIPT
+          </dd>
+          <dt>
+            What it is
+          </dt>
+          <dd>
+            Scan a receipt, earn stock of that brand
+          </dd>
+          <dt>
+            Status
+          </dt>
+          <dd>
+            Live · five brands on Robinhood Chain
+          </dd>
+          <dt>
+            Network
+          </dt>
+          <dd>
+            Robinhood Chain
+          </dd>
+          <dt>
+            Reward form
+          </dt>
+          <dd>
+            Tokenized fractional shares via a licensed issuer
+          </dd>
+          <dt>
+            Website
+          </dt>
+          <dd>
+            <a href="https://receipt.family">            receipt.family
+</a>
+          </dd>
+          <dt>
+            X
+          </dt>
+          <dd>
+            <a href="https://x.com/receiptfamily" rel="noopener" target="_blank">            @receiptfamily
+</a>
+          </dd>
+          <dt>
+            Press contact
+          </dt>
+          <dd>
+            press@receipt.family
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h2>
+          For editors
+        </h2>
+        <div class="legal">
+          <p>
+            <b>            RECEIPT has not launched.
+</b>
+            The product described here is in development and open for waitlist signups. No rewards are being issued today, and no receipts are being processed.
+          </p>
+          <p>
+            <b>            Rewards are securities.
+</b>
+            When live, rewards will be delivered as tokenized fractional shares through a licensed securities provider, subject to eligibility and available regions at launch. Nothing on this page is an offer to sell securities, a solicitation, or investment advice.
+          </p>
+          <p>
+            <b>            Please date any figures you quote.
+</b>
+            Share prices and historical examples on receipt.family are illustrative, split-adjusted, and accurate as of the date shown on that page.
+          </p>
+          <p>
+            <b>            Brand names are references, not partnerships.
+</b>
+            Company names and ticker symbols belong to their owners and are used to describe how the product works. No affiliation or endorsement is implied — including with Robinhood, whose chain the product is built on.
+          </p>
+        </div>
+      </section>
+      <footer>
+        <a class="foot-x" href="https://x.com/receiptfamily" rel="noopener" target="_blank">        <svg class="xi" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
+          </path>
+        </svg>
+        <span>        @receiptfamily
+</span>
+</a>
+        <br />
+        <br />
+        Assets © RECEIPT. Free for editorial use; not for endorsement or product use.
+        <br />
+        Brand names and tickers belong to their owners and imply no partnership.
+      </footer>
+    </div>
+  </body>
+</html>
