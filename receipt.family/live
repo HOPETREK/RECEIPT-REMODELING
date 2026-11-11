@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>
+      RECEIPT — Live stats
+    </title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500;600;700&amp;display=swap" />
+    <style>
+      :root{
+    --bg:#FFFFFF; --bg2:#F5F5F7; --paper:#FDFCFA; --ink:#1D1D1F; --soft:#6E665C; --faint:#A69C8E;
+    --hair:rgba(29,29,31,.1); --hair2:rgba(29,29,31,.18); --green:#5C7A52; --red:#B3261E; --amber:#946200;
+    --display:&#34;Bricolage Grotesque&#34;,&#34;Helvetica Neue&#34;,Arial,sans-serif;
+    --mono:&#34;IBM Plex Mono&#34;,ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  body{margin:0;background:var(--bg2);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased}
+  .wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+
+  nav{position:sticky;top:0;z-index:60}
+  nav::before{content:&#34;&#34;;position:absolute;inset:0;z-index:-1;background:rgba(255,255,255,.78);
+    backdrop-filter:blur(18px) saturate(1.2);border-bottom:1px solid var(--hair)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:16px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.05em;font-size:19px;
+    text-decoration:none;color:inherit}
+  .brand img{width:20px;height:20px;display:block}
+  .brand em{font-style:normal;font:600 10.5px/1 var(--mono);letter-spacing:.22em;color:var(--faint);
+    text-transform:uppercase;padding-left:11px;margin-left:2px;border-left:1px solid var(--hair2)}
+  .live{display:flex;align-items:center;gap:8px;font:500 10.5px/1 var(--mono);letter-spacing:.16em;
+    text-transform:uppercase;color:var(--soft)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--green);display:block;animation:pulse 2s ease-in-out infinite}
+  .live.stale i{background:var(--amber);animation:none}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  header{padding:34px 0 8px}
+  h1{font-size:clamp(28px,4vw,40px);line-height:1;letter-spacing:-.04em;font-weight:800;margin:0 0 8px}
+  .sub{font:400 13px/1.6 var(--mono);color:var(--soft);margin:0}
+
+  section{padding:30px 0}
+  h2{font:600 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--faint);
+    margin:0 0 18px;display:flex;align-items:center;gap:12px}
+  h2 i{flex:1;border-top:1px dashed var(--hair2)}
+  h2 span{color:var(--soft);letter-spacing:.06em;text-transform:none;font-weight:500}
+
+  .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  @media(max-width:860px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .card{background:var(--paper);box-shadow:0 1px 0 var(--hair),0 10px 30px -24px rgba(14,13,12,.5);padding:20px;min-width:0}
+  .card .k{font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .card .v{font:700 30px/1 var(--mono);letter-spacing:-.02em;margin-top:12px;font-variant-numeric:tabular-nums;
+    overflow-wrap:anywhere}
+  .card .n{font:500 11px/1.5 var(--mono);color:var(--soft);margin-top:8px}
+  .card.good .v{color:var(--green)}
+
+  .tabs{display:flex;gap:6px;margin-left:auto}
+  .tab{padding:7px 10px;font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    background:#fff;color:var(--soft);box-shadow:inset 0 0 0 1px var(--hair2);cursor:pointer;border:0}
+  .tab.on{background:var(--ink);color:#fff;box-shadow:none}
+  .charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  @media(max-width:860px){.charts{grid-template-columns:1fr}}
+  .chart{padding:18px 16px 12px;min-width:0}
+  .chart .k{font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .chart .v{font:700 30px/1 var(--mono);letter-spacing:-.02em;margin-top:12px;font-variant-numeric:tabular-nums}
+  .chart.good .v{color:var(--green)}
+  .chart .n{font:500 11px/1.5 var(--mono);color:var(--soft);margin-top:8px;min-height:1.5em}
+  .chart .n b{font-weight:600;color:var(--ink)}
+  .chart canvas{width:100%;height:220px;display:block;margin-top:12px;cursor:crosshair;touch-action:pan-y}
+
+  table{width:100%;border-collapse:collapse;background:var(--paper);
+    box-shadow:0 1px 0 var(--hair),0 10px 30px -24px rgba(14,13,12,.5)}
+  th{font:600 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--faint);
+    text-align:left;padding:14px 16px;border-bottom:2px dashed var(--hair2);white-space:nowrap}
+  td{font:500 12.5px/1.5 var(--mono);padding:13px 16px;border-bottom:1px solid var(--hair);vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.share{width:34%}
+  .tick{display:inline-block;margin-left:8px;padding:3px 6px;font:600 9.5px/1 var(--mono);letter-spacing:.14em;
+    color:var(--green);background:rgba(92,122,82,.12);vertical-align:1px}
+  .bar{height:6px;background:rgba(29,29,31,.08);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--green)}
+  .empty{padding:26px 16px;font:500 12px/1.6 var(--mono);color:var(--soft);text-align:center}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .scroll table{min-width:560px}
+
+  @media(max-width:640px){
+    .wrap{width:calc(100% - 28px)}
+    header{padding:22px 0 4px}
+    section{padding:22px 0}
+    .cards{gap:10px}
+    .card{padding:16px}
+    .card .v{font-size:24px;margin-top:9px}
+    .chart canvas{height:180px}
+    h2 span{display:none}
+    th,td{padding:11px 12px}
+    .sub{font-size:11.5px}
+  }
+  footer{padding:34px 0 60px;font:400 11px/1.7 var(--mono);color:var(--faint)}
+  footer a{color:var(--soft)}
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap nav-in">
+        <a class="brand" href="/">        <img src="/brand/png/glyph-black.png" alt="" />
+        RECEIPT
+        <em>        Live
+</em>
+</a>
+        <div class="live" id="live">
+          <i></i>
+          <span id="asof">          Loading
+</span>
+        </div>
+      </div>
+    </nav>
+    <div class="wrap">
+      <header>
+        <h1>
+          Live stats
+        </h1>
+        <p class="sub">
+          Every number here is read straight from the database, right now. Nothing is cached.
+        </p>
+      </header>
+      <section>
+        <h2>
+          All time
+          <i></i>
+        </h2>
+        <div class="cards">
+          <div class="card">
+            <div class="k">
+              Receipts scanned
+            </div>
+            <div class="v" id="total">
+              —
+            </div>
+            <div class="n" id="total-n">
+            </div>
+          </div>
+          <div class="card">
+            <div class="k">
+              Volume rewarded
+            </div>
+            <div class="v" id="scanned-usd">
+              —
+            </div>
+            <div class="n">
+              Spend on receipts that paid out
+            </div>
+          </div>
+          <div class="card">
+            <div class="k">
+              Rewarded
+            </div>
+            <div class="v" id="reward">
+              —
+            </div>
+            <div class="n" id="reward-n">
+              —
+            </div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>
+          Last 24 hours
+          <i></i>
+        </h2>
+        <div class="cards">
+          <div class="card">
+            <div class="k">
+              Scanned
+            </div>
+            <div class="v" id="d-total">
+              —
+            </div>
+          </div>
+          <div class="card">
+            <div class="k">
+              Volume rewarded
+            </div>
+            <div class="v" id="d-scanned">
+              —
+            </div>
+          </div>
+          <div class="card">
+            <div class="k">
+              Rewarded
+            </div>
+            <div class="v" id="d-reward">
+              —
+            </div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>
+          Growth
+          <span>          · running total, hour by hour
+</span>
+          <i></i>
+          <div class="tabs" id="tabs">
+            <button class="tab on" data-h="48">
+              48h
+            </button>
+            <button class="tab" data-h="168">
+              7 days
+            </button>
+          </div>
+        </h2>
+        <div class="charts">
+          <div class="card chart">
+            <div class="k">
+              Total scans
+            </div>
+            <div class="v" id="g-scans-v">
+              —
+            </div>
+            <div class="n" id="g-scans-n">
+              —
+            </div>
+            <canvas id="g-scans">
+            </canvas>
+          </div>
+          <div class="card chart good">
+            <div class="k">
+              Volume rewarded
+            </div>
+            <div class="v" id="g-volume-v">
+              —
+            </div>
+            <div class="n" id="g-volume-n">
+              —
+            </div>
+            <canvas id="g-volume">
+            </canvas>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>
+          By merchant
+          <span>          · approved receipts
+</span>
+          <i></i>
+        </h2>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  Merchant
+                </th>
+                <th class="num">
+                  Receipts
+                </th>
+                <th class="share">
+                  Share
+                </th>
+                <th class="num">
+                  Volume
+                </th>
+                <th class="num">
+                  Rewarded
+                </th>
+              </tr>
+            </thead>
+            <tbody id="merchants">
+              <tr>
+                <td colspan="5" class="empty">
+                  Loading…
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <footer>
+        Refreshes every 30 seconds. Times are shown in your local time zone. How rewards are computed is on the
+        <a href="/rules">        rules page
+</a>
+        .
+      </footer>
+    </div>
+    <script>
+      // ?api=https://receipt.family previews this page on production&#39;s numbers from a dev server.
+const API = new URLSearchParams(location.search).get(&#34;api&#34;) ?? (location.port === &#34;8100&#34; ? &#34;http://localhost:8080&#34; : &#34;&#34;);
+const $ = (id) =&gt; document.getElementById(id);
+const esc = (v) =&gt; String(v ?? &#34;&#34;).replace(/[&amp;&lt;&gt;&#34;&#39;]/g, (c) =&gt; ({ &#34;&amp;&#34;:&#34;&amp;amp;&#34;,&#34;&lt;&#34;:&#34;&amp;lt;&#34;,&#34;&gt;&#34;:&#34;&amp;gt;&#34;,&#39;&#34;&#39;:&#34;&amp;quot;&#34;,&#34;&#39;&#34;:&#34;&amp;#39;&#34; })[c]);
+const usd = (n) =&gt; &#34;$&#34; + Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const int = (n) =&gt; Number(n || 0).toLocaleString();
+const pct = (a, b) =&gt; b &gt; 0 ? (100 * a / b).toFixed(1) + &#34;%&#34; : &#34;—&#34;;
+const plural = (n, w) =&gt; int(n) + &#34; &#34; + w + (n === 1 ? &#34;&#34; : &#34;s&#34;);
+const hourLabel = (d) =&gt; d.toLocaleTimeString(undefined, { hour: &#34;2-digit&#34;, minute: &#34;2-digit&#34; });
+const dayLabel = (d) =&gt; d.toLocaleDateString(undefined, { weekday: &#34;short&#34; });
+const whenLabel = (d) =&gt; `${dayLabel(d)} ${hourLabel(d)}`;
+const niceMax = (n) =&gt; { if (n &lt;= 5) return 5; const p = 10 ** Math.floor(Math.log10(n)); const u = n / p; const m = u &lt;= 1 ? 1 : u &lt;= 2 ? 2 : u &lt;= 5 ? 5 : 10; return m * p; };
+
+let windowHours = 48;
+let lastData = null;
+let series = { scans: [], volume: [] }; // cumulative points: { t, v }
+const usd0 = (n) =&gt; &#34;$&#34; + Math.round(Number(n || 0)).toLocaleString();
+let hoverAt = null;
+
+// Every hour of the window, zeros included, whichever shape the API returned.
+function fillHours(hourly, hours) {
+  const byHour = new Map(hourly.map((h) =&gt; [Math.floor(new Date(h.hour).getTime() / 36e5), h]));
+  const last = Math.floor(Date.now() / 36e5);
+  return Array.from({ length: hours }, (_, i) =&gt; {
+    const k = last - (hours - 1) + i, h = byHour.get(k);
+    return { t: k * 36e5, scans: h ? h.scans : 0, scannedUsd: h ? Number(h.scannedUsd || 0) : 0 };
+  });
+}
+
+// Running totals that end exactly on the headline figures: whatever happened
+// before the window is the starting level, so the line is the true count.
+function buildSeries(d) {
+  const hours = d.windowHours ?? windowHours;
+  const buckets = fillHours(d.hourly, hours);
+  const inWindow = (k) =&gt; buckets.reduce((s, b) =&gt; s + b[k], 0);
+  let scans = d.total - inWindow(&#34;scans&#34;), volume = d.scannedUsd - inWindow(&#34;scannedUsd&#34;);
+  const start = buckets[0].t - 36e5;
+  series.scans = [{ t: start, v: scans }]; series.volume = [{ t: start, v: volume }];
+  for (const b of buckets) {
+    scans += b.scans; volume += b.scannedUsd;
+    series.scans.push({ t: b.t, v: scans }); series.volume.push({ t: b.t, v: volume });
+  }
+  const gained = (k) =&gt; series[k].at(-1).v - series[k][0].v;
+  const span = hours &gt;= 48 ? `${Math.round(hours / 24)} days` : `${hours}h`;
+  $(&#34;g-scans-v&#34;).textContent = int(d.total);
+  $(&#34;g-volume-v&#34;).textContent = usd(d.scannedUsd);
+  $(&#34;g-scans-n&#34;).innerHTML = `&lt;b&gt;+${int(gained(&#34;scans&#34;))}&lt;/b&gt; in the last ${span} · every receipt scanned`;
+  $(&#34;g-volume-n&#34;).innerHTML = `&lt;b&gt;+${usd(gained(&#34;volume&#34;))}&lt;/b&gt; in the last ${span} · spend on receipts that paid out`;
+}
+
+function drawLine(c, pts, color, fill, label = int) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.clientWidth, H = c.clientHeight;
+  if (!W || !H) return null;
+  c.width = Math.round(W * dpr); c.height = Math.round(H * dpr);
+  const ctx = c.getContext(&#34;2d&#34;);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  if (pts.length &lt; 2) return null;
+
+  const font = getComputedStyle(document.body).getPropertyValue(&#34;--mono&#34;);
+  ctx.font = `500 10px ${font}`;
+  const max = niceMax(Math.max(1, pts.at(-1).v));
+  const padL = Math.ceil(ctx.measureText(label(max)).width) + 12, padR = 8, padT = 10, padB = 22;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const t0 = pts[0].t, t1 = pts.at(-1).t;
+  const X = (t) =&gt; padL + ((t - t0) / (t1 - t0)) * plotW;
+  const Y = (v) =&gt; padT + plotH - (v / max) * plotH;
+
+  ctx.textBaseline = &#34;middle&#34;; ctx.textAlign = &#34;right&#34;;
+  for (const v of [0, max / 2, max]) {
+    ctx.strokeStyle = &#34;rgba(29,29,31,.08)&#34;;
+    ctx.beginPath(); ctx.moveTo(padL, Y(v) + 0.5); ctx.lineTo(W - padR, Y(v) + 0.5); ctx.stroke();
+    ctx.fillStyle = &#34;#A69C8E&#34;; ctx.fillText(label(v), padL - 6, Y(v));
+  }
+
+  ctx.beginPath();
+  pts.forEach((p, i) =&gt; (i ? ctx.lineTo(X(p.t), Y(p.v)) : ctx.moveTo(X(p.t), Y(p.v))));
+  ctx.lineTo(X(t1), Y(0)); ctx.lineTo(X(t0), Y(0)); ctx.closePath();
+  ctx.fillStyle = fill; ctx.fill();
+  ctx.beginPath();
+  pts.forEach((p, i) =&gt; (i ? ctx.lineTo(X(p.t), Y(p.v)) : ctx.moveTo(X(p.t), Y(p.v))));
+  ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.lineJoin = &#34;round&#34;; ctx.stroke();
+
+  // time axis: every 6h over two days, daily beyond that; a day name at midnight
+  ctx.textAlign = &#34;center&#34;; ctx.fillStyle = &#34;#A69C8E&#34;;
+  const hours = pts.length - 1;
+  const every = hours &gt; 72 ? 24 : (W &lt; 520 ? 12 : 6);
+  for (const p of pts.slice(1)) {
+    const d = new Date(p.t);
+    if (every === 24 ? d.getHours() !== 0 : d.getHours() % every !== 0) continue;
+    ctx.fillText(d.getHours() === 0 ? dayLabel(d) : hourLabel(d), X(p.t), H - padB / 2 + 1);
+  }
+
+  // hover: nearest point, a guide line and a dot; the reading goes in the note
+  if (hoverAt &amp;&amp; hoverAt.canvas === c) {
+    const t = t0 + ((hoverAt.px - padL) / plotW) * (t1 - t0);
+    const p = pts.reduce((a, q) =&gt; (Math.abs(q.t - t) &lt; Math.abs(a.t - t) ? q : a));
+    ctx.strokeStyle = &#34;rgba(29,29,31,.18)&#34;; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(X(p.t) + 0.5, padT); ctx.lineTo(X(p.t) + 0.5, Y(0)); ctx.stroke();
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(X(p.t), Y(p.v), 4, 0, Math.PI * 2); ctx.fill();
+    return p;
+  }
+  return null;
+}
+
+function drawCharts() {
+  const s = drawLine($(&#34;g-scans&#34;), series.scans, &#34;#1D1D1F&#34;, &#34;rgba(29,29,31,.07)&#34;, int);
+  const k = drawLine($(&#34;g-volume&#34;), series.volume, &#34;#5C7A52&#34;, &#34;rgba(92,122,82,.12)&#34;, usd0);
+  if (s) $(&#34;g-scans-n&#34;).innerHTML = `&lt;b&gt;${esc(whenLabel(new Date(s.t)))}&lt;/b&gt; · ${int(s.v)} scans so far`;
+  if (k) $(&#34;g-volume-n&#34;).innerHTML = `&lt;b&gt;${esc(whenLabel(new Date(k.t)))}&lt;/b&gt; · ${usd(k.v)} rewarded so far`;
+}
+
+function hover(evt) {
+  const c = evt.currentTarget, r = c.getBoundingClientRect();
+  hoverAt = { canvas: c, px: (evt.touches ? evt.touches[0].clientX : evt.clientX) - r.left };
+  drawCharts();
+}
+function unhover() { hoverAt = null; if (lastData) buildSeries(lastData); drawCharts(); }
+
+function renderMerchants(rows) {
+  const body = $(&#34;merchants&#34;);
+  if (!rows.length) { body.innerHTML = `&lt;tr&gt;&lt;td colspan=&#34;5&#34; class=&#34;empty&#34;&gt;No approved receipts yet.&lt;/td&gt;&lt;/tr&gt;`; return; }
+  const total = rows.reduce((s, m) =&gt; s + m.receipts, 0);
+  body.innerHTML = rows.map((m) =&gt; `
+    &lt;tr&gt;
+      &lt;td&gt;${esc(m.merchant)}${m.ticker ? ` &lt;span class=&#34;tick&#34;&gt;${esc(m.ticker)}&lt;/span&gt;` : &#34;&#34;}&lt;/td&gt;
+      &lt;td class=&#34;num&#34;&gt;${int(m.receipts)}&lt;/td&gt;
+      &lt;td class=&#34;share&#34;&gt;&lt;div class=&#34;bar&#34;&gt;&lt;i style=&#34;width:${(100 * m.receipts / total).toFixed(1)}%&#34;&gt;&lt;/i&gt;&lt;/div&gt;&lt;/td&gt;
+      &lt;td class=&#34;num&#34;&gt;${usd(m.scannedUsd)}&lt;/td&gt;
+      &lt;td class=&#34;num&#34;&gt;${usd(m.rewardUsd)}&lt;/td&gt;
+    &lt;/tr&gt;`).join(&#34;&#34;);
+}
+
+async function load() {
+  try {
+    const r = await fetch(`${API}/api/status/live-stats?hours=${windowHours}`, { cache: &#34;no-store&#34; });
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+
+    $(&#34;total&#34;).textContent = int(d.total);
+
+    $(&#34;scanned-usd&#34;).textContent = usd(d.scannedUsd);
+    $(&#34;reward&#34;).textContent = usd(d.rewardUsd);
+    $(&#34;reward-n&#34;).textContent = `${plural(d.approvedWallets, &#34;wallet&#34;)} rewarded`;
+
+    $(&#34;d-total&#34;).textContent = int(d.last24h.total);
+
+    $(&#34;d-scanned&#34;).textContent = d.last24h.scannedUsd == null ? &#34;—&#34; : usd(d.last24h.scannedUsd);
+    $(&#34;d-reward&#34;).textContent = usd(d.last24h.rewardUsd);
+
+    lastData = d;
+    buildSeries(d);
+    drawCharts();
+
+    renderMerchants(d.merchants ?? []);
+
+    $(&#34;live&#34;).classList.remove(&#34;stale&#34;);
+    $(&#34;asof&#34;).textContent = &#34;Updated &#34; + new Date().toLocaleTimeString(undefined, { hour: &#34;2-digit&#34;, minute: &#34;2-digit&#34; });
+  } catch {
+    $(&#34;live&#34;).classList.add(&#34;stale&#34;);
+    $(&#34;asof&#34;).textContent = &#34;Reconnecting&#34;;
+  }
+}
+
+for (const c of [$(&#34;g-scans&#34;), $(&#34;g-volume&#34;)]) {
+  c.addEventListener(&#34;mousemove&#34;, hover);
+  c.addEventListener(&#34;mouseleave&#34;, unhover);
+  c.addEventListener(&#34;touchstart&#34;, hover, { passive: true });
+  c.addEventListener(&#34;touchmove&#34;, hover, { passive: true });
+}
+$(&#34;tabs&#34;).addEventListener(&#34;click&#34;, (e) =&gt; {
+  const t = e.target.closest(&#34;.tab&#34;); if (!t) return;
+  windowHours = Number(t.dataset.h);
+  for (const b of document.querySelectorAll(&#34;.tab&#34;)) b.classList.toggle(&#34;on&#34;, b === t);
+  load();
+});
+addEventListener(&#34;resize&#34;, drawCharts);
+load();
+setInterval(load, 30000);
+    </script>
+  </body>
+</html>
