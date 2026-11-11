@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Receipt — Lock $RECEIPT
+    </title>
+    <meta name="description" content="Lock $RECEIPT and your tier is safe at the price you locked at, and you are VIP: 50 receipts a day, up to a year old, reviewed first. Every benefit, every rule." />
+    <meta property="og:title" content="Receipt — Lock $RECEIPT" />
+    <meta property="og:description" content="Lock $RECEIPT for a term and it counts toward your tier at the price you locked at, even if the price falls." />
+    <meta property="og:url" content="https://receipt.family/lock" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" />
+    <script>
+      try { const t = localStorage.getItem(&#34;receipt.theme&#34;); if (t === &#34;dark&#34; || t === &#34;light&#34;) document.documentElement.dataset.theme = t; } catch {}
+    </script>
+    <style>
+      :root {
+    --bg: #F3F2EF; --paper: #FDFCFA; --paper-2: #F3F1EC; --ink: #1D1D1F; --ink-2: #6E665C; --ink-3: #A69C8E;
+    --hair: rgba(29,29,31,.08); --dash: rgba(29,29,31,.16); --card-sh: 0 1px 2px rgba(14,13,12,.04), 0 14px 36px -24px rgba(14,13,12,.22); --green: #5C7A52; --green-bg: #E9EFE4; --red: #B3261E; --red-bg: #F7E6E4; --amber: #9A6D00; --amber-bg: #F6EDD2;
+    --gold: #A9852A; --gold-bg: #F4EBD2;
+    --display: &#34;Bricolage Grotesque&#34;, &#34;Helvetica Neue&#34;, Arial, sans-serif; --mono: &#34;IBM Plex Mono&#34;, ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme=&#34;light&#34;]) {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12; --gold: #D6B55A; --gold-bg: #33290F;
+  } }
+  :root[data-theme=&#34;dark&#34;] {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12; --gold: #D6B55A; --gold-bg: #33290F;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--display); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { width: min(760px, 100% - 40px); margin: 0 auto; padding: 40px 0 96px; }
+  header { margin-bottom: 40px; }
+  .eyebrow { font: 600 11px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+  h1 { font-size: clamp(38px, 7vw, 56px); line-height: .95; letter-spacing: -.04em; font-weight: 800; margin: 0 0 16px; text-wrap: balance; }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 60ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .meta { font: 500 11.5px/1.6 var(--mono); color: var(--ink-3); letter-spacing: .06em; margin-top: 18px; }
+  h2 { font-size: 26px; letter-spacing: -.03em; font-weight: 800; margin: 48px 0 8px; text-wrap: balance; }
+  h2 + p { margin-top: 0; color: var(--ink-2); max-width: 62ch; }
+  p { max-width: 62ch; }
+  a { color: var(--ink); }
+  /* the three terms */
+  .terms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 22px 0 8px; }
+  .term { position: relative; overflow: hidden; background: var(--paper); border: 1px solid var(--hair); border-radius: 16px; padding: 20px 18px 18px; box-shadow: var(--card-sh); }
+  .term .d { font: 800 30px/1 var(--display); letter-spacing: -.04em; }
+  .term .d small { font: 600 12px/1 var(--mono); letter-spacing: .06em; color: var(--ink-2); margin-left: 2px; }
+  .term .pc { font: 800 42px/1 var(--display); letter-spacing: -.05em; margin-top: 16px; font-variant-numeric: tabular-nums; }
+  .term .k { font: 600 9.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); margin-top: 8px; }
+  .term.best { background: linear-gradient(135deg,#D4B255,#BE9A34 26%,#A9852A 48%,#CDA945 66%,#B08D2E 84%,#C6A241); color: #231A04; border-color: rgba(35,26,4,.3); }
+  .term.best .d small, .term.best .k { color: rgba(35,26,4,.7); }
+  .term.best::after { content: &#34;&#34;; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(160deg, rgba(255,255,255,.28), rgba(255,255,255,0) 36%, rgba(0,0,0,.1) 80%); }
+  @media (max-width: 560px) { .terms { grid-template-columns: 1fr; } .term { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 16px; } .term .d { grid-column: 1; grid-row: 1; } .term .k { grid-column: 1; grid-row: 2; margin-top: 4px; } .term .pc { grid-column: 2; grid-row: 1 / 3; margin-top: 0; text-align: right; } .back b { font-size: 18px; } }
+  .term .x { font: 600 12.5px/1.5 var(--mono); color: var(--ink-2); margin-top: 10px; }
+  .term.best .x { color: rgba(35,26,4,.8); }
+  .term .tag { position: absolute; top: 14px; right: 14px; font: 700 9.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; padding: 6px 8px; border-radius: 999px; background: rgba(35,26,4,.14); color: #231A04; }
+  /* the comparison: one column per term, one row per thing that changes */
+  .cmp table { font-variant-numeric: tabular-nums; }
+  .cmp th, .cmp td { text-align: right; white-space: nowrap; }
+  .cmp th:first-child, .cmp td:first-child { text-align: left; white-space: normal; font: 500 13.5px/1.4 var(--display); color: var(--ink-2); min-width: 150px; }
+  .cmp td:first-child b { display: block; color: var(--ink); font-weight: 700; }
+  .cmp th { font: 800 15px/1 var(--display); letter-spacing: -.03em; text-transform: none; color: var(--ink); padding-top: 14px; padding-bottom: 12px; }
+  .cmp th small { display: block; font: 600 9.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+  .cmp td { font: 600 14px/1.5 var(--mono); }
+  .cmp td small { display: block; font: 500 11px/1.4 var(--mono); color: var(--ink-3); }
+  .cmp .best { background: var(--gold-bg); }
+  .cmp td.best, .cmp th.best, .cmp th.best small { color: var(--gold); }
+  .cmp tr.sec td { padding-top: 16px; padding-bottom: 4px; border-bottom: 0; }
+  .cmp tr.sec td:first-child { font: 600 9.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-3); }
+  .cmp td.up { color: var(--green); }
+  .cmp td.best.up { color: var(--gold); }
+  .cmp td .pill { font-size: 10px; padding: 4px 7px; margin-right: 6px; vertical-align: 1px; }
+  @media (max-width: 560px) {
+    /* the tag sits in the card&#39;s flow, under the numbers, rather than over the multiplier */
+    .term .tag { position: static; grid-column: 1 / -1; grid-row: 3; justify-self: start; margin-top: 10px; }
+    .term .x { grid-column: 1 / -1; grid-row: 4; }
+    /* three term columns must fit a phone: the best one is the point of the table */
+    .cmp th, .cmp td { padding: 8px 7px; }
+    .cmp th:first-child, .cmp td:first-child { min-width: 0; font-size: 12px; padding-left: 10px; }
+    .cmp th { font-size: 13px; }
+    .cmp th small { font-size: 8.5px; letter-spacing: .12em; }
+    .cmp td { font-size: 12px; }
+    .cmp td small { font-size: 9.5px; }
+    .cmp td .pill { display: block; width: fit-content; margin: 0 0 3px; }
+  }
+  /* a printed sheet */
+  .sheet { position: relative; background: var(--paper); border: 1px solid var(--hair); border-radius: 18px; box-shadow: var(--card-sh); padding: 22px 24px 20px; margin: 18px 0 8px; font: 500 13.5px/1.7 var(--mono); font-variant-numeric: tabular-nums; }
+  .sheet .k { font: 600 10.5px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+  .row { display: flex; justify-content: space-between; gap: 16px; padding: 5px 0; border-bottom: 1px dashed var(--dash); }
+  .row:last-child { border-bottom: 0; }
+  .row .m { color: var(--ink-2); }
+  .row b { font-weight: 600; text-align: right; white-space: nowrap; }
+  .row b.up { color: var(--green); }
+  .row b.dn { color: var(--red); }
+  .rule { border-top: 1.5px dashed var(--dash); margin: 12px 0; }
+  .note { font: 400 12px/1.6 var(--mono); color: var(--ink-2); margin-top: 10px; }
+  .back { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--green-bg); color: var(--green); }
+  .back.gold { background: var(--gold-bg); color: var(--gold); }
+  .back span { display: block; font-size: 10.5px; letter-spacing: .16em; font-weight: 600; }
+  .back b { display: block; font: 700 22px/1.2 var(--mono); letter-spacing: -.02em; }
+  /* what you get */
+  .vip { position: relative; overflow: hidden; margin-top: 22px; border-radius: 20px; padding: 24px 24px 20px; color: #F2EEE7; background: radial-gradient(120% 90% at 0% 0%, #2A2620 0%, #1D1D1F 55%, #141416 100%); box-shadow: 0 24px 60px -30px rgba(14,13,12,.6); }
+  .vip::before { content: &#34;&#34;; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 50% at 100% 0%, rgba(214,181,90,.22), transparent 70%); }
+  .vip-h { display: flex; align-items: center; gap: 12px; position: relative; }
+  .vip-tag { font: 800 12px/1 var(--mono); letter-spacing: .2em; padding: 7px 10px; border-radius: 999px; color: #231A04; background: linear-gradient(135deg,#D4B255,#BE9A34 40%,#CDA945); }
+  .vip-t { font: 600 12px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: rgba(242,238,231,.7); }
+  .vip-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 18px; position: relative; }
+  .vip-item { padding: 20px 18px 18px; border-top: 1px solid rgba(242,238,231,.1); }
+  .vip-item:nth-child(odd) { border-right: 1px solid rgba(242,238,231,.1); padding-left: 0; }
+  .vip-item:nth-child(even) { padding-right: 0; }
+  .vip-big { font: 800 40px/1 var(--display); letter-spacing: -.045em; color: #D6B55A; font-variant-numeric: tabular-nums; min-height: 40px; }
+  .vip-big small { font: 600 13px/1 var(--mono); letter-spacing: .06em; color: rgba(242,238,231,.55); margin-left: 6px; }
+  .vip-item b { display: block; margin-top: 12px; font-size: 16px; letter-spacing: -.02em; }
+  .vip-item p { margin: 6px 0 0; font-size: 13.5px; line-height: 1.5; color: rgba(242,238,231,.68); }
+  .vip-f { position: relative; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(242,238,231,.18); font: 500 11.5px/1.6 var(--mono); color: rgba(242,238,231,.6); }
+  .any-h { display: flex; align-items: center; gap: 14px; margin: 26px 0 12px; font: 600 11px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); }
+  .any-h i { flex: 1; border-top: 1px dashed var(--dash); }
+  .any { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .any-item { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; padding: 18px; background: var(--paper); border: 1px solid var(--hair); border-radius: 16px; box-shadow: var(--card-sh); }
+  .any-ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--green-bg); color: var(--green); font: 700 18px/1 var(--mono); }
+  .any-item b { display: block; font-size: 15.5px; letter-spacing: -.02em; }
+  .any-item p { margin: 4px 0 0; color: var(--ink-2); font-size: 13.5px; line-height: 1.5; }
+  @media (max-width: 560px) {
+    .vip { padding: 20px 18px 16px; }
+    .vip-grid { grid-template-columns: 1fr; }
+    .vip-item { padding: 16px 0 14px; border-right: 0 !important; }
+    .vip-big { font-size: 34px; min-height: 0; }
+    .any { grid-template-columns: 1fr; }
+  }
+  /* benefit list */
+  .benefits { display: grid; gap: 12px; margin: 22px 0 8px; }
+  .benefit { display: grid; grid-template-columns: 44px 1fr; gap: 16px; align-items: start; padding: 18px 20px; background: var(--paper); border: 1px solid var(--hair); border-radius: 16px; box-shadow: var(--card-sh); }
+  .benefit .n { font: 800 26px/1 var(--display); color: var(--ink-3); letter-spacing: -.04em; padding-top: 3px; }
+  .benefit b { display: block; font-size: 17px; letter-spacing: -.02em; }
+  .benefit p { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
+  /* bands */
+  .band { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 14px 16px; background: var(--paper); border: 1px solid var(--hair); border-radius: 14px; box-shadow: var(--card-sh); margin: 22px 0; }
+  .band .tag { font: 600 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 6px 8px; display: inline-block; width: fit-content; }
+  .band.ok .tag { background: var(--green-bg); color: var(--green); }
+  .band.rev .tag { background: var(--amber-bg); color: var(--amber); }
+  .band p { margin: 0; font-size: 15px; }
+  /* what counts */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tablewrap { overflow-x: auto; margin: 18px 0; box-shadow: 0 0 0 1px var(--hair); background: var(--paper); border-radius: 14px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  th { font: 600 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); }
+  td:last-child { font: 600 13px/1.5 var(--mono); white-space: nowrap; text-align: right; }
+  th:last-child { text-align: right; }
+  td small { display: block; color: var(--ink-2); font-size: 12.5px; }
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: 18px 0; display: grid; gap: 12px; }
+  .steps li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: baseline; }
+  .steps li::before { counter-increment: s; content: counter(s, decimal-leading-zero); font: 800 22px/1 var(--display); color: var(--ink-3); letter-spacing: -.04em; }
+  .steps b { display: block; font-weight: 700; }
+  .steps span { color: var(--ink-2); font-size: 15px; }
+  .cta { display: inline-block; margin-top: 8px; font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; color: #fff; background: var(--ink); padding: 15px 22px; border-radius: 10px; }
+  :root[data-theme=&#34;dark&#34;] .cta { color: var(--bg); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme=&#34;light&#34;]) .cta { color: var(--bg); } :root:not([data-theme=&#34;light&#34;]) .logo img { filter: invert(1); } }
+  :root[data-theme=&#34;dark&#34;] .logo img { filter: invert(1); }
+  .ladder td:last-child { text-align: right; white-space: nowrap; }
+  .ladder td.n { font: 600 13px/1.5 var(--mono); white-space: nowrap; text-align: right; }
+  .ladder td.n.up { color: var(--green); }
+  .ladder th.r { text-align: right; }
+  .ladder tr.you td { background: var(--gold-bg); }
+  @media (max-width: 560px) {
+    .ladder table, .ladder tbody { display: block; }
+    .ladder thead { display: none; }
+    .ladder tr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 10px; padding: 14px; border-bottom: 1px solid var(--hair); }
+    .ladder tr:last-child { border-bottom: 0; }
+    .ladder td { display: block; padding: 0; border: 0; }
+    .ladder td.t, .ladder td.p { grid-column: 1 / -1; }
+    .ladder td.p { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .ladder td.p small { font-weight: 400; }
+    .ladder td.n, .ladder td:last-child { text-align: left; }
+    .ladder td.n::before { content: attr(data-l); display: block; font: 600 9.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 3px; }
+  }
+  .pill { display: inline-block; font: 700 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 5px 8px; border-radius: 999px; border: 1px solid var(--hair); }
+  .pill.silver { background: linear-gradient(135deg,#E8E8E8,#B9B9B9); color: #2A2A2A; border-color: transparent; }
+  .pill.gold { background: linear-gradient(135deg,#D4B255,#A9852A); color: #231A04; border-color: transparent; }
+  .pill.black { background: #111; color: #EDE9E1; border-color: transparent; }
+  .pill.founder { background: linear-gradient(135deg,#3E2D6B,#1C1533); color: #EAE2FF; border-color: transparent; }
+  .fine { font: 400 12px/1.7 var(--mono); color: var(--ink-3); margin-top: 40px; border-top: 1px solid var(--hair); padding-top: 18px; }
+  .links { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 18px; font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  .links a { text-decoration: none; box-shadow: inset 0 -1px 0 var(--dash); padding-bottom: 3px; }
+  .nav-back { display: grid; place-items: center; width: 44px; height: 44px; margin: -12px 0 18px -10px; color: var(--ink); text-decoration: none; }
+  @media (max-width: 560px) { .wrap { padding-top: 32px; } .benefit { grid-template-columns: 34px 1fr; gap: 12px; padding: 16px; } }
+    </style>
+  </head>
+  <body>
+    <nav style="width:min(760px,100% - 40px);margin:0 auto;padding:22px 0 0;display:flex;justify-content:space-between;align-items:center">
+      <a class="logo" href="/" style="display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.045em;font-size:20px;text-decoration:none;color:inherit">      <img src="/brand/png/glyph-black.png" alt="" width="22" height="22" style="display:block" />
+      Receipt
+</a>
+      <a class="cta" href="/app#move" style="margin:0;padding:12px 16px">      Lock $RECEIPT
+</a>
+    </nav>
+    <div class="wrap">
+      <a aria-label="Home" class="nav-back" href="/">      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7">
+        </path>
+      </svg>
+</a>
+      <header>
+        <div class="eyebrow">
+          Lock $RECEIPT
+        </div>
+        <h1>
+          Lock it.
+          <br />
+          Keep your tier.
+        </h1>
+        <p class="lede">
+          Lock $RECEIPT for a term and two things happen.
+          <b>          Your tier is safe:
+</b>
+          the tokens count at the price you locked at or today&#39;s, whichever is higher, for the whole term.
+          <b>          You are VIP:
+</b>
+          50 receipts a day, up to a year old, reviewed first — and at Founder, a shop we do not list pays too. Nothing is spent. When the term ends, every token comes back.
+        </p>
+        <p class="meta" id="px">
+          Loading today&#39;s terms…
+        </p>
+      </header>
+      <h2 style="margin-top:34px">
+        What a lock is
+      </h2>
+      <p>
+        A lock sets aside $RECEIPT from your wallet for a fixed term:
+        <b id="term-list">        3, 7 or 30 days
+</b>
+        . From the moment the chain confirms it, the locked tokens count toward your tier at the term&#39;s rate: every token as one token on a 3-day lock, and as more than one on a longer one. And the price they are valued at can only go up. When the term ends, unlock and the full amount comes back to your wallet.
+      </p>
+      <div class="terms" id="terms">
+        <div class="term">
+          <div class="d">
+            3
+            <small>            DAYS
+</small>
+          </div>
+          <div class="pc">
+            ×1.00
+          </div>
+          <div class="k">
+            every token counts as one
+          </div>
+          <div class="x">
+            price held 3 days
+          </div>
+        </div>
+        <div class="term">
+          <div class="d">
+            7
+            <small>            DAYS
+</small>
+          </div>
+          <div class="pc">
+            ×1.10
+          </div>
+          <div class="k">
+            every token counts as 1.1
+          </div>
+          <div class="x">
+            price held 7 days
+          </div>
+        </div>
+        <div class="term best">
+          <span class="tag">          Best rate
+</span>
+          <div class="d">
+            30
+            <small>            DAYS
+</small>
+          </div>
+          <div class="pc">
+            ×1.25
+          </div>
+          <div class="k">
+            every token counts as 1.25
+          </div>
+          <div class="x">
+            price held 30 days
+          </div>
+        </div>
+      </div>
+      <p style="font:400 12.5px/1.7 var(--mono);color:var(--ink-3);margin-top:12px" id="terms-note">
+        The longer the term, the more every token counts, and the longer your price is protected.
+      </p>
+      <h2>
+        Pick a term
+      </h2>
+      <p>
+        Side by side: what each term does to the count, and how many $RECEIPT each rung takes on it at today&#39;s price. The right-hand column is always the cheapest way up.
+      </p>
+      <div class="tablewrap cmp">
+        <table>
+          <thead id="cmp-head">
+            <tr>
+              <th>
+              </th>
+              <th>
+                3 days
+              </th>
+              <th>
+                7 days
+              </th>
+              <th class="best">
+                30 days
+              </th>
+            </tr>
+          </thead>
+          <tbody id="cmp">
+            <tr>
+              <td colspan="4" style="color:var(--ink-3);text-align:left">
+                Loading today&#39;s terms…
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font:400 12.5px/1.7 var(--mono);color:var(--ink-3)" id="cmp-note">
+        Token counts are rounded up and move with the price. Whatever the term, every token comes back when it ends.
+      </p>
+      <h2>
+        What you get
+      </h2>
+      <p>
+        Ten things. Four come with a lock worth
+        <span id="vip-floor">        Silver
+</span>
+        or more; six come with any lock at all.
+      </p>
+      <div class="vip">
+        <div class="vip-h">
+          <span class="vip-tag">          VIP
+</span>
+          <span class="vip-t">          While your $RECEIPT is locked
+</span>
+        </div>
+        <div class="vip-grid">
+          <div class="vip-item">
+            <div class="vip-big">
+              Any shop
+            </div>
+            <b>            Founder only
+</b>
+            <p>
+              Any restaurant, petrol station or supermarket, in the stock of its kind: McDonald&#39;s, Exxon or Costco. Not only the listed brands. This one needs the Founder tier, not just a lock.
+            </p>
+          </div>
+          <div class="vip-item">
+            <div class="vip-big">
+              <span id="p-count">              50
+</span>
+              <small>              / day
+</small>
+            </div>
+            <b>            Receipts a day
+</b>
+            <p>
+              The VIP count, whatever your tier. Everyone else gets their tier&#39;s count
+              <span id="p-counts"></span>
+              .
+            </p>
+          </div>
+          <div class="vip-item">
+            <div class="vip-big" id="p-age">
+              1 year
+            </div>
+            <b>            Old receipts count
+</b>
+            <p>
+              The drawer you never scanned: anything up to
+              <span id="p-age-w">              a year
+</span>
+              old pays.
+              <span id="p-age-n">              Three months
+</span>
+              for everyone else.
+            </p>
+          </div>
+          <div class="vip-item">
+            <div class="vip-big">
+              First
+            </div>
+            <b>            Reviewed first
+</b>
+            <p>
+              When a receipt needs a person, yours goes to the front of the queue.
+            </p>
+          </div>
+        </div>
+        <div class="vip-f" id="perks-floor">
+          For a lock worth Silver or more.
+        </div>
+      </div>
+      <div class="any-h">
+        <span>        With any lock
+</span>
+        <i></i>
+      </div>
+      <div class="any">
+        <div class="any-item">
+          <div class="any-ic">
+            ⤓
+          </div>
+          <div>
+            <b>            Your price is fixed the moment you lock
+</b>
+            <p id="p-floor">
+              The price at that moment,
+              <span id="p-px">              today&#39;s
+</span>
+              , becomes your lock price for the whole term. If $RECEIPT falls, you still count at it. If it rises, the higher price is used. It does not change until you unlock.
+            </p>
+          </div>
+        </div>
+        <div class="any-item">
+          <div class="any-ic">
+            ▲
+          </div>
+          <div>
+            <b>            Your tier is set by the lock, and stays
+</b>
+            <p>
+              The tier your lock gives you is fixed for the whole term. A dip cannot drop it. Every receipt you scan in the term pays at that tier, with its rate and its caps.
+            </p>
+          </div>
+        </div>
+        <div class="any-item">
+          <div class="any-ic">
+            ↩
+          </div>
+          <div>
+            <b>            Tokens come back
+</b>
+            <p>
+              Nothing is sold, swapped or spent. After the term, the full amount returns to your wallet.
+            </p>
+          </div>
+        </div>
+        <div class="any-item">
+          <div class="any-ic">
+            ◎
+          </div>
+          <div>
+            <b>            Public
+</b>
+            <p>
+              Every lock and return is a transaction on Robinhood Chain, on the
+              <a href="/locks">              lock ledger
+</a>
+              .
+            </p>
+          </div>
+        </div>
+        <div class="any-item">
+          <div class="any-ic">
+            ×
+          </div>
+          <div>
+            <b>            Counts for more, the longer the term
+</b>
+            <p id="p-terms">
+              A 3-day lock counts 100% of its value toward your tier, 7 days 110%, 30 days 125%.
+            </p>
+          </div>
+        </div>
+        <div class="any-item">
+          <div class="any-ic">
+            ⇠
+          </div>
+          <div>
+            <b>            Leave whenever you like
+</b>
+            <p id="p-early">
+              Unstake before the term ends and everything comes back, no fee. The cashback you earned while locked is yours to keep.
+            </p>
+          </div>
+        </div>
+      </div>
+      <h2>
+        The price floor, worked out
+      </h2>
+      <p>
+        This is the benefit that matters on a bad day. Held tokens are marked to market every day, and a dip can drop your tier. A lock cannot count for less than it did when you made it.
+      </p>
+      <div class="sheet">
+        <div class="k">
+          Worked example · the price falls a third
+        </div>
+        <div class="row">
+          <span class="m" id="ex3-lockedm">          Locked 30 days at $0.001550
+</span>
+          <b id="ex3-locked">          100,000 $RECEIPT
+</b>
+        </div>
+        <div class="row">
+          <span class="m">          Price today
+</span>
+          <b class="dn" id="ex3-now">          $0.001033
+</b>
+        </div>
+        <div class="rule">
+        </div>
+        <div class="row">
+          <span class="m">          In the wallet · today&#39;s price
+</span>
+          <b class="dn" id="ex3-hold">          $103.33
+</b>
+        </div>
+        <div class="row">
+          <span class="m">          Locked · lock price
+</span>
+          <b class="up" id="ex3-lock">          $155.00
+</b>
+        </div>
+        <p class="note">
+          The lock keeps counting at its own price until the term ends. If the price had gone up instead, the lock would count at the new, higher price — the floor only ever works in your favour.
+        </p>
+      </div>
+      <h2>
+        Every tier, and what gets you there
+      </h2>
+      <p>
+        The ladder the app applies today, and how many $RECEIPT each rung takes at today&#39;s price. Held, every token counts as one. Locked, it counts at the term&#39;s rate and the price cannot move under you.
+      </p>
+      <div class="tablewrap ladder">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Tier
+              </th>
+              <th>
+                Pays
+              </th>
+              <th class="r">
+                Needs
+              </th>
+              <th class="r">
+                $RECEIPT today
+              </th>
+            </tr>
+          </thead>
+          <tbody id="ladder">
+            <tr>
+              <td colspan="4" style="color:var(--ink-3)">
+                Loading the ladder…
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font:400 12.5px/1.7 var(--mono);color:var(--ink-3)" id="lad-note">
+        Token counts are rounded up and move with the price. &#34;Pays&#34; is the cashback rate, then the most a single receipt and a whole day can return.
+      </p>
+      <h2>
+        What counts toward a tier
+      </h2>
+      <p>
+        Three things add up to the dollar figure that sets your rung. They stack.
+      </p>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Where it is
+              </th>
+              <th>
+                Counts
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                $RECEIPT in your wallet
+                <small>                Priced at today&#39;s rate
+</small>
+              </td>
+              <td>
+                100%
+              </td>
+            </tr>
+            <tr>
+              <td>
+                $RECEIPT locked
+                <small>                Priced at today&#39;s rate or the lock price, whichever is higher
+</small>
+              </td>
+              <td id="t-lock">
+                100%
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Stock held in the app
+                <small>                Rewards you have not withdrawn yet
+</small>
+              </td>
+              <td id="t-stock">
+                50%
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        A lock keeps its own floor: it never counts for less than it was worth on the day you locked it, however the price moves. Your tier itself follows the market. See
+        <a href="/tiers">        how tiers work
+</a>
+        for the ladder itself.
+      </p>
+      <h2>
+        Unlocking
+      </h2>
+      <p>
+        Unlock whenever you like, from the same screen you locked on. What comes back depends on when.
+      </p>
+      <div class="band ok">
+        <span class="tag">        After the term
+</span>
+        <p>
+          <b>          Everything comes back.
+</b>
+          The full amount is sent to your wallet, no fee, nothing kept. The lock stops counting toward your tier once it is returned.
+        </p>
+      </div>
+      <div class="band ok" id="band-early">
+        <span class="tag">        Before the term ends
+</span>
+        <p>
+          <b>          Everything comes back too.
+</b>
+          The full amount is sent to your wallet, and the cashback you earned while locked stays yours: it was paid for receipts you really scanned.
+          <span id="fee-line">          There is no early fee.
+</span>
+          The tokens stop counting toward your tier once they are back, so the tier the lock gave you ends with it.
+        </p>
+      </div>
+      <div class="sheet">
+        <div class="k">
+          Worked example · unlocking early
+        </div>
+        <div class="row">
+          <span class="m">          Locked
+</span>
+          <b id="ex4-locked">          100,000 $RECEIPT
+</b>
+        </div>
+        <div class="row">
+          <span class="m">          Cashback earned while locked
+</span>
+          <b id="ex4-earned">          $50.00 · stays yours
+</b>
+        </div>
+        <div class="row">
+          <span class="m">          Price at unlock
+</span>
+          <b id="ex4-px">          $0.001550
+</b>
+        </div>
+        <div class="rule">
+        </div>
+        <div class="row">
+          <span class="m" id="ex4-feem">          Early fee
+</span>
+          <b class="dn" id="ex4-fee">          none
+</b>
+        </div>
+        <div class="back">
+          <span>          SENT BACK TO YOU
+</span>
+          <b id="ex4-back">          100,000 $RECEIPT
+</b>
+        </div>
+        <p class="note">
+          Early or late, all 100,000 come back, and the $50 of stock stays yours.
+        </p>
+      </div>
+      <h2>
+        How to lock
+      </h2>
+      <ol class="steps">
+        <li>
+          <div>
+            <b>            Open Move → Lock in the app.
+</b>
+            <span>            The Lock tab appears when locking is switched on. Your $RECEIPT balance is read from the wallet you scan with.
+</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <b>            Pick an amount and a term.
+</b>
+            <span>            At least
+            <span id="min-tokens">            1,000
+</span>
+            $RECEIPT. The screen shows what the lock will count for before you send.
+</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <b>            Send the transfer.
+</b>
+            <span>            Your wallet sends the tokens. The app reads the transaction from the chain and the lock starts counting straight away.
+</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <b>            Scan as usual.
+</b>
+            <span>            Your tier reflects the lock on the next receipt. When the term is up, unlock from the same tab and the tokens return.
+</span>
+          </div>
+        </li>
+      </ol>
+      <p style="font:400 12.5px/1.7 var(--mono);color:var(--ink-3)">
+        Sent the transfer but closed the app? It can be claimed as a lock for 24 hours from the same wallet.
+      </p>
+      <a class="cta" href="/app#move">      Lock $RECEIPT →
+</a>
+      <div class="links">
+        <a href="/tiers">        The tier ladder
+</a>
+        <a href="/locks">        The lock ledger
+</a>
+        <a href="/rules">        Every rule
+</a>
+      </div>
+      <p class="fine">
+        Terms, rates and the early fee are read live from the server, so this page shows what the app applies today. Locking can be switched off; when it is, the Lock tab is hidden and existing locks still unlock normally. Amounts are in US dollars. Locked $RECEIPT is staked for the term and is not sold or lent. Rewards are tokenized stock: debt securities giving economic exposure to the share price, not ownership. Nothing here is investment advice.
+      </p>
+    </div>
+    <script>
+      // Everything numeric on this page comes from the server: the terms, the
+  // early fee, the minimum, today&#39;s price and the tier ladder. The static
+  // numbers in the markup are the defaults and are overwritten on load.
+  const $ = (id) =&gt; document.getElementById(id);
+  const usd = (n) =&gt; &#34;$&#34; + Number(n).toLocaleString(&#34;en-US&#34;, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const usd0 = (n) =&gt; &#34;$&#34; + Number(n).toLocaleString(&#34;en-US&#34;, { maximumFractionDigits: 0 });
+  const int = (n) =&gt; Math.round(Number(n)).toLocaleString(&#34;en-US&#34;);
+  const px6 = (p) =&gt; &#34;$&#34; + Number(p).toFixed(6);
+  const days = (d) =&gt; d + &#34; day&#34; + (d === 1 ? &#34;&#34; : &#34;s&#34;);
+  const EX_TOKENS = 100000;
+
+  Promise.all([
+    fetch(&#34;/api/status/locks&#34;).then((r) =&gt; (r.ok ? r.json() : null)).catch(() =&gt; null),
+    fetch(&#34;/api/status&#34;).then((r) =&gt; (r.ok ? r.json() : null)).catch(() =&gt; null),
+  ]).then(([L, S]) =&gt; {
+    const terms = (L &amp;&amp; L.terms &amp;&amp; L.terms.length ? L.terms : [{ days: 3, creditPercent: 100 }, { days: 7, creditPercent: 110 }, { days: 30, creditPercent: 125 }]).slice().sort((a, b) =&gt; a.days - b.days);
+    const best = terms[terms.length - 1];
+    const fee = L &amp;&amp; Number.isFinite(L.earlyFeePercent) ? L.earlyFeePercent : 5;
+    const minTokens = L &amp;&amp; L.minTokens ? L.minTokens : 1000;
+    const price = (L &amp;&amp; L.priceUsd) || (S &amp;&amp; S.receiptToken &amp;&amp; S.receiptToken.priceUsd) || 0.00155;
+    const enabled = L ? Boolean(L.enabled) : true;
+
+    $(&#34;term-list&#34;).textContent = terms.map((t) =&gt; t.days).join(&#34;, &#34;).replace(/, (\d+)$/, &#34; or $1&#34;) + &#34; days&#34;;
+    const mult = (t) =&gt; (t.creditPercent / 100).toFixed(2);
+    const flat = terms.every((t) =&gt; t.creditPercent === best.creditPercent);
+    $(&#34;terms&#34;).innerHTML = terms.map((t) =&gt; `&lt;div class=&#34;term${t === best ? &#34; best&#34; : &#34;&#34;}&#34;&gt;${t === best &amp;&amp; !flat ? &#39;&lt;span class=&#34;tag&#34;&gt;Best rate&lt;/span&gt;&#39; : &#34;&#34;}&lt;div class=&#34;d&#34;&gt;${t.days}&lt;small&gt;${t.days === 1 ? &#34;DAY&#34; : &#34;DAYS&#34;}&lt;/small&gt;&lt;/div&gt;&lt;div class=&#34;pc&#34;&gt;×${mult(t)}&lt;/div&gt;&lt;div class=&#34;k&#34;&gt;every token counts as ${t.creditPercent === 100 ? &#34;one&#34; : mult(t)}&lt;/div&gt;&lt;div class=&#34;x&#34;&gt;price held ${days(t.days)}&lt;/div&gt;&lt;/div&gt;`).join(&#34;&#34;);
+    if (flat) $(&#34;terms-note&#34;).textContent = &#34;Every term counts the same. The longer the term, the longer your price is protected.&#34;;
+    $(&#34;t-lock&#34;).textContent = terms[0].creditPercent === best.creditPercent ? best.creditPercent + &#34;%&#34; : `${terms[0].creditPercent} – ${best.creditPercent}%`;
+    if (fee &gt; 0) { $(&#34;band-early&#34;).className = &#34;band rev&#34;; $(&#34;fee-line&#34;).innerHTML = `&lt;b&gt;${fee}%&lt;/b&gt; of the lock is kept as the early fee.`; }
+    $(&#34;p-terms&#34;).textContent = terms.every((t) =&gt; t.creditPercent === 100)
+      ? &#34;Every term counts the full value of the lock toward your tier, like tokens in the wallet, at the locked price or higher.&#34;
+      : terms.map((t, i) =&gt; `${i === 0 ? `A ${t.days}-day lock counts ${t.creditPercent}% of its value toward your tier` : `${t.days} days ${t.creditPercent}%`}`).join(&#34;, &#34;) + &#34;.&#34;;
+    $(&#34;p-px&#34;).textContent = `${px6(price)} right now`;
+    $(&#34;p-early&#34;).textContent = fee &gt; 0
+      ? `Unstake before the term ends and ${fee}% is kept; the cashback you earned while locked is yours. After the term, everything comes back.`
+      : &#34;Unstake before the term ends and everything comes back, no fee. The cashback you earned while locked is yours to keep.&#34;;
+    if (L &amp;&amp; L.perks) {
+      const yr = Math.round(L.perks.receiptMaxAgeDays / 30) &gt;= 12;
+      $(&#34;p-count&#34;).textContent = L.perks.receiptsPerDay;
+      $(&#34;p-age&#34;).textContent = yr ? &#34;1 year&#34; : L.perks.receiptMaxAgeDays + &#34; days&#34;;
+      $(&#34;p-age-w&#34;).textContent = yr ? &#34;a year&#34; : L.perks.receiptMaxAgeDays + &#34; days&#34;;
+      $(&#34;p-age-n&#34;).textContent = L.perks.normalMaxAgeDays &gt;= 85 &amp;&amp; L.perks.normalMaxAgeDays &lt;= 95 ? &#34;Three months&#34; : L.perks.normalMaxAgeDays + &#34; days&#34;;
+      const floorTier = ((S &amp;&amp; S.rule &amp;&amp; S.rule.tiers) || []).slice().sort((a, b) =&gt; a.minUsd - b.minUsd).find((t) =&gt; t.minUsd &gt;= L.perks.minUsd);
+      $(&#34;vip-floor&#34;).textContent = floorTier ? floorTier.label : usd0(L.perks.minUsd);
+      const ladder = ((S &amp;&amp; S.rule &amp;&amp; S.rule.tiers) || []).slice().sort((a, b) =&gt; a.minUsd - b.minUsd).filter((t) =&gt; !t.vip);
+      if (ladder.length) $(&#34;p-counts&#34;).textContent = &#34;: &#34; + ladder.map((t) =&gt; `${t.maxReceiptsPerDay} on ${t.label}`).join(&#34;, &#34;);
+      $(&#34;perks-floor&#34;).textContent = `For a lock worth ${usd0(L.perks.minUsd)} or more${floorTier ? ` · ${floorTier.label} and up` : &#34;&#34;}. Below the floor a lock still counts toward your tier and keeps its price.`;
+    }    $(&#34;min-tokens&#34;).textContent = int(minTokens);
+    $(&#34;px&#34;).textContent = (enabled ? &#34;&#34; : &#34;Locking is switched off right now · &#34;) + &#34;$RECEIPT is &#34; + px6(price) + &#34; today · terms and rates are read live&#34;;
+
+    // 2 · the comparison: one column per term. The rows that matter are the
+    // tokens each rung takes, because that is what a longer lock buys.
+    const ladderTiers = ((S &amp;&amp; S.rule &amp;&amp; S.rule.tiers) || []).filter((t) =&gt; t.minUsd &gt; 0).sort((a, b) =&gt; a.minUsd - b.minUsd);
+    const isBest = (t) =&gt; t === best &amp;&amp; !flat;
+    const col = (t, inner, cls = &#34;&#34;) =&gt; `&lt;td class=&#34;${isBest(t) ? &#34;best &#34; : &#34;&#34;}${cls}&#34;&gt;${inner}&lt;/td&gt;`;
+    $(&#34;cmp-head&#34;).innerHTML = `&lt;tr&gt;&lt;th&gt;&lt;/th&gt;${terms.map((t) =&gt; `&lt;th class=&#34;${isBest(t) ? &#34;best&#34; : &#34;&#34;}&#34;&gt;${days(t.days)}&lt;small&gt;${isBest(t) ? &#34;best rate&#34; : t.creditPercent === 100 ? &#34;full value&#34; : &#34;+&#34; + (t.creditPercent - 100) + &#34;%&#34;}&lt;/small&gt;&lt;/th&gt;`).join(&#34;&#34;)}&lt;/tr&gt;`;
+    const rows = [];
+    rows.push(`&lt;tr&gt;&lt;td&gt;&lt;b&gt;Every token counts as&lt;/b&gt;&lt;/td&gt;${terms.map((t) =&gt; col(t, &#34;×&#34; + mult(t))).join(&#34;&#34;)}&lt;/tr&gt;`);
+    rows.push(`&lt;tr&gt;&lt;td&gt;&lt;b&gt;Price floor held for&lt;/b&gt;&lt;/td&gt;${terms.map((t) =&gt; col(t, days(t.days))).join(&#34;&#34;)}&lt;/tr&gt;`);
+    rows.push(`&lt;tr&gt;&lt;td&gt;&lt;b&gt;${int(EX_TOKENS)} locked counts as&lt;/b&gt;&lt;small style=&#34;display:block&#34;&gt;at today&#39;s price&lt;/small&gt;&lt;/td&gt;${terms.map((t) =&gt; col(t, usd0(EX_TOKENS * price * t.creditPercent / 100), t.creditPercent &gt; terms[0].creditPercent ? &#34;up&#34; : &#34;&#34;)).join(&#34;&#34;)}&lt;/tr&gt;`);
+    if (ladderTiers.length &amp;&amp; price &gt; 0) {
+      rows.push(`&lt;tr class=&#34;sec&#34;&gt;&lt;td&gt;$RECEIPT it takes to reach&lt;/td&gt;${terms.map((t) =&gt; col(t, &#34;&#34;)).join(&#34;&#34;)}&lt;/tr&gt;`);
+      for (const tier of ladderTiers) {
+        rows.push(`&lt;tr&gt;&lt;td&gt;&lt;span class=&#34;pill ${tier.name}&#34;&gt;${tier.label}&lt;/span&gt; ${usd0(tier.minUsd)}&lt;/td&gt;${terms.map((t) =&gt; {
+          const need = Math.ceil(tier.minUsd / (price * t.creditPercent / 100));
+          const less = Math.ceil(tier.minUsd / price) - need;
+          return col(t, int(need) + (less &gt; 0 ? `&lt;small&gt;${int(less)} fewer&lt;/small&gt;` : &#34;&#34;), less &gt; 0 ? &#34;up&#34; : &#34;&#34;);
+        }).join(&#34;&#34;)}&lt;/tr&gt;`);
+      }
+    }
+    rows.push(`&lt;tr class=&#34;sec&#34;&gt;&lt;td&gt;Getting it back&lt;/td&gt;${terms.map((t) =&gt; col(t, &#34;&#34;)).join(&#34;&#34;)}&lt;/tr&gt;`);
+    rows.push(`&lt;tr&gt;&lt;td&gt;&lt;b&gt;After the term&lt;/b&gt;&lt;/td&gt;${terms.map((t) =&gt; col(t, &#34;all of it&#34;)).join(&#34;&#34;)}&lt;/tr&gt;`);
+    rows.push(`&lt;tr&gt;&lt;td&gt;&lt;b&gt;Before the term ends&lt;/b&gt;&lt;small style=&#34;display:block&#34;&gt;the cashback earned stays yours&lt;/small&gt;&lt;/td&gt;${terms.map((t) =&gt; col(t, fee &gt; 0 ? fee + &#34;% fee&#34; : &#34;all of it&#34;)).join(&#34;&#34;)}&lt;/tr&gt;`);
+    $(&#34;cmp&#34;).innerHTML = rows.join(&#34;&#34;);
+
+    // 3 · the floor: the price falls a third after locking
+    const fallen = price * 2 / 3;
+    $(&#34;ex3-lockedm&#34;).textContent = `Locked ${days(best.days)} at ${px6(price)}`;
+    $(&#34;ex3-locked&#34;).textContent = int(EX_TOKENS) + &#34; $RECEIPT&#34;;
+    $(&#34;ex3-now&#34;).textContent = px6(fallen);
+    $(&#34;ex3-hold&#34;).textContent = usd(EX_TOKENS * fallen);
+    $(&#34;ex3-lock&#34;).textContent = usd(EX_TOKENS * price * best.creditPercent / 100);
+    document.querySelector(&#34;#ex3-lock&#34;).previousElementSibling.textContent = best.creditPercent === 100 ? &#34;Locked · lock price&#34; : `Locked · lock price × ${best.creditPercent}%`;
+
+    // 4 · early unlock: the fee, if there is one, and nothing else. Cashback
+    // earned while locked is never taken back.
+    const earned = 50;
+    const feeTokens = EX_TOKENS * fee / 100;
+    $(&#34;ex4-locked&#34;).textContent = int(EX_TOKENS) + &#34; $RECEIPT&#34;;
+    $(&#34;ex4-earned&#34;).textContent = usd(earned) + &#34; · stays yours&#34;;
+    $(&#34;ex4-px&#34;).textContent = px6(price);
+    $(&#34;ex4-feem&#34;).textContent = fee &gt; 0 ? `Early fee · ${fee}%` : &#34;Early fee&#34;;
+    $(&#34;ex4-fee&#34;).textContent = fee &gt; 0 ? &#34;− &#34; + int(feeTokens) : &#34;none&#34;;
+    $(&#34;ex4-back&#34;).textContent = int(EX_TOKENS - feeTokens) + &#34; $RECEIPT&#34;;
+    document.querySelector(&#34;#ex4-back&#34;).parentElement.nextElementSibling.textContent = fee &gt; 0
+      ? `Wait out the term instead and all ${int(EX_TOKENS)} come back, and the ${usd(earned)} of stock stays yours either way.`
+      : `Early or late, all ${int(EX_TOKENS)} come back, and the ${usd(earned)} of stock stays yours.`;
+
+    // 5 · the ladder itself, with the tokens each rung takes held vs locked
+    const allTiers = ((S &amp;&amp; S.rule &amp;&amp; S.rule.tiers) || []).slice().sort((a, b) =&gt; a.minUsd - b.minUsd);
+    if (allTiers.length &amp;&amp; price &gt; 0) {
+      $(&#34;ladder&#34;).innerHTML = allTiers.map((t) =&gt; {
+        const held = t.minUsd / price;
+        const pays = `${t.percent}% back&lt;small&gt;up to ${usd0(t.maxPerReceiptUsd)} a receipt · ${usd0(t.maxPerDayUsd)} a day${t.vip ? &#34; · VIP&#34; : &#34;&#34;}&lt;/small&gt;`;
+        const free = t.minUsd === 0;
+        return `&lt;tr&gt;&lt;td class=&#34;t&#34;&gt;&lt;span class=&#34;pill ${t.name}&#34;&gt;${t.label}&lt;/span&gt;&lt;/td&gt;&lt;td class=&#34;p&#34;&gt;${pays}&lt;/td&gt;&lt;td class=&#34;n&#34; data-l=&#34;Needs&#34;&gt;${free ? &#34;—&#34; : usd0(t.minUsd)}&lt;/td&gt;&lt;td class=&#34;n&#34; data-l=&#34;$RECEIPT today&#34;&gt;${free ? &#34;any wallet&#34; : int(Math.ceil(held))}&lt;/td&gt;&lt;/tr&gt;`;
+      }).join(&#34;&#34;);
+    } else {
+      $(&#34;ladder&#34;).innerHTML = `&lt;tr&gt;&lt;td colspan=&#34;4&#34; style=&#34;color:var(--ink-3)&#34;&gt;The ladder could not be read right now. See &lt;a href=&#34;/tiers&#34;&gt;how tiers work&lt;/a&gt;.&lt;/td&gt;&lt;/tr&gt;`;
+    }
+
+    if (S &amp;&amp; S.rule &amp;&amp; Number.isFinite(S.rule.heldStockTierPercent)) $(&#34;t-stock&#34;).textContent = S.rule.heldStockTierPercent + &#34;%&#34;;
+  });
+    </script>
+  </body>
+</html>
