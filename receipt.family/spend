@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>
+      Receipt — Where does your money go?
+    </title>
+    <meta name="description" content="Two minutes, twenty taps: tell us where your money goes every day, every week and every month. It shapes which brands Receipt pays out in next." />
+    <meta property="og:title" content="Where does your money go?" />
+    <meta property="og:description" content="Two minutes, twenty taps. It shapes which brands Receipt pays out in next." />
+    <meta property="og:url" content="https://receipt.family/spend" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500;600;700&amp;display=swap" />
+    <script>
+      try { const t = localStorage.getItem(&#34;receipt.theme&#34;); if (t === &#34;dark&#34; || t === &#34;light&#34;) document.documentElement.dataset.theme = t; } catch {}
+    </script>
+    <style>
+      :root {
+    --bg: #F3F2EF; --paper: #FDFCFA; --paper-2: #F3F1EC; --ink: #1D1D1F; --ink-2: #6E665C; --ink-3: #A69C8E;
+    --hair: rgba(29,29,31,.08); --dash: rgba(29,29,31,.16); --card-sh: 0 1px 2px rgba(14,13,12,.04), 0 14px 36px -24px rgba(14,13,12,.22);
+    --green: #5C7A52; --green-bg: #E9EFE4; --red: #B3261E; --red-bg: #F7E6E4; --amber: #9A6D00; --amber-bg: #F6EDD2;
+    --on-ink: #fff;
+    --display: &#34;Bricolage Grotesque&#34;, &#34;Helvetica Neue&#34;, Arial, sans-serif; --mono: &#34;IBM Plex Mono&#34;, ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme=&#34;light&#34;]) {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12; --on-ink: #0E0E10;
+  } :root:not([data-theme=&#34;light&#34;]) .logo img { filter: invert(1); } }
+  :root[data-theme=&#34;dark&#34;] {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12; --on-ink: #0E0E10;
+  }
+  :root[data-theme=&#34;dark&#34;] .logo img { filter: invert(1); }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--display); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  nav { width: min(720px, 100% - 40px); margin: 0 auto; padding: 22px 0 0; display: flex; justify-content: space-between; align-items: center; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.045em; font-size: 20px; text-decoration: none; color: inherit; }
+  .logo img { display: block; }
+  .cta { display: inline-block; font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; color: var(--on-ink); background: var(--ink); padding: 12px 16px; border-radius: 10px; border: 0; cursor: pointer; }
+  .wrap { width: min(720px, 100% - 40px); margin: 0 auto; padding: 40px 0 140px; }
+  .eyebrow { font: 600 11px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+  h1 { font-size: clamp(38px, 8vw, 60px); line-height: .95; letter-spacing: -.04em; font-weight: 800; margin: 0 0 16px; text-wrap: balance; }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 56ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .meta { font: 500 11.5px/1.6 var(--mono); color: var(--ink-3); letter-spacing: .06em; margin-top: 18px; }
+
+  /* progress: one tick per category, fills as they are answered */
+  .prog { display: flex; gap: 3px; margin: 28px 0 0; }
+  .prog i { flex: 1; height: 3px; background: var(--hair); border-radius: 2px; transition: background .2s; }
+  .prog i.on { background: var(--green); }
+
+  /* a group of categories */
+  .group { margin-top: 40px; }
+  .group h2 { font-size: 26px; letter-spacing: -.03em; font-weight: 800; margin: 0 0 2px; }
+  .group .gn { color: var(--ink-2); margin: 0 0 14px; font-size: 15px; }
+  .cats { display: grid; gap: 10px; }
+
+  /* one category card: name, then two rows of chips */
+  .cat { background: var(--paper); border: 1px solid var(--hair); border-radius: 16px; box-shadow: var(--card-sh); padding: 16px 16px 14px; transition: border-color .2s; }
+  .cat.done { border-color: color-mix(in srgb, var(--green) 45%, transparent); }
+  .cat-top { display: flex; align-items: center; gap: 12px; }
+  .cat-ic { width: 40px; height: 40px; border-radius: 12px; background: var(--paper-2); display: grid; place-items: center; font-size: 20px; flex: 0 0 auto; }
+  .cat-nm { font-weight: 700; font-size: 17px; letter-spacing: -.02em; line-height: 1.2; }
+  .cat-hint { font: 400 12px/1.4 var(--mono); color: var(--ink-3); margin-top: 2px; }
+  .cat-mo { margin-left: auto; text-align: right; font: 700 15px/1 var(--mono); color: var(--green); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .cat-mo span { display: block; font: 500 9.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); margin-top: 5px; }
+  .cat-mo:empty { display: none; }
+  .q { margin-top: 14px; }
+  .q .k { font: 600 10px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .q .k em { font-style: normal; color: var(--ink-2); letter-spacing: .04em; text-transform: none; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { appearance: none; border: 1px solid var(--dash); background: transparent; color: var(--ink-2); font: 600 12.5px/1 var(--mono); padding: 10px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap; transition: background .12s, color .12s, border-color .12s; -webkit-tap-highlight-color: transparent; }
+  .chip:hover { border-color: var(--ink-3); color: var(--ink); }
+  .chip.on { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+  .chip.on.off { background: var(--paper-2); color: var(--ink-2); border-color: var(--hair); }
+  .q.spend { display: none; }
+  .cat.open .q.spend { display: block; }
+
+  /* about you */
+  .about { margin-top: 40px; background: var(--paper); border: 1px solid var(--hair); border-radius: 16px; box-shadow: var(--card-sh); padding: 18px 16px; }
+  .about h2 { font-size: 22px; letter-spacing: -.03em; margin: 0 0 2px; }
+  .about p { margin: 0 0 8px; color: var(--ink-2); font-size: 14px; }
+  select { appearance: none; width: 100%; background: var(--paper-2); color: var(--ink); border: 1px solid var(--hair); border-radius: 10px; padding: 12px 14px; font: 500 14px var(--mono); }
+
+  /* the sticky total on phones, a bar at the end on desktop */
+  .dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--hair); z-index: 5; }
+  .dock-in { width: min(720px, 100%); margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+  .dock .tl { font: 600 9.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-3); }
+  .dock .tv { font: 800 26px/1 var(--mono); letter-spacing: -.03em; margin-top: 5px; font-variant-numeric: tabular-nums; }
+  .dock .tv small { font: 500 11px/1 var(--mono); color: var(--ink-3); letter-spacing: .04em; margin-left: 6px; }
+  .dock .cta { margin-left: auto; padding: 15px 20px; }
+  .dock .cta:disabled { opacity: .4; cursor: default; }
+  .err { color: var(--red); font: 500 12px/1.5 var(--mono); margin-top: 8px; display: none; }
+
+  /* the result: a printed receipt */
+  .result { display: none; }
+  body.done .form, body.done .dock { display: none; }
+  body.done .result { display: block; }
+  .sheet { position: relative; background: var(--paper); border: 1px solid var(--hair); border-radius: 18px; box-shadow: var(--card-sh); padding: 22px 24px 20px; margin: 26px 0 8px; font: 500 13.5px/1.7 var(--mono); font-variant-numeric: tabular-nums; }
+  .sheet .k { font: 600 10.5px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+  .row { display: flex; justify-content: space-between; gap: 16px; padding: 5px 0; border-bottom: 1px dashed var(--dash); align-items: center; }
+  .row:last-child { border-bottom: 0; }
+  .row .m { color: var(--ink-2); display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .row .m i { display: block; height: 4px; background: var(--ink-3); border-radius: 2px; flex: 0 0 auto; }
+  .row b { font-weight: 600; text-align: right; white-space: nowrap; }
+  .rule { border-top: 1.5px dashed var(--dash); margin: 12px 0; }
+  .tot { display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; }
+  .tot .big { font: 800 30px/1 var(--mono); color: var(--green); letter-spacing: -.02em; }
+  .note { font: 400 12px/1.6 var(--mono); color: var(--ink-2); margin-top: 10px; }
+  .back { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--green-bg); color: var(--green); }
+  .back span { display: block; font-size: 10.5px; letter-spacing: .16em; font-weight: 600; text-transform: uppercase; }
+  .back b { display: block; font: 700 22px/1.2 var(--mono); letter-spacing: -.02em; }
+  .back small { display: block; font: 400 12px/1.5 var(--mono); opacity: .85; margin-top: 4px; }
+  .end { text-align: center; font: 500 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-3); margin-top: 18px; }
+  .acts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .ghost { display: inline-block; font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; color: var(--ink); background: transparent; border: 1px solid var(--dash); padding: 12px 16px; border-radius: 10px; cursor: pointer; }
+  .fine { font: 400 12px/1.7 var(--mono); color: var(--ink-3); margin-top: 40px; border-top: 1px solid var(--hair); padding-top: 18px; }
+  a { color: var(--ink); }
+  @media (max-width: 560px) {
+    .wrap { padding-top: 30px; }
+    .cat { padding: 14px 13px 12px; border-radius: 14px; }
+    .cat-hint { display: none; }
+    .chip { padding: 10px 11px; font-size: 12px; }
+    .dock .tv { font-size: 22px; }
+    .dock .cta { padding: 14px 16px; }
+  }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a class="logo" href="/">      <img src="/brand/png/glyph-black.png" alt="" width="22" height="22" />
+      Receipt
+</a>
+      <a class="cta" href="/app">      Scan a receipt
+</a>
+    </nav>
+    <div class="wrap">
+      <div class="form">
+        <header>
+          <div class="eyebrow">
+            Two minutes · Twenty taps
+          </div>
+          <h1>
+            Where does your money go?
+          </h1>
+          <p class="lede">
+            Tap how often you go, and roughly what it costs each time.
+            <b>            Skip anything that isn&#39;t you.
+</b>
+            At the end you get your month on a receipt, and we learn which brands to pay out in next.
+          </p>
+          <p class="meta" id="meta">
+            Anonymous unless you&#39;re signed in to the app.
+          </p>
+          <div class="prog" id="prog">
+          </div>
+        </header>
+        <div id="groups">
+        </div>
+        <section class="about">
+          <h2>
+            About you
+          </h2>
+          <p>
+            Optional. It only helps us read the answers.
+          </p>
+          <div style="display:grid;gap:10px;grid-template-columns:1fr 1fr">
+            <select id="age">
+              <option value="">
+                Age
+              </option>
+            </select>
+            <select id="household">
+              <option value="">
+                Household
+              </option>
+            </select>
+          </div>
+          <div class="err" id="err">
+          </div>
+        </section>
+      </div>
+      <div class="result" id="result">
+      </div>
+      <p class="fine">
+        Answers are stored as bands, not amounts. No account, email or card is asked for. If you&#39;re signed in at
+        <a href="/app">        /app
+</a>
+        on this device, the answers are filed with your wallet so we can see what app users spend on.
+      </p>
+    </div>
+    <div class="dock">
+      <div class="dock-in">
+        <div>
+          <div class="tl">
+            Your month, so far
+          </div>
+          <div class="tv" id="total">
+            $0
+            <small id="answered">            0 of 0
+</small>
+          </div>
+        </div>
+        <button class="cta" id="send" type="button" disabled="">
+          Print my month
+        </button>
+      </div>
+    </div>
+    <script>
+      const $ = (id) =&gt; document.getElementById(id);
+const esc = (v) =&gt; String(v ?? &#34;&#34;).replace(/[&amp;&lt;&gt;&#34;&#39;]/g, (c) =&gt; ({ &#34;&amp;&#34;:&#34;&amp;amp;&#34;,&#34;&lt;&#34;:&#34;&amp;lt;&#34;,&#34;&gt;&#34;:&#34;&amp;gt;&#34;,&#39;&#34;&#39;:&#34;&amp;quot;&#34;,&#34;&#39;&#34;:&#34;&amp;#39;&#34; })[c]);
+const usd0 = (n) =&gt; &#34;$&#34; + Math.round(Number(n || 0)).toLocaleString(&#34;en-US&#34;);
+const A = {};          // category id -&gt; { freq, spend }
+let F = null;          // the form vocabulary from the server
+let FQ = {}, SP = {};  // band lookups
+
+const monthly = (a) =&gt; !a || a.freq === &#34;never&#34; || !a.spend ? 0 : (FQ[a.freq] || 0) * (SP[a.spend] || 0);
+const total = () =&gt; Object.values(A).reduce((t, a) =&gt; t + monthly(a), 0);
+const answered = () =&gt; Object.values(A).filter((a) =&gt; a.freq === &#34;never&#34; || a.spend).length;
+
+function render() {
+  FQ = Object.fromEntries(F.freq.map((b) =&gt; [b.id, b.value])); SP = Object.fromEntries(F.spend.map((b) =&gt; [b.id, b.value]));
+  $(&#34;groups&#34;).innerHTML = F.groups.map((g) =&gt; `
+    &lt;section class=&#34;group&#34;&gt;
+      &lt;h2&gt;${esc(g.name)}&lt;/h2&gt;&lt;p class=&#34;gn&#34;&gt;${esc(g.note)}&lt;/p&gt;
+      &lt;div class=&#34;cats&#34;&gt;${F.categories.filter((c) =&gt; c.group === g.id).map((c) =&gt; `
+        &lt;div class=&#34;cat&#34; data-cat=&#34;${c.id}&#34;&gt;
+          &lt;div class=&#34;cat-top&#34;&gt;&lt;div class=&#34;cat-ic&#34;&gt;${c.icon}&lt;/div&gt;&lt;div style=&#34;min-width:0&#34;&gt;&lt;div class=&#34;cat-nm&#34;&gt;${esc(c.name)}&lt;/div&gt;&lt;div class=&#34;cat-hint&#34;&gt;${esc(c.hint)}&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;cat-mo&#34; data-mo&gt;&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&#34;q freq&#34;&gt;&lt;div class=&#34;k&#34;&gt;How often&lt;/div&gt;&lt;div class=&#34;chips&#34;&gt;${F.freq.map((b) =&gt; `&lt;button type=&#34;button&#34; class=&#34;chip${b.id === &#34;never&#34; ? &#34; never&#34; : &#34;&#34;}&#34; data-freq=&#34;${b.id}&#34;&gt;${esc(b.label)}&lt;/button&gt;`).join(&#34;&#34;)}&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&#34;q spend&#34;&gt;&lt;div class=&#34;k&#34;&gt;Each time &lt;em data-note&gt;&lt;/em&gt;&lt;/div&gt;&lt;div class=&#34;chips&#34;&gt;${F.spend.map((b) =&gt; `&lt;button type=&#34;button&#34; class=&#34;chip&#34; data-spend=&#34;${b.id}&#34;&gt;${esc(b.label)}&lt;/button&gt;`).join(&#34;&#34;)}&lt;/div&gt;&lt;/div&gt;
+        &lt;/div&gt;`).join(&#34;&#34;)}&lt;/div&gt;
+    &lt;/section&gt;`).join(&#34;&#34;);
+  $(&#34;prog&#34;).innerHTML = F.categories.map((c) =&gt; `&lt;i data-p=&#34;${c.id}&#34;&gt;&lt;/i&gt;`).join(&#34;&#34;);
+  for (const v of F.ageBands) $(&#34;age&#34;).insertAdjacentHTML(&#34;beforeend&#34;, `&lt;option&gt;${esc(v)}&lt;/option&gt;`);
+  for (const v of F.households) $(&#34;household&#34;).insertAdjacentHTML(&#34;beforeend&#34;, `&lt;option&gt;${esc(v)}&lt;/option&gt;`);
+  paint();
+}
+
+function paint() {
+  for (const el of document.querySelectorAll(&#34;.cat&#34;)) {
+    const id = el.dataset.cat, a = A[id];
+    el.classList.toggle(&#34;open&#34;, !!a &amp;&amp; a.freq !== &#34;never&#34;);
+    el.classList.toggle(&#34;done&#34;, !!a &amp;&amp; (a.freq === &#34;never&#34; || !!a.spend));
+    for (const b of el.querySelectorAll(&#34;[data-freq]&#34;)) { b.classList.toggle(&#34;on&#34;, !!a &amp;&amp; a.freq === b.dataset.freq); b.classList.toggle(&#34;off&#34;, b.dataset.freq === &#34;never&#34;); }
+    for (const b of el.querySelectorAll(&#34;[data-spend]&#34;)) b.classList.toggle(&#34;on&#34;, !!a &amp;&amp; a.spend === b.dataset.spend);
+    const m = monthly(a);
+    el.querySelector(&#34;[data-mo]&#34;).innerHTML = m &gt; 0 ? `${usd0(m)}&lt;span&gt;a month&lt;/span&gt;` : &#34;&#34;;
+    document.querySelector(`[data-p=&#34;${id}&#34;]`).classList.toggle(&#34;on&#34;, !!a &amp;&amp; (a.freq === &#34;never&#34; || !!a.spend));
+  }
+  const n = answered(), real = Object.values(A).filter((a) =&gt; a.freq !== &#34;never&#34; &amp;&amp; a.spend).length;
+  $(&#34;total&#34;).innerHTML = `${usd0(total())}&lt;small id=&#34;answered&#34;&gt;${n} of ${F.categories.length}&lt;/small&gt;`;
+  $(&#34;send&#34;).disabled = real &lt; 3;
+}
+
+$(&#34;groups&#34;).addEventListener(&#34;click&#34;, (e) =&gt; {
+  const chip = e.target.closest(&#34;.chip&#34;); if (!chip) return;
+  const cat = chip.closest(&#34;.cat&#34;); const id = cat.dataset.cat;
+  if (chip.dataset.freq) {
+    const a = A[id] || {}; a.freq = a.freq === chip.dataset.freq ? undefined : chip.dataset.freq;
+    if (!a.freq) delete A[id]; else A[id] = a;
+    if (a.freq &amp;&amp; a.freq !== &#34;never&#34; &amp;&amp; !a.spend) setTimeout(() =&gt; cat.querySelector(&#34;.q.spend&#34;).scrollIntoView({ block: &#34;nearest&#34;, behavior: &#34;smooth&#34; }), 60);
+  } else if (chip.dataset.spend &amp;&amp; A[id]) {
+    A[id].spend = chip.dataset.spend;
+    // Nudge to the next unanswered card so the thumb keeps moving.
+    const next = [...document.querySelectorAll(&#34;.cat&#34;)].find((c) =&gt; !A[c.dataset.cat]);
+    if (next) setTimeout(() =&gt; next.scrollIntoView({ block: &#34;center&#34;, behavior: &#34;smooth&#34; }), 120);
+  }
+  paint();
+});
+
+function session() { try { const s = JSON.parse(localStorage.getItem(&#34;receipt.session&#34;) || &#34;null&#34;); return s &amp;&amp; s.token ? s : null; } catch { return null; } }
+
+$(&#34;send&#34;).onclick = async () =&gt; {
+  const btn = $(&#34;send&#34;); btn.disabled = true; btn.textContent = &#34;Printing…&#34;; $(&#34;err&#34;).style.display = &#34;none&#34;;
+  const s = session();
+  let lang = &#34;&#34;; try { lang = (navigator.language || &#34;&#34;).split(&#34;-&#34;)[1] || &#34;&#34;; } catch {}
+  try {
+    const r = await fetch(&#34;/api/spend&#34;, { method: &#34;POST&#34;, headers: { &#34;content-type&#34;: &#34;application/json&#34; },
+      body: JSON.stringify({ answers: A, token: s ? s.token : undefined, age: $(&#34;age&#34;).value || undefined, household: $(&#34;household&#34;).value || undefined, country: lang }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.message || j.error || &#34;Could not save&#34;);
+    showResult(j);
+  } catch (e) {
+    $(&#34;err&#34;).textContent = e.message; $(&#34;err&#34;).style.display = &#34;block&#34;; btn.disabled = false; btn.textContent = &#34;Print my month&#34;;
+  }
+};
+
+function showResult(j) {
+  const byId = Object.fromEntries(F.categories.map((c) =&gt; [c.id, c]));
+  const max = Math.max(1, ...j.breakdown.map((x) =&gt; x.usd));
+  const top = j.breakdown[0] ? byId[j.breakdown[0].id] : null;
+  const year = j.monthlyUsd * 12;
+  const ratio = j.crowd &amp;&amp; j.crowd.n &gt; 1 &amp;&amp; j.crowd.medianUsd &gt; 0 ? j.monthlyUsd / j.crowd.medianUsd : null;
+  const vs = ratio == null ? null : Math.abs(ratio - 1) &lt; 0.05 ? &#34;right on&#34; : ratio &gt; 1 ? `${Math.round(ratio * 100 - 100)}% above` : `${Math.round(100 - ratio * 100)}% below`;
+  $(&#34;result&#34;).innerHTML = `
+    &lt;header&gt;
+      &lt;div class=&#34;eyebrow&#34;&gt;Your month, printed&lt;/div&gt;
+      &lt;h1&gt;${usd0(j.monthlyUsd)}&lt;br&gt;a month.&lt;/h1&gt;
+      &lt;p class=&#34;lede&#34;&gt;${top ? `Most of it goes on &lt;b&gt;${esc(top.name.toLowerCase())}&lt;/b&gt;. ` : &#34;&#34;}That&#39;s about &lt;b&gt;${usd0(year)} a year&lt;/b&gt; through the till${vs ? `, ${vs} the typical answer so far` : &#34;&#34;}.&lt;/p&gt;
+    &lt;/header&gt;
+    &lt;div class=&#34;sheet&#34;&gt;
+      &lt;div class=&#34;k&#34;&gt;Receipt · a typical month&lt;/div&gt;
+      ${j.breakdown.map((x) =&gt; `&lt;div class=&#34;row&#34;&gt;&lt;span class=&#34;m&#34;&gt;${byId[x.id].icon} ${esc(byId[x.id].name)}&lt;i style=&#34;width:${Math.max(6, Math.round(x.usd / max * 90))}px&#34;&gt;&lt;/i&gt;&lt;/span&gt;&lt;b&gt;${usd0(x.usd)}&lt;/b&gt;&lt;/div&gt;`).join(&#34;&#34;)}
+      &lt;div class=&#34;rule&#34;&gt;&lt;/div&gt;
+      &lt;div class=&#34;tot&#34;&gt;&lt;span&gt;Total&lt;/span&gt;&lt;span class=&#34;big&#34;&gt;${usd0(j.monthlyUsd)}&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&#34;back&#34;&gt;&lt;span&gt;If every one of those was a Receipt&lt;/span&gt;&lt;b&gt;${usd0(year * 0.03)} – ${usd0(year * 0.10)} in stock a year&lt;/b&gt;&lt;small&gt;Paper tier gets 3% back; Gold and up get the whole receipt back, up to the tier cap. &lt;a href=&#34;/tiers&#34; style=&#34;color:inherit&#34;&gt;See the ladder&lt;/a&gt;.&lt;/small&gt;&lt;/div&gt;
+      &lt;div class=&#34;note&#34;&gt;Sheet nº ${String(j.id).padStart(4, &#34;0&#34;)} · ${j.crowd ? j.crowd.n.toLocaleString(&#34;en-US&#34;) + &#34; answered so far&#34; : &#34;&#34;}&lt;/div&gt;
+      &lt;div class=&#34;end&#34;&gt;*** Thank you ***&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;acts&#34;&gt;&lt;a class=&#34;cta&#34; href=&#34;/app&#34;&gt;Start scanning&lt;/a&gt;&lt;button class=&#34;ghost&#34; type=&#34;button&#34; onclick=&#34;location.reload()&#34;&gt;Do it again&lt;/button&gt;&lt;/div&gt;`;
+  document.body.classList.add(&#34;done&#34;);
+  window.scrollTo({ top: 0, behavior: &#34;smooth&#34; });
+}
+
+(async () =&gt; {
+  try { const r = await fetch(&#34;/api/spend/form&#34;); F = await r.json(); render(); }
+  catch { $(&#34;groups&#34;).innerHTML = `&lt;p class=&#34;lede&#34;&gt;The form could not load. Try again in a moment.&lt;/p&gt;`; }
+  if (session()) $(&#34;meta&#34;).textContent = &#34;Signed in: your answers are filed with your wallet.&#34;;
+})();
+    </script>
+  </body>
+</html>
