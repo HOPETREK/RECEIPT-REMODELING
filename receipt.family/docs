@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>
+      Docs — Receipt
+    </title>
+    <meta name="description" content="How Receipt works: tiers, reward rules, settlement, on-chain receipts, abuse defences and configuration." />
+    <meta property="og:title" content="Receipt Docs" />
+    <meta property="og:description" content="Tiers, reward rules, settlement and configuration — the whole system in one page." />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Serif:ital@1&amp;display=swap" />
+    <style>
+      /* ============================================================
+     RECEIPT — Docs. One page, sidebar, filter box.
+     Same ink, paper and sage as the rest of the site.
+     ============================================================ */
+  :root {
+    --bg: #FFFFFF; --paper: #FDFCFA; --paper-2: #F3F1EC;
+    --ink: #1D1D1F; --ink-soft: #6E665C; --ink-faint: #A69C8E;
+    --fg-2: rgba(29,29,31,.62); --fg-3: rgba(29,29,31,.4);
+    --hair: rgba(29,29,31,.08); --hair-2: rgba(29,29,31,.16);
+    --accent: #F04E23;
+    --green: #5C7A52; --green-2: #A6BA9A; --green-3: #E9EFE4;
+    --display: &#34;Bricolage Grotesque&#34;, &#34;Helvetica Neue&#34;, Helvetica, Arial, sans-serif;
+    --mono: &#34;IBM Plex Mono&#34;, ui-monospace, &#34;SF Mono&#34;, Menlo, Consolas, monospace;
+    --serif: &#34;Instrument Serif&#34;, Georgia, &#34;Times New Roman&#34;, serif;
+    --sidebar: 268px;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); color-scheme: light; scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink); font-family: var(--display);
+    font-optical-sizing: auto; font-size: 16px; line-height: 1.62; -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--ink); color: #fff; }
+  a { color: var(--ink); text-decoration-color: var(--hair-2); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--accent); }
+
+  /* ---- shell ---- */
+  .shell { display: grid; grid-template-columns: var(--sidebar) minmax(0,1fr); gap: 0; max-width: 1180px; margin: 0 auto; }
+
+  /* ---- sidebar ---- */
+  .side {
+    position: sticky; top: 0; align-self: start; height: 100dvh; overflow-y: auto;
+    padding: 34px 26px 60px; border-right: 1px solid var(--hair);
+  }
+  .brand { display: flex; align-items: baseline; gap: 9px; text-decoration: none; margin-bottom: 4px; }
+  .brand b { font-size: 19px; font-weight: 700; letter-spacing: -.03em; }
+  .brand span { font: 500 10px/1 var(--mono); letter-spacing: .18em; color: var(--ink-faint); text-transform: uppercase; }
+  .tagline { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--ink-soft); margin: 0 0 20px; }
+  #filter {
+    width: 100%; padding: 9px 11px; border: 1px solid var(--hair-2); background: var(--paper);
+    font: 400 13px/1.4 var(--mono); color: var(--ink); border-radius: 0; margin-bottom: 22px;
+  }
+  #filter:focus { outline: none; border-color: var(--ink); }
+  #filter::placeholder { color: var(--ink-faint); }
+  .nav h4 {
+    font: 600 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 22px 0 9px;
+  }
+  .nav a {
+    display: block; padding: 4px 0 4px 11px; font-size: 14px; color: var(--fg-2);
+    text-decoration: none; border-left: 2px solid var(--hair); line-height: 1.45;
+  }
+  .nav a:hover { color: var(--ink); border-left-color: var(--green-2); }
+  .nav a.on { color: var(--ink); font-weight: 600; border-left-color: var(--accent); }
+  .nav.filtered h4 { display: none; }
+  .side .out { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--hair); font-size: 13px; }
+  .side .out a { display: block; padding: 3px 0; color: var(--fg-2); text-decoration: none; }
+  .side .out a:hover { color: var(--accent); }
+
+  /* ---- content ---- */
+  main { padding: 54px 0 140px 56px; max-width: 760px; }
+  .kicker { font: 600 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--green); }
+  h1 { font-size: clamp(34px, 5vw, 46px); font-weight: 700; letter-spacing: -.035em; line-height: 1.06; margin: 12px 0 14px; }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--ink-soft); margin: 0 0 10px; max-width: 60ch; }
+  .lede em { font-family: var(--serif); font-style: italic; color: var(--ink); }
+  section { scroll-margin-top: 26px; padding-top: 40px; }
+  section + section { border-top: 1px solid var(--hair); margin-top: 44px; }
+  h2 { font-size: 27px; font-weight: 700; letter-spacing: -.028em; margin: 0 0 6px; line-height: 1.15; }
+  h3 { font-size: 17px; font-weight: 700; letter-spacing: -.015em; margin: 30px 0 6px; }
+  p { margin: 0 0 14px; max-width: 66ch; }
+  p, li { color: #2C2B2E; }
+  ul, ol { margin: 0 0 14px; padding-left: 20px; max-width: 66ch; }
+  li { margin-bottom: 5px; }
+  li::marker { color: var(--ink-faint); }
+  strong { font-weight: 700; color: var(--ink); }
+  code {
+    font: 500 13px/1 var(--mono); background: var(--paper-2); padding: 2px 5px;
+    color: var(--ink); white-space: nowrap;
+  }
+  pre {
+    background: var(--ink); color: #F3F1EC; padding: 16px 18px; overflow-x: auto;
+    font: 400 13px/1.65 var(--mono); margin: 0 0 16px;
+  }
+  pre code { background: none; padding: 0; color: inherit; font-size: 13px; white-space: pre; }
+
+  /* ---- tables ---- */
+  .scroll { overflow-x: auto; margin: 0 0 18px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 460px; }
+  th, td { text-align: left; padding: 9px 14px 9px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  th {
+    font: 600 10px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase;
+    color: var(--ink-faint); border-bottom-color: var(--hair-2); padding-bottom: 7px;
+  }
+  td.n, th.n { font-family: var(--mono); font-size: 13px; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  /* ---- tier cards ---- */
+  .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 10px; margin: 4px 0 22px; }
+  .tier { padding: 15px 14px 16px; border: 1px solid var(--hair-2); background: var(--paper); }
+  .tier .nm { font: 600 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+  .tier .pc { font-size: 30px; font-weight: 700; letter-spacing: -.04em; margin: 9px 0 2px; line-height: 1; }
+  .tier .at { font-size: 12px; color: var(--ink-faint); font-family: var(--mono); }
+  .tier.t-paper  { background: #FFFFFF; }
+  .tier.t-silver { background: linear-gradient(150deg, #FAFAFB, #E6E7EA); }
+  .tier.t-gold   { background: linear-gradient(150deg, #FDF6E3, #EBD9A6); border-color: rgba(160,130,50,.3); }
+  .tier.t-black  { background: linear-gradient(150deg, #35343A, #131316); border-color: #131316; }
+  .tier.t-black .nm { color: rgba(255,255,255,.55); }
+  .tier.t-black .pc { color: #fff; }
+  .tier.t-black .at { color: rgba(255,255,255,.45); }
+  .tier.t-founder { background: linear-gradient(150deg, #5C7A52, #33452C); border-color: #33452C; }
+  .tier.t-founder .nm { color: rgba(255,255,255,.6); }
+  .tier.t-founder .pc { color: #fff; }
+  .tier.t-founder .at { color: rgba(255,255,255,.5); }
+
+  /* ---- callouts ---- */
+  .note {
+    border-left: 2px solid var(--green); background: var(--green-3); padding: 13px 16px;
+    margin: 0 0 18px; font-size: 15px; max-width: 66ch;
+  }
+  .note.warn { border-left-color: var(--accent); background: #FFF3EF; }
+  .note p:last-child { margin-bottom: 0; }
+  .note .lb { font: 600 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--green); display: block; margin-bottom: 6px; }
+  .note.warn .lb { color: var(--accent); }
+
+  .empty { display: none; color: var(--ink-faint); font-size: 14px; padding: 8px 0 0 11px; }
+  .nav.none .empty { display: block; }
+
+  /* ---- mobile ---- */
+  .bar { display: none; }
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    .side {
+      position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--hair);
+      padding: 20px 22px 24px;
+    }
+    .nav { display: none; }
+    .side.open .nav, .side.open .out { display: block; }
+    .bar {
+      display: flex; align-items: center; justify-content: space-between; width: 100%;
+      background: none; border: 1px solid var(--hair-2); padding: 9px 12px; cursor: pointer;
+      font: 600 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
+    }
+    .side .out { display: none; }
+    main { padding: 30px 22px 90px; }
+    h1 { font-size: 31px; }
+  }
+  @media print {
+    .side { display: none; } .shell { display: block; } main { padding: 0; max-width: none; }
+  }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="side" id="side">
+        <a class="brand" href="/">        <b>        Receipt
+</b>
+        <span>        Docs
+</span>
+</a>
+        <p class="tagline">
+          Buy the product. Get the stock.
+        </p>
+        <button class="bar" id="bar" aria-expanded="false">
+          Contents
+          <span>          +
+</span>
+        </button>
+        <input id="filter" type="search" placeholder="Filter…" autocomplete="off" aria-label="Filter contents" />
+        <nav class="nav" id="nav">
+          <h4>
+            Start
+          </h4>
+          <a href="#what">          What Receipt is
+</a>
+          <a href="#flow">          How a scan becomes stock
+</a>
+          <h4>
+            Earning
+          </h4>
+          <a href="#tiers">          The tier ladder
+</a>
+          <a href="#price">          How your tier is decided
+</a>
+          <a href="#rule">          What a receipt pays
+</a>
+          <a href="#limits">          Limits
+</a>
+          <a href="#bonus">          Profile bonus
+</a>
+          <h4>
+            Rewards
+          </h4>
+          <a href="#stock">          What the reward is
+</a>
+          <a href="#settle">          Delivery
+</a>
+          <a href="#onchain">          On-chain receipts
+</a>
+          <h4>
+            Good to know
+          </h4>
+          <a href="#fair">          Keeping it fair
+</a>
+          <a href="#support">          Support
+</a>
+          <a href="#legal">          Important disclosures
+</a>
+          <p class="empty">
+            Nothing matches.
+          </p>
+        </nav>
+        <div class="out">
+          <a href="/">          Home
+</a>
+          <a href="/app">          App
+</a>
+          <a href="/status">          Status
+</a>
+        </div>
+      </aside>
+      <main>
+        <p class="kicker">
+          Documentation
+        </p>
+        <h1>
+          How Receipt works
+        </h1>
+        <p class="lede">
+          Scan a paper receipt, get stock in the shop you bought from. This page covers
+          <em>          what pays, how much, and when it arrives
+</em>
+          .
+        </p>
+        <section id="what">
+          <h2>
+            What Receipt is
+          </h2>
+          <p>
+            You photograph a paper receipt. We read the merchant, the date and the total, and check that it is a genuine, unclaimed receipt. If it qualifies, we set aside a reward in the stock of the brand you bought from.
+          </p>
+          <p>
+            Rewards are fractional tokenized shares of the merchant, funded from $RECEIPT trading fees. Holding $RECEIPT raises what each receipt pays you — that is the tier ladder below.
+          </p>
+        </section>
+        <section id="flow">
+          <h2>
+            How a scan becomes stock
+          </h2>
+          <ol>
+            <li>
+              <strong>              Scan
+</strong>
+              — photograph the receipt in the app.
+            </li>
+            <li>
+              <strong>              Read
+</strong>
+              — we extract the merchant, date and total.
+            </li>
+            <li>
+              <strong>              Check
+</strong>
+              — we confirm the receipt is genuine and has not been claimed before.
+            </li>
+            <li>
+              <strong>              Reserve
+</strong>
+              — your reward is set aside and appears in your app straight away.
+            </li>
+            <li>
+              <strong>              Deliver
+</strong>
+              — the stock tokens are transferred to your wallet.
+            </li>
+          </ol>
+          <div class="note">
+            <span class="lb">            Reserved, then delivered
+</span>
+            <p>
+              A reward shows in your app the moment it is approved, before it moves on-chain. A reservation is a promise we keep.
+            </p>
+          </div>
+        </section>
+        <section id="tiers">
+          <h2>
+            The tier ladder
+          </h2>
+          <p>
+            What you hold in $RECEIPT,
+            <strong>            valued in dollars
+</strong>
+            , decides what your receipts pay. Holding under $100 is Paper, and Paper earns nothing: $100 of $RECEIPT is the entry ticket.
+          </p>
+          <div class="tiers">
+            <div class="tier t-paper">
+              <div class="nm">
+                Paper
+              </div>
+              <div class="pc">
+                —
+              </div>
+              <div class="at">
+                under $100
+              </div>
+            </div>
+            <div class="tier t-silver">
+              <div class="nm">
+                Silver
+              </div>
+              <div class="pc">
+                2%
+              </div>
+              <div class="at">
+                $100+
+              </div>
+            </div>
+            <div class="tier t-gold">
+              <div class="nm">
+                Gold
+              </div>
+              <div class="pc">
+                3%
+              </div>
+              <div class="at">
+                $500+
+              </div>
+            </div>
+            <div class="tier t-black">
+              <div class="nm">
+                Black
+              </div>
+              <div class="pc">
+                5%
+              </div>
+              <div class="at">
+                $1,500+
+              </div>
+            </div>
+            <div class="tier t-platinum">
+              <div class="nm">
+                Platinum
+              </div>
+              <div class="pc">
+                7%
+              </div>
+              <div class="at">
+                $3,000+
+              </div>
+            </div>
+            <div class="tier t-founder">
+              <div class="nm">
+                Founder
+              </div>
+              <div class="pc">
+                10%
+              </div>
+              <div class="at">
+                $6,000+
+              </div>
+            </div>
+          </div>
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    Tier
+                  </th>
+                  <th class="n">
+                    You hold
+                  </th>
+                  <th class="n">
+                    Back
+                  </th>
+                  <th class="n">
+                    Per receipt
+                  </th>
+                  <th class="n">
+                    Per day
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Paper
+                  </td>
+                  <td class="n">
+                    under $100
+                  </td>
+                  <td class="n">
+                    —
+                  </td>
+                  <td class="n">
+                    —
+                  </td>
+                  <td class="n">
+                    —
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Silver
+                  </td>
+                  <td class="n">
+                    $100
+                  </td>
+                  <td class="n">
+                    2%
+                  </td>
+                  <td class="n">
+                    up to $5
+                  </td>
+                  <td class="n">
+                    $5
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Gold
+                  </td>
+                  <td class="n">
+                    $500
+                  </td>
+                  <td class="n">
+                    3%
+                  </td>
+                  <td class="n">
+                    up to $25
+                  </td>
+                  <td class="n">
+                    $25
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Black
+                  </td>
+                  <td class="n">
+                    $1,500
+                  </td>
+                  <td class="n">
+                    5%
+                  </td>
+                  <td class="n">
+                    up to $50
+                  </td>
+                  <td class="n">
+                    $50
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Platinum
+                  </td>
+                  <td class="n">
+                    $3,000
+                  </td>
+                  <td class="n">
+                    7%
+                  </td>
+                  <td class="n">
+                    up to $100
+                  </td>
+                  <td class="n">
+                    $100
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Founder
+                  </td>
+                  <td class="n">
+                    $6,000
+                  </td>
+                  <td class="n">
+                    10%
+                  </td>
+                  <td class="n">
+                    up to $200
+                  </td>
+                  <td class="n">
+                    $200
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Your tier is shown in the app, along with how much further you are from the next one.
+          </p>
+        </section>
+        <section id="price">
+          <h2>
+            How your tier is decided
+          </h2>
+          <p>
+            We read your $RECEIPT balance and value it in dollars at the market price.
+          </p>
+          <h3 id="hw-h">
+            When your tier changes
+          </h3>
+          <!-- Written from the server's setting rather than promising a rule it
+           may not be applying: the 24-hour high-water window is off, and a
+           dip does drop a tier. Only a live lock holds a price. -->
+          <p id="hw-p">
+            Your tier is whatever your $RECEIPT is worth right now, at the market price. Buy more and you move up immediately; if the price falls or you sell, you move down the same way. Nothing is held back or averaged. The one thing that holds a price is a
+            <a href="/lock">            lock
+</a>
+            : locked tokens count at the price you locked at or today&#39;s, whichever is higher, for the whole term.
+          </p>
+          <div class="note">
+            <span class="lb">            Always in your favour
+</span>
+            <p>
+              If we cannot read a price at all, everyone earns the Paper rate. A problem on our side can never pay you less than the base rate.
+            </p>
+          </div>
+        </section>
+        <section id="rule">
+          <h2>
+            What a receipt pays
+          </h2>
+          <h3>
+            One rule, and this is all of it
+          </h3>
+          <p>
+            A receipt pays
+            <strong>            your tier’s percentage of its total
+</strong>
+            , capped by whatever is left of your day. Nothing else takes part: no welcome bonus, no full match, and no minimum.
+          </p>
+          <p>
+            At Gold’s 3%, a $50 shop pays $1.50 and a $158 shop pays $4.75. Once the day’s cap is reached, further receipts wait for tomorrow.
+          </p>
+          <h3>
+            There is no minimum
+          </h3>
+          <p>
+            A receipt is worth its rate, however small — a $2.31 coffee at Black’s 5% pays 11¢. Small receipts are paid rather than refused, which is what a minimum used to do to the tail of every day.
+          </p>
+          <div class="note">
+            <span class="lb">            Rounding
+</span>
+            <p>
+              Every calculation is done in whole cents, and rounding never works against you.
+            </p>
+          </div>
+        </section>
+        <section id="limits">
+          <h2>
+            Limits
+          </h2>
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    Limit
+                  </th>
+                  <th class="n">
+                    Value
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Receipts per day
+                  </td>
+                  <td class="n">
+                    Set by your tier
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Minimum paid per receipt
+                  </td>
+                  <td class="n">
+                    None
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Largest receipt accepted
+                  </td>
+                  <td class="n">
+                    $4,000
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    How old a receipt can be
+                  </td>
+                  <td class="n">
+                    90 days
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Most per receipt
+                  </td>
+                  <td class="n">
+                    Set by your tier
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Most per day
+                  </td>
+                  <td class="n">
+                    Set by your tier
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <strong>            Limits are daily, not lifetime.
+</strong>
+            Receipts are a daily habit, so your allowance resets on a rolling 24-hour window and there is no lifetime ceiling on what you can earn.
+          </p>
+          <h3>
+            Why a receipt might be declined
+          </h3>
+          <ul>
+            <li>
+              The photo is not a receipt, or is too unclear to read.
+            </li>
+            <li>
+              The receipt has already been claimed — each purchase pays once.
+            </li>
+            <li>
+              It is older than 90 days, or above the maximum total.
+            </li>
+            <li>
+              You have already scanned three receipts today.
+            </li>
+            <li>
+              The merchant is not one of the brands we cover yet.
+            </li>
+          </ul>
+          <p>
+            If something looks wrong, a person reviews it. You can always ask us through Support.
+          </p>
+        </section>
+        <section id="bonus">
+          <h2>
+            Profile bonus
+          </h2>
+          <p>
+            Claiming a username pays a small bonus in stock, on top of your receipt reward. You earn it once you have
+            <strong>            both
+</strong>
+            a username and one approved receipt.
+          </p>
+          <p>
+            The bonus steps down by sign-up order: the first 50 people to qualify get $5, the next 200 get $2, and after that the bonus closes. It is reserved immediately and shows in your app as held, and is delivered after 7 days.
+          </p>
+        </section>
+        <section id="stock">
+          <h2>
+            What the reward is
+          </h2>
+          <p>
+            A tokenized stock issued by Robinhood Assets (Jersey) Limited. It gives you economic exposure to the share price. It is
+            <strong>            not
+</strong>
+            ownership: no shares, no voting rights, and no claim on the company. Holders are creditors of the Jersey issuer.
+          </p>
+          <p>
+            Launch set:
+            <code>            AAPL
+</code>
+            ,
+            <code>            AMZN
+</code>
+            ,
+            <code>            COST
+</code>
+            ,
+            <code>            AMC
+</code>
+            ,
+            <code>            GME
+</code>
+            . We add brands over time — a receipt from a merchant we do not cover yet cannot be rewarded.
+          </p>
+        </section>
+        <section id="settle">
+          <h2>
+            Delivery
+          </h2>
+          <p>
+            An approved reward is reserved right away and visible in your app. Delivery moves the tokens to your wallet on-chain.
+          </p>
+          <ul>
+            <li>
+              Your reward is shown as
+              <strong>              reserved
+</strong>
+              until it is sent, then
+              <strong>              delivered
+</strong>
+              once the chain confirms it.
+            </li>
+            <li>
+              Each reward is delivered once and only once.
+            </li>
+            <li>
+              If a delivery does not go through, it is held for a person to check rather than retried automatically.
+            </li>
+          </ul>
+          <p>
+            The profile bonus is the exception: it is held for 7 days before delivery.
+          </p>
+        </section>
+        <section id="onchain">
+          <h2>
+            On-chain receipts
+          </h2>
+          <p>
+            A swap on a decentralised exchange is already a receipt: public, unforgeable and impossible to reuse. Where this feature is enabled, you can connect a Solana wallet and claim recent swaps the same way you would a paper receipt.
+          </p>
+          <ul>
+            <li>
+              Connect and sign for your Solana wallet, and your recent swaps become claimable.
+            </li>
+            <li>
+              What you spent on the swap is the receipt total.
+            </li>
+            <li>
+              Swaps of very thinly traded tokens do not qualify.
+            </li>
+            <li>
+              The same rules apply as a paper receipt: age, size, three a day, the first-receipt match and your tier’s limits.
+            </li>
+            <li>
+              The reward is paid in the token you bought. Each swap can be claimed once, ever.
+            </li>
+          </ul>
+        </section>
+        <section id="fair">
+          <h2>
+            Keeping it fair
+          </h2>
+          <p>
+            The rewards pool is shared, so every receipt has to be a real purchase by a real person.
+          </p>
+          <ul>
+            <li>
+              <strong>              One purchase, one reward.
+</strong>
+              Each receipt pays exactly once, no matter who scans it or how it is photographed.
+            </li>
+            <li>
+              <strong>              Genuine receipts only.
+</strong>
+              We check for edited images, screenshots and reprints. Submitting a receipt that is not yours, or altering one, can cost you access.
+            </li>
+            <li>
+              <strong>              People, not just software.
+</strong>
+              Anything unusual is reviewed by a person before it is refused or approved.
+            </li>
+          </ul>
+          <p>
+            Scanning your own receipts, from your own purchases, is all that is ever asked.
+          </p>
+        </section>
+        <section id="support">
+          <h2>
+            Support
+          </h2>
+          <p>
+            There is a Support button on your dashboard. Send us a topic and a message, and if you are signed in your wallet comes attached automatically so we can look up what happened. A badge appears on the button when a reply is waiting for you.
+          </p>
+        </section>
+        <section id="legal">
+          <h2>
+            Important disclosures
+          </h2>
+          <p>
+            Rewards are fractional tokenized shares of the merchant, issued and custodied by a licensed tokenized-securities provider. They are debt securities giving economic exposure to the share price — not equity, not ownership, and not an interest in the merchant. Receipt is not affiliated with the merchants whose receipts are scanned. $RECEIPT is a utility token, not an investment in any brand.
+          </p>
+          <div class="note warn">
+            <span class="lb">            Availability is regional
+</span>
+            <p>
+              Stock Tokens are unregistered under the US Securities Act of 1933 and cannot be offered, sold, or delivered to US persons, or in Canada, the UK, Switzerland or the UAE.
+            </p>
+          </div>
+          <p>
+            Tokenized shares are securities and can lose value. Nothing here is investment advice.
+          </p>
+        </section>
+      </main>
+    </div>
+    <script>
+      // Highlight the section in view.
+  var links = [].slice.call(document.querySelectorAll(&#39;.nav a&#39;));
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute(&#39;href&#39;).slice(1)] = a; });
+  var seen = new Set();
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id); });
+    var order = Object.keys(map);
+    var top = order.find(function (id) { return seen.has(id); });
+    links.forEach(function (a) { a.classList.toggle(&#39;on&#39;, a === map[top]); });
+  }, { rootMargin: &#39;0px 0px -70% 0px&#39; });
+  document.querySelectorAll(&#39;section[id]&#39;).forEach(function (s) { io.observe(s); });
+
+  // Filter the contents.
+  var filter = document.getElementById(&#39;filter&#39;), nav = document.getElementById(&#39;nav&#39;);
+  filter.addEventListener(&#39;input&#39;, function () {
+    var q = filter.value.trim().toLowerCase();
+    nav.classList.toggle(&#39;filtered&#39;, !!q);
+    var hits = 0;
+    links.forEach(function (a) {
+      var hit = !q || a.textContent.toLowerCase().indexOf(q) &gt; -1;
+      a.style.display = hit ? &#39;&#39; : &#39;none&#39;;
+      if (hit) hits++;
+    });
+    nav.classList.toggle(&#39;none&#39;, q &amp;&amp; !hits);
+  });
+
+  // Mobile contents toggle.
+  var bar = document.getElementById(&#39;bar&#39;), side = document.getElementById(&#39;side&#39;);
+  bar.addEventListener(&#39;click&#39;, function () {
+    var open = side.classList.toggle(&#39;open&#39;);
+    bar.setAttribute(&#39;aria-expanded&#39;, String(open));
+    bar.querySelector(&#39;span&#39;).textContent = open ? &#39;−&#39; : &#39;+&#39;;
+  });
+  nav.addEventListener(&#39;click&#39;, function (e) { if (e.target.tagName === &#39;A&#39;) side.classList.remove(&#39;open&#39;); });
+
+  // The tier-hold paragraph is written from the server&#39;s setting, the same
+  // way /tiers does it, so this page can never promise a window the rule is
+  // not applying. With the window off (the default) the text above stands.
+  fetch(&#39;/api/status&#39;).then(function (r) { return r.json(); }).then(function (j) {
+    var hours = Number((j.rule &amp;&amp; j.rule.tierHighWaterHours) || 0);
+    if (!(hours &gt; 0)) return;
+    var span = hours === 24 ? &#39;24 hours&#39; : hours + (hours === 1 ? &#39; hour&#39; : &#39; hours&#39;);
+    document.getElementById(&#39;hw-h&#39;).textContent = &#39;The high-water mark&#39;;
+    document.getElementById(&#39;hw-p&#39;).innerHTML = &#39;A tier is held for &lt;strong&gt;&#39; + span + &#39;&lt;/strong&gt; from the moment it is reached. Selling does not drop it, and a price dip does not either \u2014 the way up is immediate, the way down is slow. When the window rolls over, the tier is whatever the balance is worth then.&#39;;
+  }).catch(function () {});
+    </script>
+  </body>
+</html>
