@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Receipt — Tiers
+    </title>
+    <meta name="description" content="Hold $RECEIPT, get more back on every receipt. Paper, Silver, Gold, Black and Founder: what each one pays, what it caps a receipt at, and what it costs to reach." />
+    <meta property="og:title" content="Receipt — Tiers" />
+    <meta property="og:description" content="Hold $RECEIPT, get more back on every receipt. Five tiers, priced in dollars." />
+    <meta property="og:image" content="https://receipt.family/brand/social/posts/tiers-promo-card.png" />
+    <meta property="og:url" content="https://receipt.family/tiers" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" />
+    <script>
+      try { const t = localStorage.getItem(&#34;receipt.theme&#34;); if (t === &#34;dark&#34; || t === &#34;light&#34;) document.documentElement.dataset.theme = t; } catch {}
+    </script>
+    <style>
+      :root {
+    --bg: #F3F2EF; --paper: #FDFCFA; --paper-2: #F3F1EC; --ink: #1D1D1F; --ink-2: #6E665C; --ink-3: #A69C8E;
+    --hair: rgba(29,29,31,.08); --dash: rgba(29,29,31,.16); --card-sh: 0 1px 2px rgba(14,13,12,.04), 0 14px 36px -24px rgba(14,13,12,.22); --green: #5C7A52; --green-bg: #E9EFE4; --red: #B3261E; --red-bg: #F7E6E4; --amber: #9A6D00; --amber-bg: #F6EDD2;
+    --display: &#34;Bricolage Grotesque&#34;, &#34;Helvetica Neue&#34;, Arial, sans-serif; --mono: &#34;IBM Plex Mono&#34;, ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme=&#34;light&#34;]) {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12;
+  } }
+  :root[data-theme=&#34;dark&#34;] {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--display); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { width: min(760px, 100% - 40px); margin: 0 auto; padding: 40px 0 96px; }
+  header { margin-bottom: 40px; }
+  .eyebrow { font: 600 11px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+  h1 { font-size: clamp(38px, 7vw, 56px); line-height: .95; letter-spacing: -.04em; font-weight: 800; margin: 0 0 16px; text-wrap: balance; }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 60ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .meta { font: 500 11.5px/1.6 var(--mono); color: var(--ink-3); letter-spacing: .06em; margin-top: 18px; }
+  h2 { font-size: 26px; letter-spacing: -.03em; font-weight: 800; margin: 48px 0 8px; text-wrap: balance; }
+  h2 + p { margin-top: 0; color: var(--ink-2); max-width: 62ch; }
+  p { max-width: 62ch; }
+  /* a printed sheet */
+  .sheet { position: relative; background: var(--paper); border: 1px solid var(--hair); border-radius: 18px; box-shadow: var(--card-sh); padding: 22px 24px 20px; margin: 18px 0 8px; font: 500 13.5px/1.7 var(--mono); font-variant-numeric: tabular-nums; }
+  .sheet .k { font: 600 10.5px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+  .row { display: flex; justify-content: space-between; gap: 16px; padding: 5px 0; border-bottom: 1px dashed var(--dash); }
+  .row:last-child { border-bottom: 0; }
+  .row .m { color: var(--ink-2); }
+  .row b { font-weight: 600; text-align: right; white-space: nowrap; }
+  .row .var { display: block; font-size: 10.5px; color: var(--ink-3); letter-spacing: .04em; white-space: nowrap; }
+  .rule { border-top: 1.5px dashed var(--dash); margin: 12px 0; }
+  .tot { display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; }
+  .tot .big { font: 800 30px/1 var(--mono); color: var(--green); letter-spacing: -.02em; }
+  .note { font: 400 12px/1.6 var(--mono); color: var(--ink-2); margin-top: 10px; }
+  .back { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--green-bg); color: var(--green); }
+  .back span { display: block; font-size: 10.5px; letter-spacing: .16em; font-weight: 600; }
+  .back b { display: block; font: 700 22px/1.2 var(--mono); letter-spacing: -.02em; }
+  /* verdict bands */
+  .bands { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 18px 0; }
+  .band { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: start; padding: 14px 16px; background: var(--paper); border: 1px solid var(--hair); border-radius: 14px; box-shadow: var(--card-sh); }
+  .band .tag { font: 600 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 6px 8px; display: inline-block; }
+  .band.ok .tag { background: var(--green-bg); color: var(--green); }
+  .band.rev .tag { background: var(--amber-bg); color: var(--amber); }
+  .band.no .tag { background: var(--red-bg); color: var(--red); }
+  .band p { margin: 0; font-size: 15px; }
+  .band small { display: block; margin-top: 6px; font: 400 12px/1.5 var(--mono); color: var(--ink-2); }
+  /* refusal messages */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tablewrap { overflow-x: auto; margin: 18px 0; box-shadow: 0 0 0 1px var(--hair); background: var(--paper); }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  th { font: 600 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); }
+  td:first-child { font: 500 13px/1.5 var(--mono); white-space: nowrap; }
+  td q { quotes: &#34;\201C&#34; &#34;\201D&#34;; color: var(--ink-2); }
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: 18px 0; display: grid; gap: 12px; }
+  .steps li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: baseline; }
+  .steps li::before { counter-increment: s; content: counter(s, decimal-leading-zero); font: 800 22px/1 var(--display); color: var(--ink-3); letter-spacing: -.04em; }
+  .steps b { display: block; font-weight: 700; }
+  .steps span { color: var(--ink-2); font-size: 15px; }
+  .fine { font: 400 12px/1.7 var(--mono); color: var(--ink-3); margin-top: 40px; border-top: 1px solid var(--hair); padding-top: 18px; }
+  a { color: var(--ink); }
+  @media (max-width: 560px) { .band { grid-template-columns: 1fr; gap: 8px; } .wrap { padding-top: 32px; } }
+    </style>
+    <style>
+      /* the ladder: one card per tier, each in its own material */
+  .ladder { display: grid; gap: 14px; margin: 26px 0 8px; }
+  .tier { position: relative; overflow: hidden; border-radius: 18px; padding: 22px 24px;
+    background: var(--mat); color: var(--tink);
+    box-shadow: inset 0 0 0 1px var(--trim), inset 0 1px 0 rgba(255,255,255,.28), 0 10px 26px -14px rgba(0,0,0,.6); }
+  .tier::after { content: &#34;&#34;; position: absolute; inset: 0; pointer-events: none; opacity: var(--sheen, .6);
+    background: linear-gradient(160deg, rgba(255,255,255,.24), rgba(255,255,255,0) 36%, rgba(0,0,0,.13) 80%, rgba(0,0,0,.2)); }
+  .tier &gt; * { position: relative; z-index: 1; }
+  .tier-top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .tier-name { font: 800 24px/1 var(--display); letter-spacing: -.03em; }
+  .tier-hold { margin-left: auto; font: 600 12px/1 var(--mono); }
+  .tier-hold span { opacity: .7; font-weight: 500; }
+  .tier-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 18px; }
+  .tier-grid div { min-width: 0; }
+  /* What the same rung pays with a live lock, on the rung itself: the prose
+     above explains it once, this shows it six times where the numbers are. */
+  .tier-lock { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    margin-top: 16px; padding-top: 13px; border-top: 1px dashed currentColor;
+    border-color: color-mix(in srgb, currentColor 28%, transparent);
+    font: 500 12.5px/1.45 var(--mono); }
+  .tier-lock b { font-weight: 800; }
+  .tier-lock i { display: block; font-style: normal; font-size: 10px; opacity: .66; margin-top: 3px; letter-spacing: .04em; }
+  /* An outlined pill rather than a filled one: each card has its own ink and
+     background, and an outline reads correctly on all of them. */
+  .tier-lock .tl-tag { flex: none; font: 700 8.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
+    padding: 5px 9px; border-radius: 999px; border: 1px solid currentColor; opacity: .85; }
+  @media (max-width: 520px) { .tier-lock { font-size: 11.5px; } }
+  .tier-grid .k { font: 600 9.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; opacity: .62; }
+  .tier-grid b { display: block; font: 800 22px/1 var(--display); letter-spacing: -.03em; margin-top: 7px; font-variant-numeric: tabular-nums; }
+  @media (max-width: 520px) { .tier-grid { grid-template-columns: 1fr 1fr; } .tier-hold { margin-left: 0; width: 100%; } }
+  /* the five materials */
+  .t-paper   { --mat: linear-gradient(135deg,#FBFAF7,#EFEDE6 45%,#F7F5F0 70%,#E7E4DB); --tink:#2B2721; --trim: rgba(43,39,33,.22); --sheen:.5; }
+  .t-silver  { --mat: linear-gradient(135deg,#EDEFF3,#AEB5BF 22%,#868D97 42%,#E6E9ED 56%,#9BA2AC 74%,#C7CCD4); --tink:#1E2126; --trim: rgba(30,33,38,.26); --sheen:.7; }
+  .t-gold    { --mat: linear-gradient(135deg,#D4B255,#BE9A34 26%,#A9852A 48%,#CDA945 66%,#B08D2E 84%,#C6A241); --tink:#231A04; --trim: rgba(35,26,4,.3); --sheen:.45; }
+  .t-black   { --mat: linear-gradient(140deg,#3A3937,#141312 42%,#2E2D2A 66%,#0B0B0A); --tink:#EFEDE8; --trim: rgba(239,237,232,.26); --sheen:.55; }
+  .t-platinum { --mat: linear-gradient(135deg,#F6F1E9,#DCD2C2 24%,#BFB29C 46%,#F2EDE3 60%,#CFC3AE 78%,#E8E1D4); --tink:#221E17; --trim: rgba(34,30,23,.28); --sheen:.75; }
+  .t-founder { --mat: linear-gradient(135deg,#FFFFFF,#EEF1F5 22%,#CED5DE 44%,#FBFCFD 58%,#DCE2EA 76%,#F4F7FA); --tink:#1A1C20; --trim: rgba(26,28,32,.26); --sheen:.9; }
+  /* what it pays in */
+  .brands { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 18px 0 8px; }
+  .brand { background: var(--paper); border: 1px solid var(--hair); box-shadow: var(--card-sh); padding: 12px 14px; border-radius: 12px; }
+  .brand .t { font: 700 15px/1 var(--mono); letter-spacing: -.01em; }
+  .brand .n { font-size: 13px; color: var(--ink-2); margin-top: 5px; }
+  .brand .c { font: 500 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-top: 8px; }
+  .cta { display: inline-block; margin-top: 8px; font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase;
+    text-decoration: none; color: #fff; background: var(--ink); padding: 15px 22px; border-radius: 10px; }
+  :root[data-theme=&#34;dark&#34;] .cta { color: var(--bg); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme=&#34;light&#34;]) .cta { color: var(--bg); } :root:not([data-theme=&#34;light&#34;]) .logo img { filter: invert(1); } }
+  :root[data-theme=&#34;dark&#34;] .logo img { filter: invert(1); }
+    </style>
+  </head>
+  <body>
+    <nav style="width:min(760px,100% - 40px);margin:0 auto;padding:22px 0 0;display:flex;justify-content:space-between;align-items:center">
+      <a class="logo" href="/" style="display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.045em;font-size:20px;text-decoration:none;color:inherit">      <img src="/brand/png/glyph-black.png" alt="" width="22" height="22" style="display:block" />
+      Receipt
+</a>
+      <a class="cta" href="/app" style="margin:0;padding:12px 16px">      Scan a receipt
+</a>
+    </nav>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">
+          Tiers
+        </div>
+        <h1>
+          Hold $RECEIPT,
+          <br />
+          get it all back.
+        </h1>
+        <p class="lede">
+          A tier is simply
+          <b>          how much of your receipt comes back
+</b>
+          . Hold $RECEIPT and it stops being a percentage — the whole receipt comes back, up to your tier&#39;s cap, as real stock in the company you bought from.
+        </p>
+        <p class="meta" id="px">
+          Loading today&#39;s prices…
+        </p>
+      </header>
+      <h2 style="margin-top:34px">
+        What a tier is
+      </h2>
+      <p>
+        Your wallet&#39;s $RECEIPT balance is valued
+        <b>        in dollars
+</b>
+        . That dollar figure puts you on a rung. The higher the rung, the more of each receipt comes back and the more you can earn in a day. That is the whole idea — there is nothing to activate and no code to enter.
+      </p>
+      <div class="ladder" id="ladder">
+      </div>
+      <div class="band ok" style="grid-template-columns:1fr;margin:22px 0">
+        <p>
+          <b>          Staking pays more, twice over.
+</b>
+          Stake $RECEIPT for 3, 7 or 30 days and every receipt pays
+          <b>          2% on top of your tier&#39;s rate
+</b>
+          with
+          <b>          a quarter more room in the day
+</b>
+          — Gold goes from 3% and $25 a day to 5% and $31.25. What you stake also keeps counting toward your tier at the price you staked at, even if the price falls.
+          <a href="/lock">          How staking works →
+</a>
+        </p>
+      </div>
+      <h2>
+        How the rate and the day work
+      </h2>
+      <p>
+        Two numbers decide everything: the percentage your tier pays on a receipt, and the most it can pay you in a day.
+      </p>
+      <div class="sheet">
+        <div class="k">
+          Worked example
+        </div>
+        <div class="row">
+          <span class="m">          Costco receipt
+</span>
+          <b id="ex-total">          $50.00
+</b>
+        </div>
+        <div class="row">
+          <span class="m">          Your tier&#39;s rate
+</span>
+          <b id="ex-cap">          3%
+</b>
+        </div>
+        <div class="rule">
+        </div>
+        <div class="row">
+          <span class="m">          That much of the receipt
+</span>
+          <b id="ex-match">          $1.50
+</b>
+        </div>
+        <div class="back">
+          <span>          YOU GET BACK
+</span>
+          <b id="ex-back">          $1.50 in COST
+</b>
+        </div>
+        <p class="note">
+          Paid in the stock of the shop you bought from, not in cash.
+        </p>
+      </div>
+      <p>
+        <b>        The rate is the whole rule.
+</b>
+        A receipt pays your tier&#39;s percentage of its total — 3% of a $50 shop is $1.50 — and that is all there is to it. Silver pays 2% into a $5 day, Gold 3% into a $25 day; every rung up is worth more than the one below it, in the rate and in the day.
+      </p>
+      <p>
+        The second number is the
+        <b>        daily cap
+</b>
+        : the most one wallet can be paid across a rolling 24 hours, however many receipts it scans. It rises as you move up the ladder, and it resets every day.
+      </p>
+      <p>
+        <b>        Staking adds two points and a quarter of a day.
+</b>
+        $RECEIPT staked for a term pays 2 percentage points more on every receipt and lifts the daily cap by 25%, at every tier, for as long as the term runs. At Silver that is 4% instead of 2%, into a $6.25 day.
+      </p>
+      <p>
+        <b>        Holding nothing earns nothing.
+</b>
+        A scan from a wallet under $100 of $RECEIPT is still read and checked, but it pays nothing. The tokens are what fund the rewards, so holding them is what starts the earning.
+      </p>
+      <div class="band ok" style="grid-template-columns:1fr;margin:22px 0">
+        <p>
+          <b>          Why a cap at all?
+</b>
+          Every dollar matched is a real share bought on a real market with treasury funds. The caps are what make a full match sustainable rather than a promotion that ends.
+        </p>
+      </div>
+      <h2>
+        What you get paid in
+      </h2>
+      <p>
+        Not points, not a stablecoin — tokenized stock in the company that sold you the thing. The brand on the receipt decides the stock.
+      </p>
+      <div class="brands">
+        <div class="brand">
+          <div class="t">
+            AAPL
+          </div>
+          <div class="n">
+            Apple, Apple Store
+          </div>
+          <div class="c">
+            Robinhood Chain
+          </div>
+        </div>
+        <div class="brand">
+          <div class="t">
+            AMZN
+          </div>
+          <div class="n">
+            Amazon, Whole Foods
+          </div>
+          <div class="c">
+            Robinhood Chain
+          </div>
+        </div>
+        <div class="brand">
+          <div class="t">
+            COST
+          </div>
+          <div class="n">
+            Costco
+          </div>
+          <div class="c">
+            Robinhood Chain
+          </div>
+        </div>
+        <div class="brand">
+          <div class="t">
+            AMC
+          </div>
+          <div class="n">
+            AMC Theatres
+          </div>
+          <div class="c">
+            Robinhood Chain
+          </div>
+        </div>
+        <div class="brand">
+          <div class="t">
+            GME
+          </div>
+          <div class="n">
+            GameStop
+          </div>
+          <div class="c">
+            Robinhood Chain
+          </div>
+        </div>
+        <div class="brand">
+          <div class="t">
+            XOM
+          </div>
+          <div class="n">
+            Exxon, ExxonMobil
+          </div>
+          <div class="c">
+            Robinhood Chain
+          </div>
+        </div>
+        <div class="brand">
+          <div class="t">
+            NVDA
+          </div>
+          <div class="n">
+            DexScreener
+          </div>
+          <div class="c">
+            Robinhood Chain
+          </div>
+        </div>
+        <div class="brand">
+          <div class="t">
+            MCD
+          </div>
+          <div class="n">
+            McDonald&#39;s
+          </div>
+          <div class="c">
+            Solana
+          </div>
+        </div>
+      </div>
+      <p style="font:400 12.5px/1.7 var(--mono);color:var(--ink-3);margin-top:12px">
+        Two rails, one rule. Robinhood Chain pays Robinhood&#39;s Stock Tokens; Solana pays Backed&#39;s xStocks for brands Robinhood Chain doesn&#39;t list. The caps and the tier are identical on both.
+      </p>
+      <h2 id="hw-h">
+        When your tier changes
+      </h2>
+      <p id="hw-p">
+        Your tier is whatever your $RECEIPT is worth right now, at the market price. Buy more and you move up immediately; if the price falls or you sell, you move down the same way. Nothing is held back or averaged.
+      </p>
+      <h2>
+        Currencies
+      </h2>
+      <p>
+        Receipts in
+        <b>        US, Canadian and Australian dollars, euros, pounds and Swedish kronor
+</b>
+        are read and converted at the day&#39;s rate before any cap applies, so a tier&#39;s limits mean the same amount everywhere.
+      </p>
+      <a class="cta" href="/app">      Scan a receipt →
+</a>
+      <p class="fine">
+        Tiers are set by the ladder the server publishes, and this page reads it live — what is shown here is what the rule applies. Amounts are in US dollars. Rewards are tokenized stock: debt securities giving economic exposure to the share price, not ownership, not voting rights, and not an interest in the merchant. Nothing here is investment advice.
+      </p>
+    </div>
+    <script>
+      // The ladder is read from the API rather than written into the page, so this
+  // can never quietly disagree with what a receipt is actually paid.
+  const MAT = { paper: &#34;t-paper&#34;, silver: &#34;t-silver&#34;, gold: &#34;t-gold&#34;, black: &#34;t-black&#34;, founder: &#34;t-founder&#34; };
+  const usd = (n) =&gt; &#34;$&#34; + Number(n).toLocaleString(&#34;en-US&#34;);
+  fetch(&#34;/api/status&#34;).then((r) =&gt; r.json()).then((j) =&gt; {
+    // The window is a server setting, so this section is written from it
+    // rather than promising a rule the server may not be applying.
+    const hours = Number((j.rule &amp;&amp; j.rule.tierHighWaterHours) || 0);
+    if (hours &gt; 0) {
+      const span = hours === 24 ? &#34;24 hours&#34; : hours + (hours === 1 ? &#34; hour&#34; : &#34; hours&#34;);
+      document.getElementById(&#34;hw-h&#34;).textContent = &#34;The high-water mark&#34;;
+      document.getElementById(&#34;hw-p&#34;).innerHTML = &#34;A tier is held for &lt;b&gt;&#34; + span
+        + &#34;&lt;/b&gt; from the moment it is reached. Selling does not drop it, and a price dip does not either \u2014 the way up is immediate, the way down is slow. When the window rolls over, the tier is whatever the balance is worth then.&#34;;
+    }
+    const all = (j.rule &amp;&amp; j.rule.tiers) || [];
+    // Holder tiers only. The zero-minimum floor asks for no holding at all, so
+    // it is not a rung anyone climbs to — naming it here would only blur what
+    // the word &#34;tier&#34; means.
+    const tiers = all.filter((t) =&gt; t.minUsd &gt; 0);
+    // Cents only when there are any: a quarter of a day lands on $31.25, but
+    // $125 should not read as $125.00.
+    const money = (n) =&gt; &#34;$&#34; + (Number.isInteger(n) ? n.toLocaleString(&#34;en-US&#34;) : n.toFixed(2));
+    document.getElementById(&#34;ladder&#34;).innerHTML = tiers.map((t) =&gt; {
+      return `&lt;div class=&#34;tier ${MAT[t.name] || &#34;t-silver&#34;}&#34;&gt;
+        &lt;div class=&#34;tier-top&#34;&gt;
+          &lt;span class=&#34;tier-name&#34;&gt;${t.label}&lt;/span&gt;
+          &lt;span class=&#34;tier-hold&#34;&gt;Hold ${usd(t.minUsd)} &lt;span&gt;of $RECEIPT&lt;/span&gt;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;tier-grid&#34;&gt;
+          ${(t.maxPerDayUsd / (t.percent / 100)) &lt; 25
+            ? `&lt;div&gt;&lt;div class=&#34;k&#34;&gt;Back&lt;/div&gt;&lt;b&gt;All of it&lt;/b&gt;&lt;div class=&#34;k&#34; style=&#34;margin-top:5px;letter-spacing:.08em&#34;&gt;up to the day&#39;s cap&lt;/div&gt;&lt;/div&gt;`
+            : `&lt;div&gt;&lt;div class=&#34;k&#34;&gt;Back&lt;/div&gt;&lt;b&gt;${t.percent}%&lt;/b&gt;&lt;div class=&#34;k&#34; style=&#34;margin-top:5px;letter-spacing:.08em&#34;&gt;of every receipt&lt;/div&gt;&lt;/div&gt;`}
+          &lt;div&gt;&lt;div class=&#34;k&#34;&gt;Per day&lt;/div&gt;&lt;b&gt;${usd(t.maxPerDayUsd)}&lt;/b&gt;&lt;div class=&#34;k&#34; style=&#34;margin-top:5px;letter-spacing:.08em&#34;&gt;at most&lt;/div&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;div class=&#34;k&#34;&gt;Per month&lt;/div&gt;&lt;b&gt;${usd(t.maxPerDayUsd * 30)}&lt;/b&gt;&lt;div class=&#34;k&#34; style=&#34;margin-top:5px;letter-spacing:.08em&#34;&gt;at most&lt;/div&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;div class=&#34;k&#34;&gt;Receipts&lt;/div&gt;&lt;b&gt;${t.maxReceiptsPerDay}&lt;/b&gt;&lt;div class=&#34;k&#34; style=&#34;margin-top:5px;letter-spacing:.08em&#34;&gt;a day&lt;/div&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;tier-lock&#34;&gt;
+          &lt;span class=&#34;tl-tag&#34;&gt;Staked&lt;/span&gt;
+          &lt;span&gt;&lt;b&gt;${t.percent + 2}%&lt;/b&gt; back · &lt;b&gt;${money(Math.round(t.maxPerDayUsd * 1.25 * 100) / 100)}&lt;/b&gt; a day
+          &lt;i&gt;+2% and +25% for staking $RECEIPT&lt;/i&gt;&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;`;
+    }).join(&#34;&#34;);
+    // The worked example uses a real tier&#39;s real ceiling, so the arithmetic on
+  // the page is the arithmetic the server would do.
+  const ex = tiers.find((t) =&gt; t.name === &#34;gold&#34;) || tiers[0];
+  if (ex) {
+    const spend = 50;
+    const money = (n) =&gt; &#34;$&#34; + Number(n).toFixed(2);
+    // The same arithmetic the server does: the rate, capped by the day.
+    const back = Math.min(Math.floor(spend * ex.percent) / 100, ex.maxPerDayUsd);
+    document.getElementById(&#34;ex-total&#34;).textContent = money(spend);
+    document.getElementById(&#34;ex-cap&#34;).textContent = ex.percent + &#34;%&#34;;
+    document.getElementById(&#34;ex-match&#34;).textContent = money(back);
+    document.getElementById(&#34;ex-back&#34;).textContent = money(back) + &#34; in COST&#34;;
+    document.querySelector(&#34;.sheet .k&#34;).textContent = &#34;Worked example \u00b7 &#34; + ex.label;
+  }
+
+  const px = j.receiptToken &amp;&amp; j.receiptToken.priceUsd;
+    document.getElementById(&#34;px&#34;).textContent = px
+      ? &#34;$RECEIPT is $&#34; + (px &lt; 0.01 ? px.toFixed(6) : px.toFixed(4)) + &#34; today. Tier thresholds are in dollars, so they hold as the price moves.&#34;
+      : &#34;Tier thresholds are in dollars, so they hold as the price moves.&#34;;
+  }).catch(() =&gt; {
+    document.getElementById(&#34;px&#34;).textContent = &#34;Tier thresholds are in dollars, so they hold as the price moves.&#34;;
+  });
+    </script>
+  </body>
+</html>
