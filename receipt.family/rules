@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      RECEIPT — The rules
+    </title>
+    <meta name="description" content="Every rule RECEIPT applies to a receipt: which brands pay, how much, the per-wallet limits, how a scan is judged, and what stops one." />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" />
+    <style>
+      :root {
+    --bg: #F5F5F7; --paper: #FDFCFA; --paper-2: #F3F1EC; --ink: #1D1D1F; --ink-2: #6E665C; --ink-3: #A69C8E;
+    --hair: rgba(29,29,31,.14); --dash: #D9D1C4; --green: #5C7A52; --green-bg: #E9EFE4; --red: #B3261E; --red-bg: #F7E6E4; --amber: #9A6D00; --amber-bg: #F6EDD2;
+    --display: &#34;Bricolage Grotesque&#34;, &#34;Helvetica Neue&#34;, Arial, sans-serif; --mono: &#34;IBM Plex Mono&#34;, ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme=&#34;light&#34;]) {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12;
+  } }
+  :root[data-theme=&#34;dark&#34;] {
+    --bg: #0E0E10; --paper: #17171A; --paper-2: #1E1E22; --ink: #F2EEE7; --ink-2: #B2AA9E; --ink-3: #7E776D;
+    --hair: rgba(242,238,231,.14); --dash: #3A3833; --green: #9DB58F; --green-bg: #22301E; --red: #F08C82; --red-bg: #3A1D1A; --amber: #E2B94F; --amber-bg: #3A2F12;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--display); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { width: min(760px, 100% - 40px); margin: 0 auto; padding: 40px 0 96px; }
+  header { margin-bottom: 40px; }
+  .eyebrow { font: 600 11px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+  h1 { font-size: clamp(38px, 7vw, 56px); line-height: .95; letter-spacing: -.04em; font-weight: 800; margin: 0 0 16px; text-wrap: balance; }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 60ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .meta { font: 500 11.5px/1.6 var(--mono); color: var(--ink-3); letter-spacing: .06em; margin-top: 18px; }
+  h2 { font-size: 26px; letter-spacing: -.03em; font-weight: 800; margin: 48px 0 8px; text-wrap: balance; }
+  h2 + p { margin-top: 0; color: var(--ink-2); max-width: 62ch; }
+  p { max-width: 62ch; }
+  /* a printed sheet */
+  .sheet { position: relative; background: var(--paper); box-shadow: 0 24px 50px -28px rgba(0,0,0,.35), 0 0 0 1px var(--hair); padding: 22px 24px 20px; margin: 18px 0 8px; font: 500 13.5px/1.7 var(--mono); font-variant-numeric: tabular-nums; }
+  .sheet::after { content: &#34;&#34;; position: absolute; left: 0; right: 0; bottom: -9px; height: 9px; background: var(--paper);
+    clip-path: polygon(0 0,100% 0,100% 100%,96% 0,92% 100%,88% 0,84% 100%,80% 0,76% 100%,72% 0,68% 100%,64% 0,60% 100%,56% 0,52% 100%,48% 0,44% 100%,40% 0,36% 100%,32% 0,28% 100%,24% 0,20% 100%,16% 0,12% 100%,8% 0,4% 100%,0 0); }
+  .sheet .k { font: 600 10.5px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+  .row { display: flex; justify-content: space-between; gap: 16px; padding: 5px 0; border-bottom: 1px dashed var(--dash); }
+  .row:last-child { border-bottom: 0; }
+  .row .m { color: var(--ink-2); }
+  .row b { font-weight: 600; text-align: right; white-space: nowrap; }
+  .row .var { display: block; font-size: 10.5px; color: var(--ink-3); letter-spacing: .04em; white-space: nowrap; }
+  .rule { border-top: 1.5px dashed var(--dash); margin: 12px 0; }
+  .tot { display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; }
+  .tot .big { font: 800 30px/1 var(--mono); color: var(--green); letter-spacing: -.02em; }
+  .note { font: 400 12px/1.6 var(--mono); color: var(--ink-2); margin-top: 10px; }
+  .back { margin-top: 12px; padding: 12px 14px; background: var(--green-bg); color: var(--green); }
+  .back span { display: block; font-size: 10.5px; letter-spacing: .16em; font-weight: 600; }
+  .back b { display: block; font: 700 22px/1.2 var(--mono); letter-spacing: -.02em; }
+  /* verdict bands */
+  .bands { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 18px 0; }
+  .band { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: start; padding: 14px 16px; background: var(--paper); box-shadow: 0 0 0 1px var(--hair); }
+  .band .tag { font: 600 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 6px 8px; display: inline-block; }
+  .band.ok .tag { background: var(--green-bg); color: var(--green); }
+  .band.rev .tag { background: var(--amber-bg); color: var(--amber); }
+  .band.no .tag { background: var(--red-bg); color: var(--red); }
+  .band p { margin: 0; font-size: 15px; }
+  .band small { display: block; margin-top: 6px; font: 400 12px/1.5 var(--mono); color: var(--ink-2); }
+  /* refusal messages */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tablewrap { overflow-x: auto; margin: 18px 0; box-shadow: 0 0 0 1px var(--hair); background: var(--paper); }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  th { font: 600 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); }
+  td:first-child { font: 500 13px/1.5 var(--mono); white-space: nowrap; }
+  td q { quotes: &#34;\201C&#34; &#34;\201D&#34;; color: var(--ink-2); }
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: 18px 0; display: grid; gap: 12px; }
+  .steps li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: baseline; }
+  .steps li::before { counter-increment: s; content: counter(s, decimal-leading-zero); font: 800 22px/1 var(--display); color: var(--ink-3); letter-spacing: -.04em; }
+  .steps b { display: block; font-weight: 700; }
+  .steps span { color: var(--ink-2); font-size: 15px; }
+  .fine { font: 400 12px/1.7 var(--mono); color: var(--ink-3); margin-top: 40px; border-top: 1px solid var(--hair); padding-top: 18px; }
+  a { color: var(--ink); }
+  @media (max-width: 560px) { .band { grid-template-columns: 1fr; gap: 8px; } .wrap { padding-top: 32px; } }
+    </style>
+  </head>
+  <body>
+    <nav style="width:min(760px,100% - 40px);margin:0 auto;padding:22px 0 0;display:flex;justify-content:space-between;align-items:center">
+      <a href="/" style="display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.05em;font-size:20px;text-decoration:none;color:inherit">      <img src="/brand/png/glyph-black.png" alt="" width="22" height="22" style="display:block" />
+      RECEIPT
+</a>
+      <a href="/app" style="font:600 12px/1 &#39;IBM Plex Mono&#39;,ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:#fff;background:#1D1D1F;padding:11px 16px">      Scan a receipt
+</a>
+    </nav>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">
+          RECEIPT · receipt.family · rules as of 8 September 2026
+        </div>
+        <h1>
+          What a receipt is worth, and what stops one.
+        </h1>
+        <p class="lede">
+          Every rule the app applies when you photograph a receipt, in the order it applies them.
+          <b>          We verify the paper, not the person.
+</b>
+          There is no link to the store or your bank, so the limits below are what keep the rewards honest.
+        </p>
+        <div class="meta">
+          Live on Robinhood Chain · five brands · rewards are tokenized stock
+        </div>
+      </header>
+      <h2>
+        What pays out
+      </h2>
+      <p>
+        Only receipts from brands whose stock Robinhood issues on Robinhood Chain. Everything else has no stock to give, so it is refused before any reward is counted.
+      </p>
+      <div class="sheet">
+        <div class="k">
+          Brands and the stock you receive
+        </div>
+        <div class="row">
+          <span>          Apple, Apple Store
+</span>
+          <b>          AAPL
+</b>
+        </div>
+        <div class="row">
+          <span>          Amazon, Whole Foods Market
+</span>
+          <b>          AMZN
+</b>
+        </div>
+        <div class="row">
+          <span>          Costco Wholesale
+</span>
+          <b>          COST
+</b>
+        </div>
+        <div class="row">
+          <span>          AMC Theatres
+</span>
+          <b>          AMC
+</b>
+        </div>
+        <div class="row">
+          <span>          GameStop
+</span>
+          <b>          GME
+</b>
+        </div>
+        <div class="rule">
+        </div>
+        <div class="row">
+          <span class="m">          Stock on Solana (xStocks), when switched on
+</span>
+          <b>          McDonald&#39;s → MCD
+</b>
+        </div>
+        <div class="row">
+          <span class="m">          Coming as their tokens become tradable
+</span>
+          <b>          Starbucks · Nike · Target · Walmart
+</b>
+        </div>
+        <p class="note">
+          Solana brands pay the same rule, as tokenized shares delivered to a Solana wallet the user adds on the dashboard; the treasury buys the shortfall on Jupiter the same way it buys on Uniswap. The Robinhood Chain wallet stays the identity: every cap and limit below still applies to it.
+        </p>
+      </div>
+      <h2>
+        What a receipt must be
+      </h2>
+      <div class="sheet">
+        <div class="k">
+          Checked before the reward is computed
+        </div>
+        <div class="row">
+          <span>          Age
+</span>
+          <b>          90 days or newer · a year with $RECEIPT locked
+</b>
+        </div>
+        <div class="row">
+          <span>          Total
+</span>
+          <b>          $4,000 or less
+</b>
+        </div>
+        <div class="row">
+          <span>          Currency
+</span>
+          <b>          US dollars
+</b>
+        </div>
+        <div class="row">
+          <span>          Date
+</span>
+          <b>          not in the future
+</b>
+        </div>
+        <div class="row">
+          <span>          Readable
+</span>
+          <b>          merchant, date and total all legible
+</b>
+        </div>
+        <div class="row">
+          <span>          Photo
+</span>
+          <b>          live camera, never an upload
+</b>
+        </div>
+        <div class="row">
+          <span>          Claimed before
+</span>
+          <b>          never, by anyone
+</b>
+        </div>
+      </div>
+      <h2>
+        How much it pays
+      </h2>
+      <p>
+        Your tier&#39;s percentage of the receipt total, paid in that brand&#39;s stock, capped by whatever is left of your day. That is the whole rule — there is no welcome bonus, no full match and no minimum. What you hold in $RECEIPT sets both the rate and the day; holding under $100 is Paper, and Paper earns nothing.
+      </p>
+      <div class="sheet">
+        <div class="k">
+          The rule
+        </div>
+        <div class="row">
+          <span>          Rate
+</span>
+          <b>          your tier&#39;s percent of the total
+</b>
+        </div>
+        <div class="row">
+          <span>          Minimum, every receipt
+</span>
+          <b>          none
+</b>
+        </div>
+        <div class="row">
+          <span>          Ceiling per receipt
+</span>
+          <b>          what is left of your day
+</b>
+        </div>
+        <div class="row">
+          <span>          Paper · under $100 held
+</span>
+          <b>          earns nothing
+</b>
+        </div>
+        <div class="row">
+          <span>          Silver · $100 held
+</span>
+          <b>          2%, up to $5 a day
+</b>
+        </div>
+        <div class="row">
+          <span>          Gold · $500 held
+</span>
+          <b>          3%, up to $25 a day
+</b>
+        </div>
+        <div class="row">
+          <span>          Black · $1,500 held
+</span>
+          <b>          5%, up to $50 a day
+</b>
+        </div>
+        <div class="row">
+          <span>          Platinum · $3,000 held
+</span>
+          <b>          7%, up to $100 a day
+</b>
+        </div>
+        <div class="row">
+          <span>          Founder · $6,000 held
+</span>
+          <b>          10%, up to $200 a day
+</b>
+        </div>
+        <div class="row">
+          <span>          Rounding
+</span>
+          <b>          down, to the cent
+</b>
+        </div>
+        <div class="row">
+          <span>          Shares
+</span>
+          <b>          reward ÷ that day&#39;s reference price
+</b>
+        </div>
+      </div>
+      <p>
+        A worked example. The wallet holds $3,000 of $RECEIPT, so it scans as Platinum: 7% of the total, into a $100 day.
+      </p>
+      <div class="sheet">
+        <div class="k">
+          Apple Store · Platinum
+        </div>
+        <div class="row">
+          <span>          MacBook Pro
+</span>
+          <b>          $3,899.00
+</b>
+        </div>
+        <div class="rule">
+        </div>
+        <div class="row">
+          <span class="m">          7% of $3,899.00
+</span>
+          <b>          $272.93
+</b>
+        </div>
+        <div class="row">
+          <span class="m">          What is left of the day
+</span>
+          <b>          $100.00
+</b>
+        </div>
+        <div class="back">
+          <span>          REWARD · DELIVERED ON-CHAIN
+</span>
+          <b>          +$100.00 in AAPL = 0.3047 AAPL @ $328.21
+</b>
+        </div>
+        <p class="note">
+          The same receipt from a wallet holding under $100 pays nothing at all. A $2.31 coffee at Platinum pays 16¢ — a receipt is worth its rate, however small, and nothing is refused for being under a minimum.
+        </p>
+      </div>
+      <h2>
+        Limits per wallet
+      </h2>
+      <p>
+        All limits are per wallet over a rolling 24 hours. There is no lifetime cap: a wallet that keeps shopping keeps earning.
+      </p>
+      <div class="sheet">
+        <div class="k">
+          Every rolling 24 hours
+        </div>
+        <div class="row">
+          <span>          Receipts approved
+</span>
+          <b>          set by your tier
+</b>
+        </div>
+        <div class="row">
+          <span>          Earnings
+</span>
+          <b>          your tier&#39;s day, $5 to $200
+</b>
+        </div>
+        <div class="row">
+          <span>          Uploads attempted
+</span>
+          <b>          12 an hour
+</b>
+        </div>
+        <p class="note">
+          A large receipt late in a wallet&#39;s day pays less than the rate says: the rate is worked out first, then trimmed to whatever room is left in the day. Forty cents left pays forty cents — the tail of a day is paid rather than refused. Once the day is spent, the next receipt waits for tomorrow.
+        </p>
+      </div>
+      <h2>
+        How a scan is judged
+      </h2>
+      <p>
+        The AI reads the photo and returns the merchant, date, total, receipt number, and a confidence score from 0 to 1 that this is genuine paper. It also flags photos of screens, reprints, and numbers that don&#39;t add up. The score and the flags decide what happens next.
+      </p>
+      <div class="bands">
+        <div class="band no">
+          <span class="tag">          Refused
+</span>
+          <div>
+            <p>
+              Confidence below 0.2.
+            </p>
+            <small>            Treated as junk, not a borderline case. The user is asked to retake: paper, flat, good light.
+</small>
+          </div>
+        </div>
+        <div class="band rev">
+          <span class="tag">          Human review
+</span>
+          <div>
+            <p>
+              Confidence between 0.2 and the accept line, but nothing flagged.
+            </p>
+            <small>            A person sees the photo, the AI&#39;s reasoning, and the wallet&#39;s history, then approves up to what the rule allows or rejects with a reason. Anything flagged as a screen photo, reprint, typed mock-up, edit, or a total the items can&#39;t produce is refused outright and never reaches a person.
+</small>
+          </div>
+        </div>
+        <div class="band ok">
+          <span class="tag">          Approved
+</span>
+          <div>
+            <p>
+              Confidence 0.2 or higher and clean.
+            </p>
+            <small>            The reward is reserved on the wallet immediately and delivered as stock within about five minutes.
+</small>
+          </div>
+        </div>
+      </div>
+      <h2>
+        What the user sees when it stops
+      </h2>
+      <p>
+        Every refusal names its reason. These are the exact messages in the scanner.
+      </p>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Reason
+              </th>
+              <th>
+                Message
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Not one of the five brands
+              </td>
+              <td>
+                <q>                That merchant isn&#39;t a public company, so there&#39;s no stock to give.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Already claimed
+              </td>
+              <td>
+                <q>                Already claimed. This receipt has been used before — by any wallet, from any angle.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Too old
+              </td>
+              <td>
+                <q>                Receipts must be from the last 3 months.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Over $4,000
+              </td>
+              <td>
+                <q>                Receipts over $4,000 don&#39;t count. Something smaller?
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Fourth of the day
+              </td>
+              <td>
+                <q>                Three receipts a day per wallet. Come back tomorrow.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Day&#39;s $200 reached
+              </td>
+              <td>
+                <q>                This wallet has hit today&#39;s limit. Try tomorrow.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Not US dollars
+              </td>
+              <td>
+                <q>                Only USD receipts for now.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Can&#39;t read it
+              </td>
+              <td>
+                <q>                We couldn&#39;t read the merchant, date or total. Try again in better light, flat on a table.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Confidence under 0.2
+              </td>
+              <td>
+                <q>                We couldn&#39;t make out a real receipt in that photo. Paper, flat, good light.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Needs a human
+              </td>
+              <td>
+                <q>                We&#39;re checking it. The photo was hard to read, so a person will look.
+</q>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Our fault
+              </td>
+              <td>
+                <q>                We&#39;re offline.
+</q>
+                followed by the actual cause, for example the vision service being out of credit. The receipt is not used up.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h2>
+        From scan to stock
+      </h2>
+      <ol class="steps">
+        <li>
+          <div>
+            <b>            Connect a wallet on a computer.
+</b>
+            <span>            Robinhood Chain only. The wallet signs one message to prove it&#39;s yours; pasting an address is not accepted.
+</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <b>            Open the link on a phone.
+</b>
+            <span>            The scanner runs only on a phone camera. A link lives 30 minutes.
+</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <b>            Photograph the paper.
+</b>
+            <span>            The photo is stored, fingerprinted, and read by the AI. The fingerprint is kept forever.
+</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <b>            The reward is reserved.
+</b>
+            <span>            It shows on the wallet&#39;s dashboard at once, with the reason if it was refused.
+</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <b>            The treasury buys and delivers.
+</b>
+            <span>            Every five minutes the treasury tops up each stock on Uniswap and transfers the reserved shares to the wallet. Every delivery is a public transaction on Robinhood Chain.
+</span>
+          </div>
+        </li>
+      </ol>
+      <h2>
+        What we don&#39;t do
+      </h2>
+      <p>
+        We never contact the merchant, your card, or your bank. A receipt someone else dropped would pass the checks above. That is why rewards are small, capped, and paid on-chain where anyone can audit them, and why the ceiling rises only for wallets that hold $RECEIPT.
+      </p>
+      <div class="fine">
+        Reference prices are a daily snapshot; the share count is fixed at delivery. Rewards are tokenized stock issued by Robinhood on Robinhood Chain, subject to eligibility and region. Nothing here is an offer of securities or investment advice. Brands are references, not partners. Every number on this page is a setting the team can change; this page reflects the values live on 8 September 2026.
+      </div>
+    </div>
+  </body>
+</html>
